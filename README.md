@@ -1,3 +1,9 @@
 # HotelicUs
 
-Hotel Management System
+## Hotel Management System
+
+Имена: Даниел Димитров, Стефан Узунов
+Специалност:СИТ
+Курс: III
+Група: 5(б)
+Задача: "Хотел"
