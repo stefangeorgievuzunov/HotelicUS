@@ -24,7 +24,7 @@ public class Clients {
     }
 
     @ManyToMany
-    @JoinColumn(name="user_id",referencedColumnName = "user_id")
+   // @JoinColumn(name="user_id",referencedColumnName = "user_id")
     public Integer getUserId() {
         return userId;
     }

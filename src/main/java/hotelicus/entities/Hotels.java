@@ -3,10 +3,12 @@ package hotelicus.entities;
 import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name="hotels")
 public class Hotels {
     private Integer hotelId;
-    private Integer userOwnerId;
-    private Integer userManagerId;
+    private Users owner;
+    private Users manager;
     private String name;
     private Integer capacity;
     private Integer status;
@@ -26,24 +28,25 @@ public class Hotels {
 
 
     @ManyToOne
-    @JoinColumn(name="user_owner_id",referencedColumnName = "user_owner_id")
-    public Integer getUserOwnerId() {
-        return userOwnerId;
+    @JoinColumn(name="user_owner_id",referencedColumnName = "user_id")
+    public Users getOwner() {
+        return owner;
     }
 
-    public void setUserOwnerId(Integer userOwnerId) {
-        this.userOwnerId = userOwnerId;
+    public void setOwner(Users owner) {
+        this.owner = owner;
     }
 
-    @OneToMany
-    @JoinColumn(name="user_manager_id",referencedColumnName = "user_manager_id")
-    public Integer getUserManagerId() {
-        return userManagerId;
+    @OneToOne
+    @JoinColumn(name="user_manager_id",referencedColumnName = "user_id")
+    public Users getManager() {
+        return manager;
     }
 
-    public void setUserManagerId(Integer userManagerId) {
-        this.userManagerId = userManagerId;
+    public void setManager(Users manager) {
+        this.manager = manager;
     }
+
     @Column(name="name")
     public String getName() {
         return name;
