@@ -15,7 +15,6 @@ public class test {
         @SuppressWarnings("unchecked")
         List<Users> employeeList = session.createQuery("FROM " + Users.class.getSimpleName()).list();
 
-
         Users user = new Users();
         user.setUsername("Test 1");
         user.setPassword("Password");

@@ -10,6 +10,21 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password"></property>
         <property name="show_sql">true</property>
+        <mapping class="hotelicus.entities.Clients"/>
+        <mapping class="hotelicus.entities.Hotels"/>
+        <mapping class="hotelicus.entities.Packages"/>
+        <mapping class="hotelicus.entities.PackagesServices"/>
+        <mapping class="hotelicus.entities.PaymentTypes"/>
+        <mapping class="hotelicus.entities.Reports"/>
+        <mapping class="hotelicus.entities.Reservations"/>
+        <mapping class="hotelicus.entities.ReservationsCanceling"/>
+        <mapping class="hotelicus.entities.ReservationsRooms"/>
+        <mapping class="hotelicus.entities.ReservationStatus"/>
+        <mapping class="hotelicus.entities.ReservationTypes"/>
+        <mapping class="hotelicus.entities.RoomCategories"/>
+        <mapping class="hotelicus.entities.Rooms"/>
+        <mapping class="hotelicus.entities.RoomStatus"/>
+        <mapping class="hotelicus.entities.Services"/>
         <mapping class="hotelicus.entities.Users"/>
     </session-factory>
 </hibernate-configuration>
