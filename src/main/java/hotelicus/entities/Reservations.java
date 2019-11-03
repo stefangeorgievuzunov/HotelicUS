@@ -74,33 +74,33 @@ public class Reservations {
     //TODO
     @ManyToMany
    // @JoinColumn(name="reservation_type_id",referencedColumnName = "reservation_type_id")
-    public Integer getReservationTypeId() {
-        return reservationTypeId;
+    public ReservationTypes getReservationType() {
+        return reservationType;
     }
 
-    public void setReservationTypeId(Integer reservationTypeId) {
-        this.reservationTypeId = reservationTypeId;
-    }
+//    public void setReservationType(Integer reservationTypeId) {
+//        this.reservationType = reservationTypeId;
+//    }
     //TODO
     @ManyToMany
     //@JoinColumn(name="payment_type_id",referencedColumnName = "payment_type_id")
-    public Integer getPaymentTypeId() {
-        return paymentTypeId;
+    public PaymentTypes getPaymentTypeId() {
+        return this.paymentType;
     }
 
-    public void setPaymentTypeId(Integer paymentTypeId) {
-        this.paymentTypeId = paymentTypeId;
-    }
+//    public void setPaymentTypeId(Integer paymentTypeId) {
+//        this.paymentType = paymentType;
+//    }
     //TODO
     @ManyToMany
     //@JoinColumn(name="canceling_type_id",referencedColumnName = "canceling_type_id")
-    public Integer getCancelingTypeId() {
-        return cancelingTypeId;
+    public ReservationsCanceling getCancelingTypeId() {
+        return this.cancelingType;
     }
 
-    public void setCancelingTypeId(Integer cancelingTypeId) {
-        this.cancelingTypeId = cancelingTypeId;
-    }
+//    public void setCancelingTypeId(Integer cancelingTypeId) {
+//        this.cancelingTypeId = cancelingTypeId;
+//    }
 
     @Column(name="paid_money")
     public Double getPaidMoney() {
@@ -113,13 +113,13 @@ public class Reservations {
     //TODO
     @ManyToMany
     //@JoinColumn(name="reservation_status_id",referencedColumnName = "reservation_status_id")
-    public Integer getReservationStatusId() {
-        return reservationStatusId;
+    public ReservationStatus getReservationStatusId() {
+        return reservationStatus;
     }
 
-    public void setReservationStatusId(Integer reservationStatusId) {
-        this.reservationStatusId = reservationStatusId;
-    }
+//    public void setReservationStatusId(Integer reservationStatusId) {
+//        this.reservationStatus = reservationStatusId;
+//    }
 
     @Column(name="created_on")
     public Date getCreatedOn() {

@@ -46,7 +46,7 @@ public class Users {
         this.password = password;
     }
 
-    @Column(name="priviliges")
+    @Column(name="privileges")
     public Integer getPrivileges() {
         return privileges;
     }

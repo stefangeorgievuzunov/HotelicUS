@@ -12,7 +12,7 @@ public class Hotels {
     private String name;
     private Integer capacity;
     private Integer status;
-    private Date  dateCreated;
+    private Date dateCreated;
     private Date removedOn;
 
     @Id
@@ -25,7 +25,6 @@ public class Hotels {
     public void setHotelId(Integer hotelId) {
         this.hotelId = hotelId;
     }
-
 
     @ManyToOne
     @JoinColumn(name="user_owner_id",referencedColumnName = "user_id")
