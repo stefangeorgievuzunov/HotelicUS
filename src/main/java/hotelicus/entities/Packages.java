@@ -2,7 +2,7 @@ package hotelicus.entities;
 
 public enum Packages {
     SUMMER,
-    WINER,
+    WINTER,
     FOR_SEASONS,
     HOLIDAYS,
     WEEKENDS,
