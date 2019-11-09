@@ -32,8 +32,8 @@ public class Rooms {
     public void setHotel(Hotels hotel) {
         this.hotel = hotel;
     }
-    @OneToOne
-    @JoinColumn(name="category_id",referencedColumnName = "category_id")
+
+    @Column(name="category")
     public RoomCategories getCategory() {
         return category;
     }
@@ -42,6 +42,7 @@ public class Rooms {
         this.category = category;
     }
 
+    @Column(name="capacity")
     public Integer getCapacity() {
         return capacity;
     }
@@ -50,6 +51,7 @@ public class Rooms {
         this.capacity = capacity;
     }
 
+    @Column(name="room_number")
     public Integer getRoomNumber() {
         return roomNumber;
     }
@@ -58,6 +60,7 @@ public class Rooms {
         this.roomNumber = room_number;
     }
 
+    @Column(name="price")
     public Double getPrice() {
         return price;
     }
@@ -65,7 +68,8 @@ public class Rooms {
     public void setPrice(Double price) {
         this.price = price;
     }
-    //TODO
+
+    @Column(name="room_status")
     public RoomStatus getStatus() {
         return status;
     }

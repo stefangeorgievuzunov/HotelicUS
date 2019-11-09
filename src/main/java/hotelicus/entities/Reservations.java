@@ -13,7 +13,7 @@ public class Reservations {
     private Packages reservationPackage;
     private ReservationTypes reservationType;
     private PaymentTypes paymentType;
-    private ReservationsCanceling cancelingType;
+    private ReservationCanceling cancelingType;
     private Double paidMoney;
     private ReservationStatus reservationStatus;
     private Date createdOn;
@@ -62,45 +62,50 @@ public class Reservations {
         this.user = user;
     }
 
-    @ManyToOne
-    @JoinColumn(name="package_id",referencedColumnName = "package_id")
-    public Packages getPackage() {
+    @Column(name="package")
+    public Packages getReservationPackage() {
         return reservationPackage;
     }
 
-    public void setPackage(Packages reservationPackage) {
+    public void setReservationPackage(Packages reservationPackage) {
         this.reservationPackage = reservationPackage;
     }
-    //TODO
-    @ManyToMany
-   // @JoinColumn(name="reservation_type_id",referencedColumnName = "reservation_type_id")
+
+    @Column(name="reservation_type")
     public ReservationTypes getReservationType() {
         return reservationType;
     }
 
-//    public void setReservationType(Integer reservationTypeId) {
-//        this.reservationType = reservationTypeId;
-//    }
-    //TODO
-    @ManyToMany
-    //@JoinColumn(name="payment_type_id",referencedColumnName = "payment_type_id")
-    public PaymentTypes getPaymentTypeId() {
-        return this.paymentType;
+    public void setReservationType(ReservationTypes reservationType) {
+        this.reservationType = reservationType;
     }
 
-//    public void setPaymentTypeId(Integer paymentTypeId) {
-//        this.paymentType = paymentType;
-//    }
-    //TODO
-    @ManyToMany
-    //@JoinColumn(name="canceling_type_id",referencedColumnName = "canceling_type_id")
-    public ReservationsCanceling getCancelingTypeId() {
-        return this.cancelingType;
+    @Column(name="payment_type")
+    public PaymentTypes getPaymentType() {
+        return paymentType;
     }
 
-//    public void setCancelingTypeId(Integer cancelingTypeId) {
-//        this.cancelingTypeId = cancelingTypeId;
-//    }
+    public void setPaymentType(PaymentTypes paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    @Column(name="reservation_canceling")
+    public ReservationCanceling getCancelingType() {
+        return cancelingType;
+    }
+
+    public void setCancelingType(ReservationCanceling cancelingType) {
+        this.cancelingType = cancelingType;
+    }
+
+    @Column(name="reservation_status")
+    public ReservationStatus getReservationStatus() {
+        return reservationStatus;
+    }
+
+    public void setReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
 
     @Column(name="paid_money")
     public Double getPaidMoney() {
@@ -110,16 +115,6 @@ public class Reservations {
     public void setPaidMoney(Double paidMoney) {
         this.paidMoney = paidMoney;
     }
-    //TODO
-    @ManyToMany
-    //@JoinColumn(name="reservation_status_id",referencedColumnName = "reservation_status_id")
-    public ReservationStatus getReservationStatusId() {
-        return reservationStatus;
-    }
-
-//    public void setReservationStatusId(Integer reservationStatusId) {
-//        this.reservationStatus = reservationStatusId;
-//    }
 
     @Column(name="created_on")
     public Date getCreatedOn() {

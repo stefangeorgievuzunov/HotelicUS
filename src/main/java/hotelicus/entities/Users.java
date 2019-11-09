@@ -13,7 +13,7 @@ public class Users {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private Integer userState;
+    private UserState userState;
     private Date createdOn;
     private Date startedOn;
     private Date endedOn;
@@ -83,11 +83,11 @@ public class Users {
     }
 
     @Column(name="user_state")
-    public Integer getUserState() {
+    public UserState getUserState() {
         return userState;
     }
 
-    public void setUserState(Integer userState) {
+    public void setUserState(UserState userState) {
         this.userState = userState;
     }
 

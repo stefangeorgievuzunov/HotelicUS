@@ -8,9 +8,12 @@ import java.util.Date;
 @Table(name="clients")
 public class Clients {
     private Integer id;
-    private Integer userId;
+    private Users createdBy;
     private String firstName;
     private String lastName;
+    private String phoneNumber;
+    private Float rate;
+    private Date createdOn;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +26,15 @@ public class Clients {
         this.id = id;
     }
 
-    @ManyToMany
-   // @JoinColumn(name="user_id",referencedColumnName = "user_id")
-    public Integer getUserId() {
-        return userId;
+
+    @ManyToOne
+    @JoinColumn(name="user_id",referencedColumnName = "user_id")
+    public Users getCreatedBy() {
+        return createdBy;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setCreatedBy(Users createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Column(name="first_name")
@@ -77,7 +81,4 @@ public class Clients {
         this.createdOn = createdOn;
     }
 
-    private String phoneNumber;
-    private Float rate;
-    private Date createdOn;
 }
