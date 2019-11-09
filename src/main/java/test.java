@@ -1,11 +1,8 @@
 import hotelicus.entities.Users;
+import hotelicus.enums.UserState;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class test {
     public static void test() {
@@ -22,7 +19,7 @@ public class test {
         user.setFirstName("Papa");
         user.setLastName("Meme");
         user.setPhoneNumber("+355555555");
-//        user.setUserState(1);
+        user.setUserState(UserState.ACTIVE);
         user.setCreatedOn(new Date());
 
         session.save(user);
