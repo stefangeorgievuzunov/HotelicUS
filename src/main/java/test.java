@@ -22,7 +22,7 @@ public class test {
         user.setFirstName("Papa");
         user.setLastName("Meme");
         user.setPhoneNumber("+355555555");
-        user.setUserState(1);
+//        user.setUserState(1);
         user.setCreatedOn(new Date());
 
         session.save(user);

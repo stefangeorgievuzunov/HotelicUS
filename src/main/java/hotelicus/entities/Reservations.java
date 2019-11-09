@@ -1,5 +1,7 @@
 package hotelicus.entities;
 
+import hotelicus.enums.*;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -89,7 +91,7 @@ public class Reservations {
         this.paymentType = paymentType;
     }
 
-    @Column(name="reservation_canceling")
+    @Column(name="canceling_type")
     public ReservationCanceling getCancelingType() {
         return cancelingType;
     }

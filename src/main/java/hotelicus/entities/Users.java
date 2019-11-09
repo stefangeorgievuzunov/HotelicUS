@@ -1,5 +1,7 @@
 package hotelicus.entities;
 
+import hotelicus.enums.UserState;
+
 import javax.persistence.*;
 import java.util.Date;
 

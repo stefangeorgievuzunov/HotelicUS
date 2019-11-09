@@ -1,5 +1,8 @@
 package hotelicus.entities;
 
+import hotelicus.enums.RoomCategories;
+import hotelicus.enums.RoomStatus;
+
 import javax.persistence.*;
 
 @Entity

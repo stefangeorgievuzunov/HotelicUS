@@ -1,4 +1,4 @@
-package hotelicus.entities;
+package hotelicus.enums;
 
 public enum RoomCategories {
     VIP,
