@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?language JavaScript?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="vbox" layoutX="10.0" layoutY="10.0" prefHeight="120.0" prefWidth="300.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+    <style>
+        -fx-padding: 10;
+    </style>
+    <children>
+        <GridPane>
+            <children>
+                <Label text="Succ" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            </children>
+        </GridPane>
+    </children>
+</VBox>
