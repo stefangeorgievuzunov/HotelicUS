@@ -61,6 +61,14 @@ public class App extends Application {
         }
     }
 
+    public void adminWindow() {
+        try {
+            changeScene("admin.xml", "Admin", 500, 500);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void changeScene(String fxml, String title, int width, int height) throws Exception {
         Parent page = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("templates/" + fxml)), null, new JavaFXBuilderFactory());
         Scene scene = getStage().getScene();

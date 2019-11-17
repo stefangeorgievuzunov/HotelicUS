@@ -1,0 +1,12 @@
+package hotelicus.controllers;
+
+import hotelicus.App;
+import javafx.fxml.FXML;
+
+
+public class DashboardController {
+    @FXML
+    private void openAdmin() {
+        new App().adminWindow();
+    }
+}
