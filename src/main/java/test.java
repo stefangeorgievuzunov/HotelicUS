@@ -1,3 +1,4 @@
+import hotelicus.HibernateUtil;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserState;
 import org.hibernate.Session;
