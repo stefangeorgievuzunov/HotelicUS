@@ -2,6 +2,7 @@ package hotelicus.controllers;
 
 import java.lang.Class;
 
+import hotelicus.App;
 import hotelicus.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -12,13 +13,12 @@ import org.hibernate.criterion.Restrictions;
 import java.util.List;
 
 @SuppressWarnings("all")
-public class DbController<T> {
+public class DbController<T>{
     private  Class<T> type;
     private Session session;
-
     public DbController(Class<T> type){
-       this.session = HibernateUtil.getSessionFactory().openSession();
-       this.type=type;
+        this.session= App.getSession();
+        this.type=type;
     }
     private void DESC(String property,Criteria crit){
         crit.addOrder(Order.desc(property));

@@ -27,7 +27,7 @@ public class LoginController {
 
         // Verify user input
         if (!user.getText().equals("") && !password.getText().equals("")) {
-            new App().dashboardWindow();
+            App.dashboardWindow();
 
             return;
         }

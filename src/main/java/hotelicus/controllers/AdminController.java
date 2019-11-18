@@ -11,14 +11,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.util.List;
+
 
 public class AdminController {
     private TableView tab;
 
     public AdminController() {
 
+        DbController<Services> services= new DbController<Services>(Services.class);
+
+        List<Services> ourServices=services.findAll();
+
          tab = new TableView();
-        Services service = new Services(1,"test12",10.2);
+//        Services service = new Services(1,"test12",10.2);
         TableColumn serviceId = new TableColumn("serviceId");
         serviceId.setCellValueFactory(new PropertyValueFactory<Services,Integer>("serviceId"));
 
@@ -31,7 +37,9 @@ public class AdminController {
         tab.getColumns().addAll(serviceId, name,price);
 
 
-        tab.getItems().add(service);
+       for(Services service : ourServices){
+            tab.getItems().add(service);
+        }
     }
 
     public TableView getTableView(){
