@@ -9,6 +9,11 @@ public class Services {
     private String  name;
     private Double price;
 
+    public Services(){
+        this.serviceId=0;
+        this.name="";
+        this.price=0.0;
+    }
     public Services(Integer sId, String n, Double p) {
         this.serviceId = sId;
         this.name = n;
