@@ -20,10 +20,6 @@ public class DbController<T> {
        this.session = HibernateUtil.getSessionFactory().openSession();
        this.type=type;
     }
-
-    private void ASC(String property,Criteria crit){
-        crit.addOrder(Order.asc(property));
-    }
     private void DESC(String property,Criteria crit){
         crit.addOrder(Order.desc(property));
     }
@@ -49,94 +45,53 @@ public class DbController<T> {
         this.session.update(object);
     }
 
-    public <T> List<T>  selectEqualTo(String criteria,Object value,boolean ASC,boolean DESC){
+    public <T> List<T>  selectEqualTo(String criteria,Object value,boolean DESC){
         Criteria crit=this.session.createCriteria(this.type);
         crit.add(Restrictions.eq(criteria, value));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
         return(List<T>)crit.list();
     }
 
-    public <T> List<T>  selectGreaterThan(String criteria,Object value,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectGreaterThan(String criteria,Object value,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.gt(criteria, value));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
         return (List<T>) crit.list();
     }
-    public <T> List<T>  selectGreaterOrEqual(String criteria,Object value,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectGreaterOrEqual(String criteria,Object value,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.ge(criteria, value));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
         return (List<T>) crit.list();
     }
 
-    public <T> List<T>  selectLowerThan(String criteria,Object value,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectLowerThan(String criteria,Object value,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.lt(criteria, value));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
+
         if(DESC==true){
             this.DESC(criteria,crit);
         }
         return (List<T>) crit.list();
     }
 
-    public <T> List<T>  selectLowerOrEqual(String criteria,Object value,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectLowerOrEqual(String criteria,Object value,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.le(criteria, value));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
         return (List<T>) crit.list();
     }
-    public <T> List<T>  selectNotEqualTo(String criteria,Object value,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectNotEqualTo(String criteria,Object value,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.ne(criteria, value));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
@@ -144,61 +99,33 @@ public class DbController<T> {
     }
 
     //LIKE FUNCTONS MAY BE WITH JUST ".like" IF WE DONT CARE ABOUT CASE-SENSITIVE
-    public <T> List<T>  selectLike_ANYWHERE(String criteria,Object like,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectLike_ANYWHERE(String criteria,Object like,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.ilike(criteria, like+"%", MatchMode.ANYWHERE));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
         return (List<T>) crit.list();
     }
-    public <T> List<T>  selectLike_START(String criteria,Object like,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectLike_START(String criteria,Object like,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.ilike(criteria, like+"%", MatchMode.START));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
         return (List<T>) crit.list();
     }
-    public <T> List<T>  selectLike_END(String criteria,Object like,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectLike_END(String criteria,Object like,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.ilike(criteria, like+"%", MatchMode.END));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
         return (List<T>) crit.list();
     }
-    public <T> List<T>  selectLike_EXACT(String criteria,Object like,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectLike_EXACT(String criteria,Object like,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.ilike(criteria, like+"%", MatchMode.EXACT));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
@@ -206,16 +133,9 @@ public class DbController<T> {
     }
 
 
-    public <T> List<T>  selectNull(String criteria,boolean ASC,boolean DESC) {
+    public <T> List<T>  selectNull(String criteria,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.isNull(criteria));
-        if(ASC==true && DESC==true){
-            ASC=false;
-            DESC=false;
-        }
-        if(ASC==true){
-            this.ASC(criteria,crit);
-        }
         if(DESC==true){
             this.DESC(criteria,crit);
         }
