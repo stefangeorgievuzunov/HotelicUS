@@ -47,7 +47,7 @@ public final class App extends Application {
     public void start(Stage primaryStage) {
         try {
             App.stage = primaryStage;
-            loginWindow();
+            App.loginWindow();
             primaryStage.show();
         } catch (Exception ex) {
             ex.printStackTrace();

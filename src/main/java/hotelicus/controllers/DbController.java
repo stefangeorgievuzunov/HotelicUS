@@ -1,14 +1,14 @@
 package hotelicus.controllers;
 
+import java.io.IOException;
 import java.lang.Class;
 
 import hotelicus.App;
 import hotelicus.HibernateUtil;
+import hotelicus.window.Error;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 
 import java.util.List;
 
@@ -54,6 +54,23 @@ public class DbController<T>{
         return(List<T>)crit.list();
     }
 
+    public <T> boolean usernamePasswordValidator(String username,String password)throws IOException{
+        Criteria crit=this.session.createCriteria(this.type);
+        crit.add(Restrictions.eq("username", username));
+        crit.add(Restrictions.eq("password", password));
+        List<T> users=crit.list();
+
+        if(users.size()>1){
+            new Error("Failed to login","FATAL ERROR: More than one record existing !");
+            return false;
+        }
+        else if(users.size()<1){
+            new Error("Failed to login","Invalid username or password!");
+            return false;
+        }else{
+            return true;
+        }
+    }
     public <T> List<T>  selectGreaterThan(String criteria,Object value,boolean DESC) {
         Criteria crit = this.session.createCriteria(this.type);
         crit.add(Restrictions.gt(criteria, value));

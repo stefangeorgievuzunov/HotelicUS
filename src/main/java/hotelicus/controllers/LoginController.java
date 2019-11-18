@@ -1,6 +1,7 @@
 package hotelicus.controllers;
 
 import hotelicus.App;
+import hotelicus.entities.Users;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 
@@ -21,17 +22,27 @@ public class LoginController {
     }
 
     @FXML
-    private void printOutput() throws IOException {
+    private void loginRouter() throws IOException {
         System.out.println(user.getText());
         System.out.println(password.getText());
 
-        // Verify user input
-        if (!user.getText().equals("") && !password.getText().equals("")) {
+        if(loginValidation(user.getText(),password.getText())){
             App.dashboardWindow();
-
             return;
         }
-        // return error
-        new Error("Failed to login", "There are empty fields!");
+       }
+
+    private boolean loginValidation(String username, String password) throws IOException{
+        if (!username.equals("") && !password.equals("")) {
+            DbController<Users> loginControl=new DbController<Users>(Users.class);
+
+            if(loginControl.usernamePasswordValidator(username,password))
+                return true;
+            else
+                return false;
+        }else{
+            new Error("Failed to login", "There are empty fields!");
+            return false;
+        }
     }
 }
