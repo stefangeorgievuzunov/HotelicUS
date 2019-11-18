@@ -70,6 +70,7 @@ public class App extends Application {
     }
 
     private void changeScene(String fxml, String title, int width, int height) throws Exception {
+        System.out.println(getClass().getClassLoader().getResource("templates/" + fxml));
         Parent page = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("templates/" + fxml)), null, new JavaFXBuilderFactory());
         Scene scene = getStage().getScene();
 

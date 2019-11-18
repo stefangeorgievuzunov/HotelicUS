@@ -1,6 +1,7 @@
 package hotelicus.controllers;
 
 import hotelicus.entities.Services;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -13,22 +14,22 @@ public class AdminController {
     private TableView<Services> hotelsTable = new TableView<>();
 
     @FXML
-    private TableColumn<Services, String> serviceId;
+    private TableColumn<Services, Integer> serviceId = new TableColumn<Services,Integer>("serviceId");
 
     @FXML
-    private TableColumn<Services, String> name;
+    private TableColumn<Services, String> name = new TableColumn<Services,String>("name");
 
     @FXML
-    private TableColumn<Services, String> price;
+    private TableColumn<Services, Double> price = new TableColumn<Services,Double>("price");
 
     public AdminController() {
-        System.out.println(hotelsTable.getItems().toString());
-        ObservableList<Services> data = hotelsTable.getItems();
-        Services h = new Services();
-        h.setServiceId(1);
-        h.setName("Hotelicus");
-        h.setPrice(100.0);
-        data.add(h);
-        System.out.println(hotelsTable.getItems().toString());
+        serviceId.setCellValueFactory(new PropertyValueFactory<Services, Integer>("serviceId"));
+        name.setCellValueFactory(new PropertyValueFactory<Services, String>("name"));
+        price.setCellValueFactory(new PropertyValueFactory<Services, Double>("price"));
+        final ObservableList<Services> das = FXCollections.observableArrayList(
+                new Services(1, "Hotelicus", 100.0)
+        );
+        hotelsTable.setItems(das);
+        System.out.println(das.isEmpty());
     }
 }

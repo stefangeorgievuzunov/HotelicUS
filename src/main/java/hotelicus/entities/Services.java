@@ -9,6 +9,12 @@ public class Services {
     private String  name;
     private Double price;
 
+    public Services(Integer sId, String n, Double p) {
+        this.serviceId = sId;
+        this.name = n;
+        this.price = p;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="service_id")
