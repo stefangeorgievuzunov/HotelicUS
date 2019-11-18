@@ -72,14 +72,14 @@ public final class App extends Application {
 
     public static void adminWindow() {
         try {
-            changeSceneByObject(new AdminController().getTableView());
+            changeScene(new AdminController().getTableView());
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private static void changeSceneByObject(TableView tableView){
+    private static void changeScene(TableView tableView){
         VBox vbox=new VBox(tableView);
         Scene scene=new Scene(vbox);
         App.stage.setScene(scene);

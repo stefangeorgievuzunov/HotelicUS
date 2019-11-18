@@ -1,5 +1,6 @@
 import hotelicus.HibernateUtil;
 import hotelicus.entities.Users;
+import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
 import org.hibernate.Session;
 import java.util.Date;
@@ -16,7 +17,7 @@ public class test {
         Users user = new Users();
         user.setUsername("Test 1");
         user.setPassword("Password");
-        user.setPrivileges(0);
+        user.setPrivileges(UserPrivileges.OWNER);
         user.setFirstName("Papa");
         user.setLastName("Meme");
         user.setPhoneNumber("+355555555");

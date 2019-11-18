@@ -1,5 +1,6 @@
 package hotelicus.entities;
 
+import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ public class Users {
     private Integer userId;
     private String username;
     private String password;
-    private Integer privileges;
+    private UserPrivileges privileges;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -49,11 +50,11 @@ public class Users {
     }
 
     @Column(name="privileges")
-    public Integer getPrivileges() {
+    public UserPrivileges getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(Integer privileges) {
+    public void setPrivileges(UserPrivileges privileges) {
         this.privileges = privileges;
     }
 
