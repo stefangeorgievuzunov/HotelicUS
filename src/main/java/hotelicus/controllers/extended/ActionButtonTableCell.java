@@ -18,6 +18,10 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
 
         this.actionButton = new Button(label);
         this.actionButton.setOnAction((ActionEvent e) -> {
+            getTableView().getSelectionModel().clearSelection();
+            getTableView().requestFocus();
+            getTableView().getFocusModel().focus(getTableRow().getIndex());
+            System.out.println(getTableRow().getIndex());
             function.apply(getCurrentItem());
         });
         this.actionButton.setMaxWidth(Double.MAX_VALUE);
