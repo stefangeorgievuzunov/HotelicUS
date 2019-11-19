@@ -1,6 +1,7 @@
 package hotelicus;
 
 import hotelicus.controllers.AdminController;
+import hotelicus.core.HibernateUtil;
 import hotelicus.entities.Users;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

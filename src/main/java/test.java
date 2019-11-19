@@ -1,4 +1,4 @@
-import hotelicus.HibernateUtil;
+import hotelicus.core.HibernateUtil;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;

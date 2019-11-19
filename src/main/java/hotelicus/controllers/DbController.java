@@ -67,13 +67,6 @@ public class DbController<T>{
         crit.add(Restrictions.eq("password", password));
         List<T> users=crit.list();
 
-        //OPTIONAL
-//
-//        if(users.size()>1){
-//            new Error("Failed to login","FATAL ERROR: More than one record existing !");
-//            return false;
-//        }
-
         this.session.getTransaction().commit();
         if(users.size()<1){
             new Error("Failed to login","Invalid username or password!");

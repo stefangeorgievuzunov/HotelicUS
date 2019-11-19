@@ -1,4 +1,4 @@
-package hotelicus;
+package hotelicus.core;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

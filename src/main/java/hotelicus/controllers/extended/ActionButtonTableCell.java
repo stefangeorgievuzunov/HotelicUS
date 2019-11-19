@@ -1,6 +1,7 @@
 package hotelicus.controllers.extended;
 
 
+import hotelicus.styles.Styles;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -14,7 +15,7 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
     private final Button actionButton;
 
     public ActionButtonTableCell(String label,String buttonStyle, Function<S, S> function) {
-        this.getStyleClass().add("action-button-table-cell");
+        this.getStyleClass().add(Styles.ACTION_BUTTON_TABLE_CELL_STYLE);
         this.actionButton = new Button(label);
         if(buttonStyle!=null){
             this.actionButton.setStyle(buttonStyle);
@@ -44,7 +45,7 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
         if (empty) {
             setGraphic(null);
         } else {
-            setGraphic(actionButton);
+            setGraphic(this.actionButton);
         }
     }
 }
