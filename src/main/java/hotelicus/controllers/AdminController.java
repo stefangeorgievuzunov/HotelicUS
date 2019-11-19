@@ -1,36 +1,33 @@
 package hotelicus.controllers;
-
-import com.sun.javafx.scene.control.DoubleField;
-import com.sun.javafx.scene.control.IntegerField;
-import hotelicus.entities.Services;
+import hotelicus.controllers.extended.ActionButtonTableCell;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import hotelicus.window.Confirmation;
+import javafx.scene.control.*;
 
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
+
+
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import static hotelicus.enums.UserPrivileges.OWNER;
+import static hotelicus.enums.UserState.DISABLED;
 
 
 public class AdminController {
     private TableView tab;
-
+    private DbController<Users> users;
     public AdminController() {
         this.loadTableView();
     }
 
-    public void loadTableView(){
-        DbController<Users> users= new DbController<Users>(Users.class);
-
-        List<Users> owners =users.findAll();
+    private void loadTableView(){
+        this.users= new DbController<Users>(Users.class);
+        List<Users> owners =this.users.findAll();
 
         tab=new TableView();
         TableColumn userId = new TableColumn("userId");
@@ -66,15 +63,49 @@ public class AdminController {
         TableColumn endedOn = new TableColumn("endedOn");
         endedOn.setCellValueFactory(new PropertyValueFactory<Users, Date>("endedOn"));
 
-        tab.getColumns().addAll(userId, username,password,privileges,firstName,lastName,phoneNumber,userState,createdOn,endedOn);
+        TableColumn removeButton = new TableColumn("Delete Record");
+        removeButton.setCellValueFactory(new PropertyValueFactory<Users,String>("removeButton"));
+
+        TableColumn activateButton = new TableColumn("Activate Record");
+        activateButton.setCellValueFactory(new PropertyValueFactory<Users,String>("activateButton"));
+
+        //activateButton.setCellFactory(cellFactory);
+        removeButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Remove", (Users u) -> {
+            try{
+                deleteUser(u);
+            }catch(IOException excep){
+                excep.getMessage();
+            }
+
+            return u;
+        }));
+        tab.getColumns().addAll(userId, username,password,privileges,firstName,lastName,phoneNumber,userState,createdOn,endedOn,removeButton,activateButton);
 
 
         for(Users owner : owners){
-            if(owner.getPrivileges()==OWNER)
-            tab.getItems().add(owner);
+            if(owner.getPrivileges()==OWNER) {
+                tab.getItems().add(owner);
+            }
         }
     }
+
+    private void deleteUser(Users user)throws IOException{
+        Date deletedOn=new Date();
+
+        Confirmation confirm=new Confirmation("Confirmation","Do you want to delete this row?");
+        if(confirm.getConfirmationResult()==true){
+            Users updatedUser=new Users();
+            updatedUser=user;
+            updatedUser.setEndedOn(deletedOn);
+            updatedUser.setUserState(DISABLED);
+            this.users.update(updatedUser);
+            System.out.println(user.getUserState());
+            this.tab.refresh();
+        }
+    }
+
     public TableView getTableView(){
         return this.tab;
     }
 }
+

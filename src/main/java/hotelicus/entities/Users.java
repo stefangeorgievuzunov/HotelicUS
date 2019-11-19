@@ -2,7 +2,6 @@ package hotelicus.entities;
 
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -49,6 +48,7 @@ public class Users {
         this.password = password;
     }
 
+    @Enumerated(EnumType.STRING)
     @Column(name="privileges")
     public UserPrivileges getPrivileges() {
         return privileges;
@@ -85,6 +85,7 @@ public class Users {
         this.phoneNumber = phoneNumber;
     }
 
+    @Enumerated(EnumType.STRING)
     @Column(name="user_state")
     public UserState getUserState() {
         return userState;
