@@ -13,10 +13,12 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
 
     private final Button actionButton;
 
-    public ActionButtonTableCell(String label, Function<S, S> function) {
+    public ActionButtonTableCell(String label,String buttonStyle, Function<S, S> function) {
         this.getStyleClass().add("action-button-table-cell");
-
         this.actionButton = new Button(label);
+        if(buttonStyle!=null){
+            this.actionButton.setStyle(buttonStyle);
+        }
         this.actionButton.setOnAction((ActionEvent e) -> {
             getTableView().getSelectionModel().clearSelection();
             getTableView().requestFocus();
@@ -31,8 +33,8 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
         return (S) getTableView().getItems().get(getIndex());
     }
 
-    public static <S> Callback<TableColumn<S, Button>, TableCell<S, Button>> forTableColumn(String label, Function<S, S> function) {
-        return param -> new ActionButtonTableCell<>(label, function);
+    public static <S> Callback<TableColumn<S, Button>, TableCell<S, Button>> forTableColumn(String label,String buttonStyle, Function<S, S> function) {
+        return param -> new ActionButtonTableCell<>(label,buttonStyle, function);
     }
 
     @Override

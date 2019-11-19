@@ -70,7 +70,7 @@ public class AdminController {
         activateButton.setCellValueFactory(new PropertyValueFactory<Users,String>("activateButton"));
 
 
-        removeButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("disable", (Users u) -> {
+        removeButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("disable","-fx-background-color: #fc0356;-fx-font-size: 15;", (Users u) -> {
             try{
                 deleteUser(u);
             }catch(IOException excep){
@@ -79,7 +79,7 @@ public class AdminController {
             return u;
         }));
 
-        activateButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("activate", (Users u) -> {
+        activateButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("activate","-fx-background-color: #03fc73; -fx-font-size: 15;", (Users u) -> {
             try{
                 activateUser(u);
             }catch(IOException excep){
