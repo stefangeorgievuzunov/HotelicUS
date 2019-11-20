@@ -3,6 +3,7 @@ import hotelicus.App;
 import hotelicus.controllers.extended.ActionButtonTableCell;
 import hotelicus.controllers.extended.UploadUserForm;
 import hotelicus.entities.Users;
+import hotelicus.enums.UploadAction;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
 import hotelicus.styles.Styles;
@@ -16,9 +17,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import static hotelicus.enums.UploadAction.EDIT;
 import static hotelicus.enums.UserPrivileges.OWNER;
 import static hotelicus.enums.UserState.ACTIVE;
 import static hotelicus.enums.UserState.DISABLED;
+import static hotelicus.styles.Styles.EDIT_BUTTON_STYLE;
 
 
 public class AdminController {
@@ -89,10 +92,9 @@ public class AdminController {
             return user;
         }));
 
-        editButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit",null, (Users user) -> {
+        editButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit",EDIT_BUTTON_STYLE, (Users user) -> {
             try{
-                //new UploadUserForm("Edit",500,500,user,user.getPrivileges());
-                App.popUpScene(user,"UploadForm.xml", "Login", 320, 120);
+                App.popUpScene("UploadForm.xml", "EDIT RECORD", 250, 120, EDIT,user,user.getPrivileges());
             }catch(IOException excep){
                 System.out.println(excep.getMessage());
             }

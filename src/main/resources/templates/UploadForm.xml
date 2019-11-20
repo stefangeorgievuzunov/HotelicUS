@@ -31,7 +31,7 @@
         </GridPane>
         <StackPane prefHeight="-1.0" prefWidth="-1.0">
             <children>
-                <Button fx:id="saveButton" onAction="#uploadRouter" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Save" StackPane.alignment="CENTER_RIGHT" />
+                <Button fx:id="saveButton" onAction="#uploadRouter" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Save" StackPane.alignment="CENTER_LEFT" />
             </children>
         </StackPane>
     </children>

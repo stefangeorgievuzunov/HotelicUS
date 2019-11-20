@@ -4,6 +4,8 @@ import hotelicus.controllers.extended.UploadUserForm;
 import hotelicus.controllers.main.AdminController;
 import hotelicus.core.HibernateUtil;
 import hotelicus.entities.Users;
+import hotelicus.enums.UploadAction;
+import hotelicus.enums.UserPrivileges;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -109,20 +111,21 @@ public final class App extends Application {
         App.stage.setTitle(title);
     }
 
-    public  static void popUpScene(Users user,String fxml, String title, int width, int height)throws IOException{
+    public  static void popUpScene(String fxml, String title, int width, int height, UploadAction uploadAction, Users user, UserPrivileges privileges)throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.type.getClassLoader().getResource("templates/" + fxml));
 
         Parent root = (Parent)fxmlLoader.load();
         UploadUserForm controller = fxmlLoader.<UploadUserForm>getController();
-        Users user2=new Users();
-        controller.init(user2,user.getPrivileges());
+        controller.init(user,privileges,uploadAction);
         Stage stage=new Stage();
         stage.setTitle(title);
         Scene scene=new Scene(root, 450, 450);
         stage.setScene(scene);
         stage.show();
     }
-
+    public static Stage getAppStage(){
+        return App.stage;
+    }
     public static void main(String[] args) {
         launch(args);
     }

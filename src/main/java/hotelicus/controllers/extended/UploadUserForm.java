@@ -1,16 +1,23 @@
 package hotelicus.controllers.extended;
+import hotelicus.App;
+import hotelicus.controllers.main.AdminController;
 import hotelicus.controllers.main.DbController;
 import hotelicus.entities.Users;
+import hotelicus.enums.UploadAction;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.IOException;
 import java.util.Date;
+
+import static hotelicus.enums.UploadAction.*;
 
 public class UploadUserForm {
     @FXML
@@ -21,17 +28,21 @@ public class UploadUserForm {
     private TextField firstName;
     @FXML
     private TextField lastName;
+    @FXML
+    private Button saveButton;
 
     private Users user;
     private UserPrivileges priviliges;
+    private UploadAction uploadAction;
 
     public UploadUserForm(){
 
     }
 
-    public void init(Users user,UserPrivileges priviliges){
+    public void init(Users user, UserPrivileges priviliges, UploadAction uploadAction){
         this.user=user;
         this.priviliges=priviliges;
+        this.uploadAction=uploadAction;
         this.uploadUserInfo();
     }
 
@@ -49,12 +60,30 @@ public class UploadUserForm {
                 Date startedOn=new Date();
                 this.user.setStartedOn(startedOn);
             }
+            boolean successfulRecord=true;
 
-            try{
-                updateUser.insert(this.user);
+            if(this.uploadAction==EDIT){
+                try{
+                    updateUser.update(this.user);
+                }
+                catch(ConstraintViolationException excp){
+                    successfulRecord=false;
+                    new Error("Upload failed", "Username is busy");
+                }
             }
-            catch(ConstraintViolationException excp){
-                new Error("Upload failed", "Username is busy");
+            if(this.uploadAction==INSERT){
+                try{
+                    updateUser.insert(this.user);
+                }
+                catch(ConstraintViolationException excp){
+                    successfulRecord=false;
+                    new Error("Upload failed", "Username is busy");
+                }
+            }
+
+            if(successfulRecord){
+                Stage stage = (Stage) saveButton.getScene().getWindow();
+                stage.close();
             }
         }
     }
