@@ -13,31 +13,31 @@ import java.util.List;
 
 @SuppressWarnings("all")
 public class UserDbController {
-    private Session session;
+    private static Session session;
 
     public UserDbController(){
         this.session= App.getSession();
     }
 
-    public Users selectUniqueUser(String username)throws NonUniqueResultException {
-        this.session.beginTransaction();
-        Criteria crit=this.session.createCriteria(Users.class);
+    public static  Users selectUniqueUser(String username)throws NonUniqueResultException {
+        UserDbController.session.beginTransaction();
+        Criteria crit=UserDbController.session.createCriteria(Users.class);
         crit.add(Restrictions.eq("username", username));
 
         Users result=(Users)crit.uniqueResult();
-        this.session.getTransaction().commit();
-
+        UserDbController.session.getTransaction().commit();
         return result;
-    }
 
-    public boolean usernamePasswordValidator(String username,String password)throws IOException {
-        this.session.beginTransaction();
-        Criteria crit=this.session.createCriteria(Users.class);
+        }
+
+    public static boolean usernamePasswordValidator(String username,String password)throws IOException {
+        UserDbController.session.beginTransaction();
+        Criteria crit=UserDbController.session.createCriteria(Users.class);
         crit.add(Restrictions.eq("username", username));
         crit.add(Restrictions.eq("password", password));
         List<Users> users=crit.list();
 
-        this.session.getTransaction().commit();
+        UserDbController.session.getTransaction().commit();
         if(users.size()<1){
             new Error("Failed to login","Invalid username or password!");
             return false;

@@ -1,5 +1,7 @@
 package hotelicus.controllers.main;
+import hotelicus.App;
 import hotelicus.controllers.extended.ActionButtonTableCell;
+import hotelicus.controllers.extended.UploadUserForm;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
@@ -65,6 +67,9 @@ public class AdminController {
         TableColumn activateButton = new TableColumn("Activate Record");
         activateButton.setCellValueFactory(new PropertyValueFactory<Users,String>("activateButton"));
 
+        TableColumn editButton = new TableColumn("Edit Record");
+        editButton.setCellValueFactory(new PropertyValueFactory<Users,String>("editButton"));
+
 
         removeButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("disable", Styles.DISABLE_BUTTON_STYLE, (Users user) -> {
             try{
@@ -84,7 +89,16 @@ public class AdminController {
             return user;
         }));
 
-        tab.getColumns().addAll(userId, username,password,privileges,firstName,lastName,userState,startedOn,endedOn,removeButton,activateButton);
+        editButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit",null, (Users user) -> {
+            try{
+                //new UploadUserForm("Edit",500,500,user,user.getPrivileges());
+                App.popUpScene(user,"UploadForm.xml", "Login", 320, 120);
+            }catch(IOException excep){
+                System.out.println(excep.getMessage());
+            }
+            return user;
+        }));
+        tab.getColumns().addAll(userId, username,password,privileges,firstName,lastName,userState,startedOn,endedOn,removeButton,activateButton,editButton);
     }
 
     private void loadUsers(){

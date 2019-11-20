@@ -29,7 +29,7 @@ public class Users {
         this.userId = userId;
     }
 
-    @Column(name="username")
+    @Column(name="username",unique = true)
     public String getUsername() {
         return username;
     }

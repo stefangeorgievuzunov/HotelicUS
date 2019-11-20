@@ -1,5 +1,6 @@
 package hotelicus;
 
+import hotelicus.controllers.extended.UploadUserForm;
 import hotelicus.controllers.main.AdminController;
 import hotelicus.core.HibernateUtil;
 import hotelicus.entities.Users;
@@ -13,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 
+import java.io.IOException;
 import java.util.Objects;
 
 
@@ -89,7 +91,9 @@ public final class App extends Application {
 
     private static void changeScene(String fxml, String title, int width, int height) throws Exception {
         System.out.println(App.type.getClassLoader().getResource("templates/" + fxml));
-        Parent page = FXMLLoader.load(Objects.requireNonNull(App.type.getClassLoader().getResource("templates/" + fxml)), null, new JavaFXBuilderFactory());
+        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getClassLoader().getResource("templates/" + fxml));
+
+        Parent page = (Parent)fxmlLoader.load();
         Scene scene = getStage().getScene();
 
         if (scene == null) {
@@ -103,6 +107,20 @@ public final class App extends Application {
         }
 
         App.stage.setTitle(title);
+    }
+
+    public  static void popUpScene(Users user,String fxml, String title, int width, int height)throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getClassLoader().getResource("templates/" + fxml));
+
+        Parent root = (Parent)fxmlLoader.load();
+        UploadUserForm controller = fxmlLoader.<UploadUserForm>getController();
+        Users user2=new Users();
+        controller.init(user2,user.getPrivileges());
+        Stage stage=new Stage();
+        stage.setTitle(title);
+        Scene scene=new Scene(root, 450, 450);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void main(String[] args) {

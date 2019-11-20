@@ -9,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.criterion.*;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class DbController<T>{
         return all;
     }
 
-    public void insert(T object)
+    public void insert(T object)throws ConstraintViolationException
     {
         this.session.beginTransaction();
         this.session.save(object);
