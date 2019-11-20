@@ -14,9 +14,7 @@ public class Users {
     private UserPrivileges privileges;
     private String firstName;
     private String lastName;
-    private String phoneNumber;
     private UserState userState;
-    private Date createdOn;
     private Date startedOn;
     private Date endedOn;
 
@@ -76,15 +74,6 @@ public class Users {
         this.lastName = lastName;
     }
 
-    @Column(name="phone_number")
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     @Enumerated(EnumType.STRING)
     @Column(name="user_state")
     public UserState getUserState() {
@@ -93,15 +82,6 @@ public class Users {
 
     public void setUserState(UserState userState) {
         this.userState = userState;
-    }
-
-    @Column(name="created_on")
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
     }
 
     @Column(name="started_on")

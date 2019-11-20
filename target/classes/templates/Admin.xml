@@ -17,7 +17,7 @@
 <?import javafx.geometry.Insets?>
 <?import hotelicus.entities.Services ?>
 
-<VBox fx:id="vbox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="hotelicus.controllers.AdminController">
+<VBox fx:id="vbox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="hotelicus.controllers.main.AdminController">
     <children>
         <MenuBar accessibleRole="BUTTON">
             <menus>

@@ -3,6 +3,7 @@ package hotelicus.controllers.extended;
 
 import hotelicus.styles.Styles;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -15,7 +16,7 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
     private final Button actionButton;
 
     public ActionButtonTableCell(String label,String buttonStyle, Function<S, S> function) {
-        this.getStyleClass().add(Styles.ACTION_BUTTON_TABLE_CELL_STYLE);
+        //this.getStyleClass().add(Styles.ACTION_BUTTON_TABLE_CELL_STYLE);
         this.actionButton = new Button(label);
         if(buttonStyle!=null){
             this.actionButton.setStyle(buttonStyle);
@@ -27,7 +28,7 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
             System.out.println(getTableRow().getIndex());
             function.apply(getCurrentItem());
         });
-        this.actionButton.setMaxWidth(Double.MAX_VALUE);
+        //this.actionButton.setMaxWidth(Double.MAX_VALUE);
     }
 
     public S getCurrentItem() {
@@ -41,10 +42,10 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
     @Override
     public void updateItem(Button item, boolean empty) {
         super.updateItem(item, empty);
-
         if (empty) {
             setGraphic(null);
         } else {
+            this.setAlignment(Pos.CENTER);
             setGraphic(this.actionButton);
         }
     }

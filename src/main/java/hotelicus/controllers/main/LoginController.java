@@ -1,7 +1,7 @@
-package hotelicus.controllers;
+package hotelicus.controllers.main;
 
 import hotelicus.App;
-import hotelicus.entities.Users;
+import hotelicus.controllers.extended.UserDbController;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 
@@ -34,7 +34,7 @@ public class LoginController {
 
     private boolean loginValidation(String username, String password) throws IOException{
         if (!username.equals("") && !password.equals("")) {
-            DbController<Users> loginControl=new DbController<Users>(Users.class);
+            UserDbController loginControl=new UserDbController();
 
             if(loginControl.usernamePasswordValidator(username,password))
                 return true;

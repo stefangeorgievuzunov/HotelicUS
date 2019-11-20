@@ -1,4 +1,4 @@
-package hotelicus.controllers;
+package hotelicus.controllers.main;
 import hotelicus.controllers.extended.ActionButtonTableCell;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
@@ -25,12 +25,13 @@ public class AdminController {
     public AdminController() {
         this.users= new DbController<Users>(Users.class);
         this.loadTableView();
+        this.loadUsers();
     }
 
     private void loadTableView(){
-        List<Users> users =this.users.findAll();
-
         this.tab=new TableView();
+        this.tab.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         TableColumn userId = new TableColumn("User id");
         userId.setCellValueFactory(new PropertyValueFactory<Users,Integer>("userId"));
 
@@ -49,14 +50,8 @@ public class AdminController {
         TableColumn lastName = new TableColumn("Last name");
         lastName.setCellValueFactory(new PropertyValueFactory<Users,String>("lastName"));
 
-        TableColumn phoneNumber = new TableColumn("Phone number");
-        phoneNumber.setCellValueFactory(new PropertyValueFactory<Users,Double>("phoneNumber"));
-
         TableColumn userState = new TableColumn("User state");
         userState.setCellValueFactory(new PropertyValueFactory<Users, UserState>("userState"));
-
-        TableColumn createdOn = new TableColumn("Created on");
-        createdOn.setCellValueFactory(new PropertyValueFactory<Users,Date>("createdOn"));
 
         TableColumn startedOn = new TableColumn("Started on");
         startedOn.setCellValueFactory(new PropertyValueFactory<Users,Date>("startedOn"));
@@ -89,9 +84,11 @@ public class AdminController {
             return user;
         }));
 
-        tab.getColumns().addAll(userId, username,password,privileges,firstName,lastName,phoneNumber,userState,createdOn,endedOn,removeButton,activateButton);
+        tab.getColumns().addAll(userId, username,password,privileges,firstName,lastName,userState,startedOn,endedOn,removeButton,activateButton);
+    }
 
-
+    private void loadUsers(){
+        List<Users> users =this.users.findAll();
         for(Users user : users){
             if(user.getPrivileges()==OWNER) {
                 this.tab.getItems().add(user);

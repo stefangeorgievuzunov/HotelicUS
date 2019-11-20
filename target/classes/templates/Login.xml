@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?language JavaScript?>
+        <?language JavaScript?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.layout.*?>
 
-<VBox fx:id="vbox" layoutX="10.0" layoutY="10.0" prefHeight="120.0" prefWidth="300.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="hotelicus.controllers.LoginController">
-    <style>
-        -fx-padding: 10;
-    </style>
-    <children>
-        <GridPane>
-            <children>
-                <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <TextField fx:id="user" promptText="Enter your username" text="" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <PasswordField fx:id="password" promptText="Enter your password" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            </children>
-            <columnConstraints>
-                <ColumnConstraints maxWidth="148.0" minWidth="10.0" prefWidth="109.0" />
-                <ColumnConstraints maxWidth="228.0" minWidth="10.0" prefWidth="189.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" />
-            </rowConstraints>
-        </GridPane>
-        <StackPane prefHeight="-1.0" prefWidth="-1.0">
-            <children>
-                <Button fx:id="loginButton" onAction="#loginRouter" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Login" StackPane.alignment="CENTER_RIGHT" />
-            </children>
-        </StackPane>
-    </children>
+<VBox fx:id="vbox" layoutX="10.0" layoutY="10.0" prefHeight="120.0" prefWidth="300.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="hotelicus.controllers.main.LoginController">
+<style>
+    -fx-padding: 10;
+</style>
+<children>
+    <GridPane>
+        <children>
+            <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField fx:id="user" promptText="Enter your username" text="" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <PasswordField fx:id="password" promptText="Enter your password" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        </children>
+        <columnConstraints>
+            <ColumnConstraints maxWidth="148.0" minWidth="10.0" prefWidth="109.0" />
+            <ColumnConstraints maxWidth="228.0" minWidth="10.0" prefWidth="189.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+        </rowConstraints>
+    </GridPane>
+    <StackPane prefHeight="-1.0" prefWidth="-1.0">
+        <children>
+            <Button fx:id="loginButton" onAction="#loginRouter" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Login" StackPane.alignment="CENTER_RIGHT" />
+        </children>
+    </StackPane>
+</children>
 </VBox>

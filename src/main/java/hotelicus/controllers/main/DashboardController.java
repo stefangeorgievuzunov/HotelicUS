@@ -1,4 +1,4 @@
-package hotelicus.controllers;
+package hotelicus.controllers.main;
 
 import hotelicus.App;
 import javafx.fxml.FXML;

@@ -20,9 +20,8 @@ public class test {
         user.setPrivileges(UserPrivileges.OWNER);
         user.setFirstName("Papa");
         user.setLastName("Meme");
-        user.setPhoneNumber("+355555555");
         user.setUserState(UserState.ACTIVE);
-        user.setCreatedOn(new Date());
+        user.setStartedOn(new Date());
 
         session.save(user);
         session.getTransaction().commit();
