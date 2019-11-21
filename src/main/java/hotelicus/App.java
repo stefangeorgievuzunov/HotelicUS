@@ -8,7 +8,6 @@ import hotelicus.enums.UploadAction;
 import hotelicus.enums.UserPrivileges;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
@@ -17,7 +16,6 @@ import javafx.stage.Stage;
 import org.hibernate.Session;
 
 import java.io.IOException;
-import java.util.Objects;
 
 
 public final class App extends Application {
@@ -77,18 +75,10 @@ public final class App extends Application {
 
     public static void adminWindow() {
         try {
-            changeScene(new AdminController().getTableView());
-
+            new AdminController();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    private static void changeScene(TableView tableView){
-        VBox vbox=new VBox(tableView);
-        Scene scene=new Scene(vbox);
-        App.stage.setScene(scene);
-        App.stage.show();
     }
 
     private static void changeScene(String fxml, String title, int width, int height) throws Exception {
@@ -111,8 +101,8 @@ public final class App extends Application {
         App.stage.setTitle(title);
     }
 
-    public  static void popUpScene(String fxml, String title, int width, int height, UploadAction uploadAction, Users user, UserPrivileges privileges)throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getClassLoader().getResource("templates/" + fxml));
+    public  static void loadUploadUserFormWindow(String title,UploadAction uploadAction, Users user, UserPrivileges privileges)throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getClassLoader().getResource("templates/UploadForm.xml"));
 
         Parent root = (Parent)fxmlLoader.load();
         UploadUserForm controller = fxmlLoader.<UploadUserForm>getController();

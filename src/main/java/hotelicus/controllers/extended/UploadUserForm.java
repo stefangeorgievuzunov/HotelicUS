@@ -1,6 +1,4 @@
 package hotelicus.controllers.extended;
-import hotelicus.App;
-import hotelicus.controllers.main.AdminController;
 import hotelicus.controllers.main.DbController;
 import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
@@ -50,6 +48,7 @@ public class UploadUserForm {
     private void uploadRouter()throws  IOException{
         if(this.formValidation(this.username.getText(),this.password.getText(),this.firstName.getText(),this.lastName.getText())){
            DbController<Users> updateUser=new DbController<Users>(Users.class);
+
             this.user.setUsername(this.username.getText());
             this.user.setPassword(this.password.getText());
             this.user.setFirstName(this.firstName.getText());
@@ -74,6 +73,7 @@ public class UploadUserForm {
             if(this.uploadAction==INSERT){
                 try{
                     updateUser.insert(this.user);
+                    UsersTableController.getTableView().getItems().add(this.user);
                 }
                 catch(ConstraintViolationException excp){
                     successfulRecord=false;
@@ -82,6 +82,7 @@ public class UploadUserForm {
             }
 
             if(successfulRecord){
+                UsersTableController.getTableView().refresh();
                 Stage stage = (Stage) saveButton.getScene().getWindow();
                 stage.close();
             }

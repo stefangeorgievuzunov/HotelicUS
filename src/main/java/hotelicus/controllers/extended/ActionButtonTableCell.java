@@ -16,7 +16,6 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
     private final Button actionButton;
 
     public ActionButtonTableCell(String label,String buttonStyle, Function<S, S> function) {
-        //this.getStyleClass().add(Styles.ACTION_BUTTON_TABLE_CELL_STYLE);
         this.actionButton = new Button(label);
         if(buttonStyle!=null){
             this.actionButton.setStyle(buttonStyle);
@@ -28,7 +27,6 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
             System.out.println(getTableRow().getIndex());
             function.apply(getCurrentItem());
         });
-        //this.actionButton.setMaxWidth(Double.MAX_VALUE);
     }
 
     public S getCurrentItem() {
