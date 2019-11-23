@@ -1,4 +1,4 @@
-package hotelicus.controllers.extended;
+package hotelicus.controllers.extended.Users;
 import hotelicus.controllers.main.DbController;
 import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
@@ -45,8 +45,8 @@ public class UploadUserForm {
     }
 
     @FXML
-    private void uploadRouter()throws  IOException{
-        if(this.formValidation(this.username.getText(),this.password.getText(),this.firstName.getText(),this.lastName.getText())){
+    private void uploadRouter(){
+        if(this.formValidation()){
            DbController<Users> updateUser=new DbController<Users>(Users.class);
 
             this.user.setUsername(this.username.getText());
@@ -62,18 +62,13 @@ public class UploadUserForm {
             boolean successfulRecord=true;
 
             if(this.uploadAction==EDIT){
-                try{
                     updateUser.update(this.user);
-                }
-                catch(ConstraintViolationException excp){
-                    successfulRecord=false;
-                    new Error("Upload failed", "Username is busy");
-                }
             }
+
             if(this.uploadAction==INSERT){
                 try{
                     updateUser.insert(this.user);
-                    UsersTableController.getTableView().getItems().add(this.user);
+                   // UsersTableController.getTableView().getItems().add(this.user);
                 }
                 catch(ConstraintViolationException excp){
                     successfulRecord=false;
@@ -82,7 +77,7 @@ public class UploadUserForm {
             }
 
             if(successfulRecord){
-                UsersTableController.getTableView().refresh();
+               // UsersTableController.getTableView().refresh();
                 Stage stage = (Stage) saveButton.getScene().getWindow();
                 stage.close();
             }
@@ -98,11 +93,11 @@ public class UploadUserForm {
         }
     }
 
-    private boolean formValidation(String username, String password, String firstName, String lastName)throws IOException {
+    private boolean formValidation(){
 
-        if (!username.equals("") && !password.equals("") && !firstName.equals("") && !lastName.equals("")){
+        if (!this.username.getText().equals("") && !this.password.getText().equals("") && !this.firstName.getText().equals("") && !this.lastName.getText().equals("")){
             try{
-                Users testUser=UserDbController.selectUniqueUser(username);
+                Users testUser= UserDbController.selectUniqueUser(this.username.getText());
                 if(testUser==null){
                     return true;
                 }
@@ -114,7 +109,7 @@ public class UploadUserForm {
                         throw new NonUniqueResultException(0);
                     }
                 }
-                if(username.equals(testUser.getUsername())){
+                if(this.username.getText().equals(testUser.getUsername())){
                     throw new NonUniqueResultException(0);
                 }
             }

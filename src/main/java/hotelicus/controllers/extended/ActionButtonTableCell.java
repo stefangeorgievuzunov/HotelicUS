@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.util.Callback;
 
 import java.util.function.Function;
@@ -14,27 +15,28 @@ import java.util.function.Function;
 public class ActionButtonTableCell<S> extends TableCell<S, Button> {
 
     private final Button actionButton;
+    private  TableView table;
 
-    public ActionButtonTableCell(String label,String buttonStyle, Function<S, S> function) {
+    public ActionButtonTableCell(String label, String buttonStyle,TableView table, Function<S, S> function) {
         this.actionButton = new Button(label);
+        this.table=table;
         if(buttonStyle!=null){
             this.actionButton.setStyle(buttonStyle);
         }
         this.actionButton.setOnAction((ActionEvent e) -> {
-            getTableView().getSelectionModel().clearSelection();
-            getTableView().requestFocus();
-            getTableView().getFocusModel().focus(getTableRow().getIndex());
-            System.out.println(getTableRow().getIndex());
+            this.table.getSelectionModel().clearSelection();
+            this.table.requestFocus();
+            this.table.getFocusModel().focus(getTableRow().getIndex());
             function.apply(getCurrentItem());
         });
     }
 
     public S getCurrentItem() {
-        return (S) getTableView().getItems().get(getIndex());
+        return (S) this.table.getItems().get(getIndex());
     }
 
-    public static <S> Callback<TableColumn<S, Button>, TableCell<S, Button>> forTableColumn(String label,String buttonStyle, Function<S, S> function) {
-        return param -> new ActionButtonTableCell<>(label,buttonStyle, function);
+    public static <S> Callback<TableColumn<S, Button>, TableCell<S, Button>> forTableColumn(String label,String buttonStyle,TableView table, Function<S, S> function) {
+        return param -> new ActionButtonTableCell<>(label,buttonStyle,table, function);
     }
 
     @Override

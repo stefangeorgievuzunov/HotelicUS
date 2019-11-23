@@ -1,6 +1,6 @@
 package hotelicus;
 
-import hotelicus.controllers.extended.UploadUserForm;
+import hotelicus.controllers.extended.Users.UploadUserForm;
 import hotelicus.controllers.main.AdminController;
 import hotelicus.core.HibernateUtil;
 import hotelicus.entities.Users;
@@ -10,8 +10,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 
@@ -52,17 +50,19 @@ public final class App extends Application {
             App.stage = primaryStage;
             App.loginWindow();
             primaryStage.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception excep) {
+            excep.printStackTrace();
         }
     }
 
-    private static void loginWindow() {
-        try {
-            changeScene("login.xml", "Login", 320, 120);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    public static void loginWindow() {
+            try{
+                changeScene("login.xml", "Login", 320, 120);
+            }
+            catch(IOException excep){
+                excep.printStackTrace();
+            }
+
     }
 
     public static void dashboardWindow() {
@@ -81,8 +81,7 @@ public final class App extends Application {
         }
     }
 
-    private static void changeScene(String fxml, String title, int width, int height) throws Exception {
-        System.out.println(App.type.getClassLoader().getResource("templates/" + fxml));
+    private static void changeScene(String fxml, String title, int width, int height) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.type.getClassLoader().getResource("templates/" + fxml));
 
         Parent page = (Parent)fxmlLoader.load();

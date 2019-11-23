@@ -4,7 +4,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
-import java.io.IOException;
 import java.util.Optional;
 
 public class Confirmation {
@@ -13,7 +12,7 @@ public class Confirmation {
     ButtonType confirmationButton;
     ButtonType  cancelButton;
 
-    public Confirmation(String title,String message)throws IOException{
+    public Confirmation(String title,String message){
         this.confirmationButton = new ButtonType("Yes");
         this.cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 

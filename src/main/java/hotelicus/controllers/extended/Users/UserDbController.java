@@ -1,4 +1,4 @@
-package hotelicus.controllers.extended;
+package hotelicus.controllers.extended.Users;
 
 import hotelicus.App;
 import hotelicus.entities.Users;
@@ -30,7 +30,7 @@ public class UserDbController {
 
         }
 
-    public static boolean usernamePasswordValidator(String username,String password)throws IOException {
+    public static boolean usernamePasswordValidator(String username,String password) {
         UserDbController.session.beginTransaction();
         Criteria crit=UserDbController.session.createCriteria(Users.class);
         crit.add(Restrictions.eq("username", username));

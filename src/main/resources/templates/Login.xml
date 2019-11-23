@@ -27,7 +27,7 @@
     </GridPane>
     <StackPane prefHeight="-1.0" prefWidth="-1.0">
         <children>
-            <Button fx:id="loginButton" onAction="#loginRouter" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Login" StackPane.alignment="CENTER_RIGHT" />
+            <Button fx:id="loginButton" onAction="#loginRouter" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Login" StackPane.alignment="CENTER_LEFT" />
         </children>
     </StackPane>
 </children>

@@ -1,5 +1,6 @@
-package hotelicus.controllers.extended;
+package hotelicus.controllers.extended.Users;
 import hotelicus.App;
+import hotelicus.controllers.extended.ActionButtonTableCell;
 import hotelicus.controllers.main.DbController;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
@@ -23,17 +24,17 @@ import static hotelicus.styles.Styles.EDIT_BUTTON_STYLE;
 
 
 public class UsersTableController {
-    private static TableView tab;
+    private  TableView tab;
     private  DbController<Users> users;
-    public UsersTableController() {
+    public UsersTableController(UserPrivileges toBeLoad) {
         this.users= new DbController<Users>(Users.class);
-        this.loadTableView();
-        this.loadUsers();
+        this.loadDefaultTableView();
+        this.loadAllUsers(toBeLoad);
     }
 
-    private void loadTableView(){
-        UsersTableController.tab=new TableView();
-        UsersTableController.tab.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    private void loadDefaultTableView(){
+        this.tab=new TableView();
+        this.tab.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn userId = new TableColumn("User id");
         userId.setCellValueFactory(new PropertyValueFactory<Users,Integer>("userId"));
@@ -72,59 +73,67 @@ public class UsersTableController {
         editButton.setCellValueFactory(new PropertyValueFactory<Users,String>("editButton"));
 
 
-        removeButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("disable", Styles.DISABLE_BUTTON_STYLE, (Users user) -> {
-            try{
-                disableUser(user);
-            }catch(IOException excep){
-                excep.getMessage();
-            }
+        removeButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("disable", Styles.DISABLE_BUTTON_STYLE,this.tab, (Users user) -> {
+            disableUser(user);
             return user;
         }));
 
-        activateButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("activate",Styles.ACTIVATE_BUTTON_STYLE, (Users user) -> {
-            try{
-                activateUser(user);
-            }catch(IOException excep){
-                excep.getMessage();
-            }
+        activateButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("activate",Styles.ACTIVATE_BUTTON_STYLE,this.tab, (Users user) -> {
+            activateUser(user);
             return user;
         }));
 
-        editButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit",EDIT_BUTTON_STYLE, (Users user) -> {
+        editButton.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit",EDIT_BUTTON_STYLE,this.tab, (Users user) -> {
             try{
-                App.loadUploadUserFormWindow( "EDIT RECORD", EDIT,user,user.getPrivileges());
+                editUser(user);
             }catch(IOException excep){
                 System.out.println(excep.getMessage());
             }
             return user;
         }));
-        UsersTableController.tab.getColumns().addAll(userId, username,password,privileges,firstName,lastName,userState,startedOn,endedOn,removeButton,activateButton,editButton);
+        this.tab.getColumns().addAll(userId, username,password,privileges,firstName,lastName,userState,startedOn,endedOn,removeButton,activateButton,editButton);
     }
 
-    private void loadUsers(){
-        List<Users> users =this.users.findAll();
+    public void loadAllUsers(UserPrivileges toBeLoad){
+        List<Users> users = this.users.selectEqualTo("privileges",toBeLoad,false);
         for(Users user : users){
-            if(user.getPrivileges()==OWNER) {
-                UsersTableController.tab.getItems().add(user);
+            if(user.getPrivileges()==toBeLoad) {
+                this.tab.getItems().add(user);
+            }
+        }
+    }
+    public void loadActiveUsers(UserPrivileges toBeLoad){
+        List<Users> users = this.users.selectEqualTo("privileges",toBeLoad,false);
+        for(Users user : users){
+            if(user.getPrivileges()==toBeLoad && user.getUserState()==ACTIVE) {
+                this.tab.getItems().add(user);
+            }
+        }
+    }
+    public void loadDisabledUsers(UserPrivileges toBeLoad){
+        List<Users> users = this.users.selectEqualTo("privileges",toBeLoad,false);
+        for(Users user : users){
+            if(user.getPrivileges()==toBeLoad&& user.getUserState()==DISABLED) {
+                this.tab.getItems().add(user);
             }
         }
     }
 
-    private void activateUser(Users user)throws IOException{
+    private void activateUser(Users user) {
         Confirmation confirm=new Confirmation("Confirmation","Do you want to activate this user?");
         if(confirm.getConfirmationResult()==true){
             if(user.getUserState()==DISABLED){
                 user.setEndedOn(null);
                 user.setUserState(ACTIVE);
                 this.users.update(user);
-                UsersTableController.tab.refresh();
+                this.tab.refresh();
             }else{
                new Error("Message","ALREADY ACTIVE !");
             }
         }
     }
 
-    private void disableUser(Users user)throws IOException{
+    private void disableUser(Users user){
         Date deletedOn=new Date();
         Confirmation confirm=new Confirmation("Confirmation","Do you want to disable this user?");
         if(confirm.getConfirmationResult()==true){
@@ -132,15 +141,20 @@ public class UsersTableController {
               user.setEndedOn(deletedOn);
               user.setUserState(DISABLED);
               this.users.update(user);
-              UsersTableController.tab.refresh();
+              this.tab.refresh();
           }
           else{
               new Error("Message","ALREADY DISABLED !");
           }
         }
     }
-    public static  TableView getTableView(){
-        return UsersTableController.tab;
+
+    private void editUser(Users user)throws  IOException{
+        App.loadUploadUserFormWindow( "EDIT RECORD", EDIT,user,user.getPrivileges());
+    }
+
+    public  TableView getTableView(){
+        return this.tab;
     }
 }
 
