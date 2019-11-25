@@ -2,11 +2,12 @@ package hotelicus.entities;
 
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class Users {
     private Integer userId;
     private String username;
@@ -20,7 +21,7 @@ public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name = "user_id")
     public Integer getUserId() {
         return userId;
     }
@@ -29,7 +30,7 @@ public class Users {
         this.userId = userId;
     }
 
-    @Column(name="username",unique = true)
+    @Column(name = "username", unique = true)
     public String getUsername() {
         return username;
     }
@@ -37,7 +38,8 @@ public class Users {
     public void setUsername(String username) {
         this.username = username;
     }
-    @Column(name="password")
+
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -47,7 +49,7 @@ public class Users {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name="privileges")
+    @Column(name = "privileges")
     public UserPrivileges getPrivileges() {
         return privileges;
     }
@@ -56,7 +58,7 @@ public class Users {
         this.privileges = privileges;
     }
 
-    @Column(name="first_name")
+    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -65,7 +67,7 @@ public class Users {
         this.firstName = firstName;
     }
 
-    @Column(name="last_name")
+    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -75,7 +77,7 @@ public class Users {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name="user_state")
+    @Column(name = "user_state")
     public UserState getUserState() {
         return userState;
     }
@@ -84,7 +86,7 @@ public class Users {
         this.userState = userState;
     }
 
-    @Column(name="started_on")
+    @Column(name = "started_on")
     public Date getStartedOn() {
         return startedOn;
     }
@@ -93,7 +95,7 @@ public class Users {
         this.startedOn = startedOn;
     }
 
-    @Column(name="ended_on")
+    @Column(name = "ended_on")
     public Date getEndedOn() {
         return endedOn;
     }

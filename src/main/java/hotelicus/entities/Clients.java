@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="clients")
+@Table(name = "clients")
 public class Clients {
     private Integer id;
     private Users createdBy;
@@ -17,7 +17,7 @@ public class Clients {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="client_id")
+    @Column(name = "client_id")
     public Integer getId() {
         return id;
     }
@@ -28,7 +28,7 @@ public class Clients {
 
 
     @ManyToOne
-    @JoinColumn(name="user_id",referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     public Users getCreatedBy() {
         return createdBy;
     }
@@ -37,7 +37,7 @@ public class Clients {
         this.createdBy = createdBy;
     }
 
-    @Column(name="first_name")
+    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -46,7 +46,7 @@ public class Clients {
         this.firstName = firstName;
     }
 
-    @Column(name="last_name")
+    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -55,7 +55,7 @@ public class Clients {
         this.lastName = lastName;
     }
 
-    @Column(name="phone_number")
+    @Column(name = "phone_number")
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -63,7 +63,8 @@ public class Clients {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    @Column(name="rate")
+
+    @Column(name = "rate")
     public Float getRate() {
         return rate;
     }
@@ -72,7 +73,7 @@ public class Clients {
         this.rate = rate;
     }
 
-    @Column(name="created_on")
+    @Column(name = "created_on")
     public Date getCreatedOn() {
         return createdOn;
     }
