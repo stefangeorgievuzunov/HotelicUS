@@ -1,7 +1,6 @@
 package hotelicus;
 
 import hotelicus.controllers.extended.Users.UploadUserForm;
-import hotelicus.controllers.main.AdminController;
 import hotelicus.core.HibernateUtil;
 import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
@@ -10,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 
@@ -57,7 +57,7 @@ public final class App extends Application {
 
     public static void loginWindow() {
             try{
-                changeScene("login.fxml", "Login", 320, 120);
+                changeScene("login.fxml", "Login");
             }
             catch(IOException excep){
                 excep.printStackTrace();
@@ -67,7 +67,7 @@ public final class App extends Application {
 
     public static void dashboardWindow() {
         try {
-            changeScene("dashboard.xml", "Dashboard", 500, 500);
+            changeScene("dashboard.xml", "Dashboard");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -75,14 +75,13 @@ public final class App extends Application {
 
     public static void adminWindow() {
         try {
-            //new AdminController();
-            App.changeScene("adminpanel.fxml","ADMIN PANEL", 320, 120);
+            App.changeScene("adminpanel.fxml","ADMIN PANEL");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private static void changeScene(String fxml, String title, int width, int height) throws IOException {
+    private static void changeScene(String fxml, String title) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.type.getResource("/templates/" + fxml));
 
         Parent page = (Parent)fxmlLoader.load();
@@ -93,23 +92,21 @@ public final class App extends Application {
             App.stage.setScene(scene);
             App.stage.sizeToScene();
         } else {
-            App.stage.setWidth(width);
-            App.stage.setHeight(height);
             App.stage.getScene().setRoot(page);
         }
 
         App.stage.setTitle(title);
     }
 
-    public  static void loadUploadUserFormWindow(String title,UploadAction uploadAction, Users user, UserPrivileges privileges)throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getClassLoader().getResource("templates/UploadForm.xml"));
+    public  static void loadUploadUserFormWindow(TableView tableView,String title, UploadAction uploadAction, Users user, UserPrivileges privileges)throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getResource("/templates/Edit.fxml"));
 
         Parent root = (Parent)fxmlLoader.load();
         UploadUserForm controller = fxmlLoader.<UploadUserForm>getController();
-        controller.init(user,privileges,uploadAction);
+        controller.init(tableView,user,privileges,uploadAction);
         Stage stage=new Stage();
         stage.setTitle(title);
-        Scene scene=new Scene(root, 450, 450);
+        Scene scene=new Scene(root);
         stage.setScene(scene);
         stage.show();
     }

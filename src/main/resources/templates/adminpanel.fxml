@@ -13,10 +13,10 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="100.0" style="-fx-background-color: #8d99ae;">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #d80032;" text="Add" textFill="WHITE" />
-                  <Button layoutY="100.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #ef233c;" text="Active" textFill="WHITE" />
-                  <Button layoutY="200.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #d80032;" text="Disabled" textFill="WHITE" />
-                  <Button layoutY="300.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #ef233c;" text="Logout" textFill="WHITE" />
+                  <Button onAction="#addUser" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #d80032;" text="Add" textFill="WHITE" />
+                  <Button onAction="#filterActivate" layoutY="100.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #ef233c;" text="Active" textFill="WHITE" />
+                  <Button onAction="#filterDisable" layoutY="200.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #d80032;" text="Disabled" textFill="WHITE" />
+                  <Button onAction="#logOut" layoutY="300.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #ef233c;" text="Logout" textFill="WHITE" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="910.0">

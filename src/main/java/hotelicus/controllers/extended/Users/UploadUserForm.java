@@ -7,6 +7,7 @@ import hotelicus.enums.UserState;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.hibernate.NonUniqueResultException;
@@ -32,13 +33,19 @@ public class UploadUserForm {
     private Users user;
     private UserPrivileges priviliges;
     private UploadAction uploadAction;
+    private TableView tableView;
 
     public UploadUserForm(){
 
     }
 
-    public void init(Users user, UserPrivileges priviliges, UploadAction uploadAction){
-        this.user=user;
+    public void init(TableView tableVliew, Users user, UserPrivileges priviliges, UploadAction uploadAction){
+        this.tableView=tableVliew;
+        if(user!=null){
+            this.user=user;
+        }else{
+            this.user=new Users();
+        }
         this.priviliges=priviliges;
         this.uploadAction=uploadAction;
         this.uploadUserInfo();
@@ -68,7 +75,7 @@ public class UploadUserForm {
             if(this.uploadAction==INSERT){
                 try{
                     updateUser.insert(this.user);
-                   // UsersTableController.getTableView().getItems().add(this.user);
+                   this.tableView.getItems().add(this.user);
                 }
                 catch(ConstraintViolationException excp){
                     successfulRecord=false;
@@ -77,7 +84,7 @@ public class UploadUserForm {
             }
 
             if(successfulRecord){
-               // UsersTableController.getTableView().refresh();
+                this.tableView.refresh();
                 Stage stage = (Stage) saveButton.getScene().getWindow();
                 stage.close();
             }
