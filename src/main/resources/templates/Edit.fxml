@@ -15,7 +15,7 @@
             <Font size="13.0" />
          </font>
       </Label>
-      <TextField fx:id="username" />
+      <TextField fx:id="username" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
       <Label text="Password" textFill="WHITE">
          <VBox.margin>
             <Insets top="20.0" />
@@ -24,7 +24,7 @@
             <Font size="13.0" />
          </font>
       </Label>
-      <TextField fx:id="password" />
+      <TextField fx:id="password" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
       <Label text="First Name" textFill="WHITE">
          <VBox.margin>
             <Insets top="20.0" />
@@ -33,7 +33,7 @@
             <Font size="13.0" />
          </font>
       </Label>
-      <TextField fx:id="firstName" />
+      <TextField fx:id="firstName" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
       <Label text="Last Name" textFill="WHITE">
          <VBox.margin>
             <Insets top="20.0" />
@@ -42,7 +42,7 @@
             <Font size="13.0" />
          </font>
       </Label>
-      <TextField fx:id="lastName"/>
+      <TextField fx:id="lastName" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
       <Button fx:id="saveButton" onAction="#uploadRouter" mnemonicParsing="false" prefHeight="32.0" prefWidth="76.0" style="-fx-background-color: #d80032;" text="Save" textFill="WHITE" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets top="20.0" />
