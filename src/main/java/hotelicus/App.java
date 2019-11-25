@@ -50,6 +50,7 @@ public final class App extends Application {
     public void start(Stage primaryStage) {
         try {
             App.stage = primaryStage;
+            App.stage.setResizable(false);
             App.loginWindow();
             primaryStage.show();
         } catch (Exception excep) {
@@ -91,7 +92,7 @@ public final class App extends Application {
         if (scene == null) {
             scene = new Scene(page);
             App.stage.setScene(scene);
-            App.stage.setResizable(false);
+
         } else {
             App.stage.getScene().setRoot(page);
         }
@@ -100,7 +101,7 @@ public final class App extends Application {
     }
 
     public static void loadUploadUserFormWindow(TableView tableView, String title, UploadAction uploadAction, Users user, UserPrivileges privileges) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getResource("/templates/Edit.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getResource("/templates/edit.fxml"));
 
         Parent root = (Parent) fxmlLoader.load();
         UploadUserForm controller = fxmlLoader.<UploadUserForm>getController();

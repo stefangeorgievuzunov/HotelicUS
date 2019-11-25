@@ -16,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -64,7 +66,7 @@ public class AdminPanel implements Initializable {
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("lastName"));
         userStateColumn.setCellValueFactory(new PropertyValueFactory<Users, UserState>("userState"));
         startedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, Date>("startedOn"));
-        endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, Date>("endedOn"));
+        endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users,Date>("endedOn"));
 
         statusColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Users user) -> {
             if (user.getUserState() == ACTIVE) {
