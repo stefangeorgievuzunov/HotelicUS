@@ -106,7 +106,7 @@ public class AdminPanel implements Initializable {
     @FXML
     private void addUser(){
         try{
-            App.loadUploadUserFormWindow( this.tableView,"EDIT RECORD", INSERT,null,OWNER);
+            App.loadUploadUserFormWindow( this.tableView,"Add new user", INSERT,null,OWNER);
         }
         catch(IOException excep){
             excep.printStackTrace();
@@ -155,6 +155,6 @@ public class AdminPanel implements Initializable {
     }
 
     private void editUser(Users user)throws  IOException{
-        App.loadUploadUserFormWindow( this.tableView,"EDIT RECORD", EDIT,user,user.getPrivileges());
+        App.loadUploadUserFormWindow( this.tableView,"Edit user", EDIT,user,OWNER);
     }
 }

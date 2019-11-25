@@ -41,13 +41,15 @@ public class DbController<T>{
         this.session.getTransaction().commit();
     }
 
-    public T load(Integer id){
-        T object=session.load(this.type, id);
-        return object;
-    }
     public void update(T object){
         this.session.beginTransaction();
         this.session.update(object);
+        this.session.getTransaction().commit();
+    }
+
+    public void insertOrUpdate(T object)throws ConstraintViolationException{
+        this.session.beginTransaction();
+        this.session.saveOrUpdate(object);
         this.session.getTransaction().commit();
     }
 

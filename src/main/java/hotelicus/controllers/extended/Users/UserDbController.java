@@ -7,8 +7,6 @@ import org.hibernate.Criteria;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-
-import java.io.IOException;
 import java.util.List;
 
 @SuppressWarnings("all")

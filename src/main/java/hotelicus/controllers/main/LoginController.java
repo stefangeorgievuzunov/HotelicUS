@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import java.io.IOException;
 
 public class LoginController {
     @FXML
@@ -23,14 +22,11 @@ public class LoginController {
 
     @FXML
     private void loginRouter() {
-        System.out.println(username.getText());
-        System.out.println(password.getText());
-
         if(loginValidation(username.getText(),password.getText())){
             App.dashboardWindow();
             return;
         }
-       }
+    }
 
     private boolean loginValidation(String username, String password){
         if (!username.equals("") && !password.equals("")) {

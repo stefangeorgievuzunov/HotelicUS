@@ -26,7 +26,8 @@
                         <TableColumn fx:id="usernameColumn" editable="false" prefWidth="436.0" sortable="false" text="Username" />
                         <TableColumn fx:id="passwordColumn" editable="false" prefWidth="436.0" sortable="false" text="Password" />
                         <TableColumn fx:id="privilegesColumn" editable="false" prefWidth="436.0" sortable="false" text="Privileges" />
-                        <TableColumn fx:id="firstNameColumn" editable="false" prefWidth="123.0" sortable="false" text="First name" /><TableColumn fx:id="lastNameColumn" editable="false" prefWidth="123.0" sortable="false" text="Last name" />
+                        <TableColumn fx:id="firstNameColumn" editable="false" prefWidth="123.0" sortable="false" text="First name" />
+                         <TableColumn fx:id="lastNameColumn" editable="false" prefWidth="123.0" sortable="false" text="Last name" />
                         <TableColumn fx:id="userStateColumn" editable="false" sortable="false" text="User State" />
                         <TableColumn fx:id="startedOnColumn" editable="false" prefWidth="436.0" sortable="false" text="Started On" />
                         <TableColumn fx:id="endedOnColumn" editable="false" prefWidth="436.0" sortable="false" text="Ended On" />
