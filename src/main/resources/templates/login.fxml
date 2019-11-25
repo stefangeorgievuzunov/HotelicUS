@@ -13,14 +13,14 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #8d99ae;" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="loginButton" layoutX="247.0" layoutY="265.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #d80032;" text="Login" textFill="WHITE" />
+            <Button fx:id="loginButton" onAction="#loginRouter" layoutX="247.0" layoutY="265.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #d80032;" text="Login" textFill="WHITE" />
             <Label layoutX="246.0" layoutY="163.0" text="Username" textFill="WHITE" />
             <Label layoutX="246.0" layoutY="213.0" text="Password" textFill="WHITE" />
-            <PasswordField fx:id="password" layoutX="246.0" layoutY="186.0" />
-            <TextField fx:id="username" layoutX="246.0" layoutY="230.0" />
+            <TextField fx:id="username" layoutX="246.0" layoutY="186.0" />
+            <PasswordField fx:id="password" layoutX="246.0" layoutY="230.0" />
             <ImageView fx:id="logo" fitHeight="46.0" fitWidth="199.0" layoutX="221.0" layoutY="110.0">
                <image>
-                  <Image url="@../src/main/resources/templates/images/hotelicus.png" />
+                  <Image url="@images/hotelicus.png" />
                </image>
             </ImageView>
       </children>

@@ -57,7 +57,7 @@ public final class App extends Application {
 
     public static void loginWindow() {
             try{
-                changeScene("login.xml", "Login", 320, 120);
+                changeScene("login.fxml", "Login", 320, 120);
             }
             catch(IOException excep){
                 excep.printStackTrace();
@@ -75,20 +75,21 @@ public final class App extends Application {
 
     public static void adminWindow() {
         try {
-            new AdminController();
+            //new AdminController();
+            App.changeScene("adminpanel.fxml","ADMIN PANEL", 320, 120);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private static void changeScene(String fxml, String title, int width, int height) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getClassLoader().getResource("templates/" + fxml));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getResource("/templates/" + fxml));
 
         Parent page = (Parent)fxmlLoader.load();
         Scene scene = getStage().getScene();
 
         if (scene == null) {
-            scene = new Scene(page, width, height);
+            scene = new Scene(page);
             App.stage.setScene(scene);
             App.stage.sizeToScene();
         } else {

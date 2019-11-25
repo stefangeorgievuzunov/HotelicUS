@@ -101,4 +101,5 @@ public class Users {
     public void setEndedOn(Date endedOn) {
         this.endedOn = endedOn;
     }
+
 }

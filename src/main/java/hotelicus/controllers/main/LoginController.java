@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class LoginController {
     @FXML
-    private TextField user;
+    private TextField username;
 
     @FXML
     private PasswordField password;
@@ -22,11 +22,11 @@ public class LoginController {
     }
 
     @FXML
-    private void loginRouter() throws IOException {
-        System.out.println(user.getText());
+    private void loginRouter() {
+        System.out.println(username.getText());
         System.out.println(password.getText());
 
-        if(loginValidation(user.getText(),password.getText())){
+        if(loginValidation(username.getText(),password.getText())){
             App.dashboardWindow();
             return;
         }
