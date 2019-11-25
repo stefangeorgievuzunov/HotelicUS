@@ -90,7 +90,7 @@ public final class App extends Application {
         if (scene == null) {
             scene = new Scene(page);
             App.stage.setScene(scene);
-            App.stage.sizeToScene();
+            App.stage.setResizable(false);
         } else {
             App.stage.getScene().setRoot(page);
         }
