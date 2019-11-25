@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="reservations")
+@Table(name = "reservations")
 public class Reservations {
     private Integer reservationId;
     private Hotels hotel;
@@ -25,7 +25,7 @@ public class Reservations {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="reservation_id")
+    @Column(name = "reservation_id")
     public Integer getReservationId() {
         return reservationId;
     }
@@ -35,7 +35,7 @@ public class Reservations {
     }
 
     @ManyToOne
-    @JoinColumn(name="hotel_id",referencedColumnName = "hotel_id")
+    @JoinColumn(name = "hotel_id", referencedColumnName = "hotel_id")
     public Hotels getHotel() {
         return hotel;
     }
@@ -45,7 +45,7 @@ public class Reservations {
     }
 
     @ManyToOne
-    @JoinColumn(name="client_id",referencedColumnName = "client_id")
+    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
     public Clients getClient() {
         return client;
     }
@@ -55,7 +55,7 @@ public class Reservations {
     }
 
     @ManyToOne
-    @JoinColumn(name="user_id",referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     public Users getUser() {
         return user;
     }
@@ -64,7 +64,7 @@ public class Reservations {
         this.user = user;
     }
 
-    @Column(name="package")
+    @Column(name = "package")
     public Packages getReservationPackage() {
         return reservationPackage;
     }
@@ -73,7 +73,7 @@ public class Reservations {
         this.reservationPackage = reservationPackage;
     }
 
-    @Column(name="reservation_type")
+    @Column(name = "reservation_type")
     public ReservationTypes getReservationType() {
         return reservationType;
     }
@@ -82,7 +82,7 @@ public class Reservations {
         this.reservationType = reservationType;
     }
 
-    @Column(name="payment_type")
+    @Column(name = "payment_type")
     public PaymentTypes getPaymentType() {
         return paymentType;
     }
@@ -91,7 +91,7 @@ public class Reservations {
         this.paymentType = paymentType;
     }
 
-    @Column(name="canceling_type")
+    @Column(name = "canceling_type")
     public ReservationCanceling getCancelingType() {
         return cancelingType;
     }
@@ -100,7 +100,7 @@ public class Reservations {
         this.cancelingType = cancelingType;
     }
 
-    @Column(name="reservation_status")
+    @Column(name = "reservation_status")
     public ReservationStatus getReservationStatus() {
         return reservationStatus;
     }
@@ -109,7 +109,7 @@ public class Reservations {
         this.reservationStatus = reservationStatus;
     }
 
-    @Column(name="paid_money")
+    @Column(name = "paid_money")
     public Double getPaidMoney() {
         return paidMoney;
     }
@@ -118,7 +118,7 @@ public class Reservations {
         this.paidMoney = paidMoney;
     }
 
-    @Column(name="created_on")
+    @Column(name = "created_on")
     public Date getCreatedOn() {
         return createdOn;
     }
@@ -127,7 +127,7 @@ public class Reservations {
         this.createdOn = createdOn;
     }
 
-    @Column(name="reserved_from")
+    @Column(name = "reserved_from")
     public Date getReservedFrom() {
         return reservedFrom;
     }
@@ -136,7 +136,7 @@ public class Reservations {
         this.reservedFrom = reservedFrom;
     }
 
-    @Column(name="reserved_to")
+    @Column(name = "reserved_to")
     public Date getReservedTo() {
         return reservedTo;
     }

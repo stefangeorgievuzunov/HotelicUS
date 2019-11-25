@@ -10,9 +10,9 @@ public class Confirmation {
     private
     Optional<ButtonType> result;
     ButtonType confirmationButton;
-    ButtonType  cancelButton;
+    ButtonType cancelButton;
 
-    public Confirmation(String title,String message){
+    public Confirmation(String title, String message) {
         this.confirmationButton = new ButtonType("Yes");
         this.cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
@@ -21,13 +21,14 @@ public class Confirmation {
         alert.setHeaderText(message);
         alert.setContentText("Choose your option.");
 
-        alert.getButtonTypes().setAll(confirmationButton,cancelButton);
+        alert.getButtonTypes().setAll(confirmationButton, cancelButton);
         this.result = alert.showAndWait();
     }
-    public boolean getConfirmationResult(){
-        if(this.result.get()==this.confirmationButton){
+
+    public boolean getConfirmationResult() {
+        if (this.result.get() == this.confirmationButton) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

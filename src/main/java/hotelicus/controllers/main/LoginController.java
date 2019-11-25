@@ -16,27 +16,26 @@ public class LoginController {
     @FXML
     private PasswordField password;
 
-    public LoginController()
-    {
+    public LoginController() {
     }
 
     @FXML
     private void loginRouter() {
-        if(loginValidation(username.getText(),password.getText())){
+        if (loginValidation(username.getText(), password.getText())) {
             App.dashboardWindow();
             return;
         }
     }
 
-    private boolean loginValidation(String username, String password){
+    private boolean loginValidation(String username, String password) {
         if (!username.equals("") && !password.equals("")) {
-            UserDbController loginControl=new UserDbController();
+            UserDbController loginControl = new UserDbController();
 
-            if(loginControl.usernamePasswordValidator(username,password))
+            if (loginControl.usernamePasswordValidator(username, password))
                 return true;
             else
                 return false;
-        }else{
+        } else {
             new Error("Failed to login", "There are empty fields!");
             return false;
         }

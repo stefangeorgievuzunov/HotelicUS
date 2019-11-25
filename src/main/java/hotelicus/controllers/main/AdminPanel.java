@@ -32,15 +32,15 @@ public class AdminPanel implements Initializable {
     @FXML
     private TableView<Users> tableView;
     @FXML
-    private TableColumn<Users,String> usernameColumn;
+    private TableColumn<Users, String> usernameColumn;
     @FXML
-    private TableColumn<Users,String> passwordColumn;
+    private TableColumn<Users, String> passwordColumn;
     @FXML
     private TableColumn<Users, UserPrivileges> privilegesColumn;
     @FXML
-    private TableColumn<Users,String> firstNameColumn;
+    private TableColumn<Users, String> firstNameColumn;
     @FXML
-    private TableColumn<Users,String> lastNameColumn;
+    private TableColumn<Users, String> lastNameColumn;
     @FXML
     private TableColumn<Users, UserState> userStateColumn;
     @FXML
@@ -51,35 +51,35 @@ public class AdminPanel implements Initializable {
     private TableColumn<Users, Button> statusColumn;
     @FXML
     private TableColumn<Users, Button> editColumn;
-    private  DbController<Users> users;
+    private DbController<Users> users;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb){
-        this.users= new DbController<Users>(Users.class);
+    public void initialize(URL url, ResourceBundle rb) {
+        this.users = new DbController<Users>(Users.class);
 
-        usernameColumn.setCellValueFactory(new PropertyValueFactory<Users,String>("username"));
-        passwordColumn.setCellValueFactory(new PropertyValueFactory<Users,String>("password"));
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("username"));
+        passwordColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("password"));
         privilegesColumn.setCellValueFactory(new PropertyValueFactory<Users, UserPrivileges>("privileges"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<Users,String>("firstName"));
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<Users,String>("lastName"));
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("firstName"));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("lastName"));
         userStateColumn.setCellValueFactory(new PropertyValueFactory<Users, UserState>("userState"));
-        startedOnColumn.setCellValueFactory(new PropertyValueFactory<Users,Date>("startedOn"));
+        startedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, Date>("startedOn"));
         endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, Date>("endedOn"));
 
-        statusColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Switch",CHANGE_STATUS_BUTTON_STYLE,tableView, (Users user) -> {
-            if(user.getUserState()== ACTIVE){
+        statusColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Users user) -> {
+            if (user.getUserState() == ACTIVE) {
                 disableUser(user);
-            }else{
+            } else {
                 activateUser(user);
             }
             return user;
         }));
 
-        editColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit",EDIT_BUTTON_STYLE,tableView, (Users user) -> {
-            try{
+        editColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Users user) -> {
+            try {
                 editUser(user);
 
-            }catch(IOException excep){
+            } catch (IOException excep) {
                 System.out.println(excep.getMessage());
             }
             return user;
@@ -89,32 +89,35 @@ public class AdminPanel implements Initializable {
     }
 
     @FXML
-    private void filterActivate(){
+    private void filterActivate() {
         this.loadUsers(ACTIVE);
     }
+
     @FXML
-    private void filterDisable(){
+    private void filterDisable() {
         this.loadUsers(DISABLED);
     }
+
     @FXML
-    private void logOut(){
-        Confirmation logConfirmation = new Confirmation("Message","Are you sure you want to log off ?");
-        if(logConfirmation.getConfirmationResult()==true){
+    private void logOut() {
+        Confirmation logConfirmation = new Confirmation("Message", "Are you sure you want to log off ?");
+        if (logConfirmation.getConfirmationResult() == true) {
             App.loginWindow();
         }
     }
+
     @FXML
-    private void addUser(){
-        try{
-            App.loadUploadUserFormWindow( this.tableView,"Add new user", INSERT,null,OWNER);
-        }
-        catch(IOException excep){
+    private void addUser() {
+        try {
+            App.loadUploadUserFormWindow(this.tableView, "Add new user", INSERT, null, OWNER);
+        } catch (IOException excep) {
             excep.printStackTrace();
         }
     }
+
     private void activateUser(Users user) {
-        Confirmation confirm=new Confirmation("Confirmation","Do you want to activate this user?");
-        if(confirm.getConfirmationResult()==true){
+        Confirmation confirm = new Confirmation("Confirmation", "Do you want to activate this user?");
+        if (confirm.getConfirmationResult() == true) {
             user.setEndedOn(null);
             user.setUserState(ACTIVE);
             this.users.update(user);
@@ -122,10 +125,10 @@ public class AdminPanel implements Initializable {
         }
     }
 
-    private void disableUser(Users user){
-        Date deletedOn=new Date();
-        Confirmation confirm=new Confirmation("Confirmation","Do you want to disable this user?");
-        if(confirm.getConfirmationResult()==true){
+    private void disableUser(Users user) {
+        Date deletedOn = new Date();
+        Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this user?");
+        if (confirm.getConfirmationResult() == true) {
             user.setEndedOn(deletedOn);
             user.setUserState(DISABLED);
             this.users.update(user);
@@ -133,28 +136,27 @@ public class AdminPanel implements Initializable {
         }
     }
 
-    private void loadUsers(UserState userState){
+    private void loadUsers(UserState userState) {
         tableView.getItems().clear();
-        List<Users> users = this.users.selectEqualTo("privileges",OWNER,false);
-        for(Users user : users){
-           if(userState==ACTIVE){
-               if(user.getPrivileges()==OWNER && user.getUserState()==ACTIVE) {
-                   this.tableView.getItems().add(user);
-               }
-           }
-           else if(userState==DISABLED){
-               if(user.getPrivileges()==OWNER && user.getUserState()==DISABLED) {
-                   this.tableView.getItems().add(user);
-               }
-           }else{
-               if(user.getPrivileges()==OWNER) {
-                   this.tableView.getItems().add(user);
-               }
-           }
+        List<Users> users = this.users.selectEqualTo("privileges", OWNER, false);
+        for (Users user : users) {
+            if (userState == ACTIVE) {
+                if (user.getPrivileges() == OWNER && user.getUserState() == ACTIVE) {
+                    this.tableView.getItems().add(user);
+                }
+            } else if (userState == DISABLED) {
+                if (user.getPrivileges() == OWNER && user.getUserState() == DISABLED) {
+                    this.tableView.getItems().add(user);
+                }
+            } else {
+                if (user.getPrivileges() == OWNER) {
+                    this.tableView.getItems().add(user);
+                }
+            }
         }
     }
 
-    private void editUser(Users user)throws  IOException{
-        App.loadUploadUserFormWindow( this.tableView,"Edit user", EDIT,user,OWNER);
+    private void editUser(Users user) throws IOException {
+        App.loadUploadUserFormWindow(this.tableView, "Edit user", EDIT, user, OWNER);
     }
 }

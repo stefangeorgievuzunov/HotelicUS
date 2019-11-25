@@ -6,7 +6,7 @@ import hotelicus.enums.RoomStatus;
 import javax.persistence.*;
 
 @Entity
-@Table(name="rooms")
+@Table(name = "rooms")
 public class Rooms {
     private Integer roomId;
     private Hotels hotel;
@@ -18,7 +18,7 @@ public class Rooms {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="room_id")
+    @Column(name = "room_id")
     public Integer getRoomId() {
         return roomId;
     }
@@ -26,8 +26,9 @@ public class Rooms {
     public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
+
     @ManyToOne
-    @JoinColumn(name="hotel_id",referencedColumnName = "hotel_id")
+    @JoinColumn(name = "hotel_id", referencedColumnName = "hotel_id")
     public Hotels getHotel() {
         return hotel;
     }
@@ -36,7 +37,7 @@ public class Rooms {
         this.hotel = hotel;
     }
 
-    @Column(name="category")
+    @Column(name = "category")
     public RoomCategories getCategory() {
         return category;
     }
@@ -45,7 +46,7 @@ public class Rooms {
         this.category = category;
     }
 
-    @Column(name="capacity")
+    @Column(name = "capacity")
     public Integer getCapacity() {
         return capacity;
     }
@@ -54,7 +55,7 @@ public class Rooms {
         this.capacity = capacity;
     }
 
-    @Column(name="room_number")
+    @Column(name = "room_number")
     public Integer getRoomNumber() {
         return roomNumber;
     }
@@ -63,7 +64,7 @@ public class Rooms {
         this.roomNumber = room_number;
     }
 
-    @Column(name="price")
+    @Column(name = "price")
     public Double getPrice() {
         return price;
     }
@@ -72,7 +73,7 @@ public class Rooms {
         this.price = price;
     }
 
-    @Column(name="room_status")
+    @Column(name = "room_status")
     public RoomStatus getStatus() {
         return status;
     }

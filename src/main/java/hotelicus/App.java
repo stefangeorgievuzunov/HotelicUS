@@ -27,11 +27,13 @@ public final class App extends Application {
     public App() {
         App.instance = this;
         App.session = HibernateUtil.getSessionFactory().openSession();
-        App.type=getClass();
+        App.type = getClass();
     }
-    public static Session getSession(){
+
+    public static Session getSession() {
         return App.session;
     }
+
     public static App getInstance() {
         return App.instance;
     }
@@ -56,12 +58,11 @@ public final class App extends Application {
     }
 
     public static void loginWindow() {
-            try{
-                changeScene("login.fxml", "Login");
-            }
-            catch(IOException excep){
-                excep.printStackTrace();
-            }
+        try {
+            changeScene("login.fxml", "Login");
+        } catch (IOException excep) {
+            excep.printStackTrace();
+        }
 
     }
 
@@ -75,7 +76,7 @@ public final class App extends Application {
 
     public static void adminWindow() {
         try {
-            App.changeScene("adminpanel.fxml","ADMIN PANEL");
+            App.changeScene("adminpanel.fxml", "ADMIN PANEL");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -84,7 +85,7 @@ public final class App extends Application {
     private static void changeScene(String fxml, String title) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.type.getResource("/templates/" + fxml));
 
-        Parent page = (Parent)fxmlLoader.load();
+        Parent page = (Parent) fxmlLoader.load();
         Scene scene = getStage().getScene();
 
         if (scene == null) {
@@ -98,21 +99,23 @@ public final class App extends Application {
         App.stage.setTitle(title);
     }
 
-    public  static void loadUploadUserFormWindow(TableView tableView,String title, UploadAction uploadAction, Users user, UserPrivileges privileges)throws IOException{
+    public static void loadUploadUserFormWindow(TableView tableView, String title, UploadAction uploadAction, Users user, UserPrivileges privileges) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.type.getResource("/templates/Edit.fxml"));
 
-        Parent root = (Parent)fxmlLoader.load();
+        Parent root = (Parent) fxmlLoader.load();
         UploadUserForm controller = fxmlLoader.<UploadUserForm>getController();
-        controller.init(tableView,user,privileges,uploadAction);
-        Stage stage=new Stage();
+        controller.init(tableView, user, privileges, uploadAction);
+        Stage stage = new Stage();
         stage.setTitle(title);
-        Scene scene=new Scene(root);
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
-    public static Stage getAppStage(){
+
+    public static Stage getAppStage() {
         return App.stage;
     }
+
     public static void main(String[] args) {
         launch(args);
     }

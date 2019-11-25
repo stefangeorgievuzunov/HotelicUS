@@ -3,17 +3,18 @@ package hotelicus.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name="services")
+@Table(name = "services")
 public class Services {
     private Integer serviceId;
-    private String  name;
+    private String name;
     private Double price;
 
-    public Services(){
-        this.serviceId=0;
-        this.name="";
-        this.price=0.0;
+    public Services() {
+        this.serviceId = 0;
+        this.name = "";
+        this.price = 0.0;
     }
+
     public Services(Integer sId, String n, Double p) {
         this.serviceId = sId;
         this.name = n;
@@ -22,7 +23,7 @@ public class Services {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="service_id")
+    @Column(name = "service_id")
     public Integer getServiceId() {
         return serviceId;
     }
@@ -31,7 +32,7 @@ public class Services {
         this.serviceId = serviceId;
     }
 
-    @Column(name="name")
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -40,7 +41,7 @@ public class Services {
         this.name = name;
     }
 
-    @Column(name="price")
+    @Column(name = "price")
     public Double getPrice() {
         return price;
     }

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="hotels")
+@Table(name = "hotels")
 public class Hotels {
     private Integer hotelId;
     private Users owner;
@@ -17,7 +17,7 @@ public class Hotels {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="hotel_id")
+    @Column(name = "hotel_id")
     public Integer getHotelId() {
         return hotelId;
     }
@@ -27,7 +27,7 @@ public class Hotels {
     }
 
     @ManyToOne
-    @JoinColumn(name="user_owner_id",referencedColumnName = "user_id")
+    @JoinColumn(name = "user_owner_id", referencedColumnName = "user_id")
     public Users getOwner() {
         return owner;
     }
@@ -37,7 +37,7 @@ public class Hotels {
     }
 
     @OneToOne
-    @JoinColumn(name="user_manager_id",referencedColumnName = "user_id")
+    @JoinColumn(name = "user_manager_id", referencedColumnName = "user_id")
     public Users getManager() {
         return manager;
     }
@@ -46,7 +46,7 @@ public class Hotels {
         this.manager = manager;
     }
 
-    @Column(name="name")
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -54,7 +54,8 @@ public class Hotels {
     public void setName(String name) {
         this.name = name;
     }
-    @Column(name="capacity")
+
+    @Column(name = "capacity")
     public Integer getCapacity() {
         return capacity;
     }
@@ -62,7 +63,8 @@ public class Hotels {
     public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
-    @Column(name="status")
+
+    @Column(name = "status")
     public Integer getStatus() {
         return status;
     }
@@ -70,7 +72,8 @@ public class Hotels {
     public void setStatus(Integer status) {
         this.status = status;
     }
-    @Column(name="date_created")
+
+    @Column(name = "date_created")
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -78,7 +81,8 @@ public class Hotels {
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
-    @Column(name="removed_on")
+
+    @Column(name = "removed_on")
     public Date getRemovedOn() {
         return removedOn;
     }

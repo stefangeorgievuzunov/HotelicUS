@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="reports")
+@Table(name = "reports")
 public class Reports {
     private Integer reportId;
     private Hotels hotel;
@@ -12,13 +12,13 @@ public class Reports {
     private String title;
     private Integer status;
     private Integer reportBy;
-    private Date  createdOn;
-    private Date  completedOn;
+    private Date createdOn;
+    private Date completedOn;
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="report_id")
+    @Column(name = "report_id")
     public Integer getReportId() {
         return reportId;
     }
@@ -28,7 +28,7 @@ public class Reports {
     }
 
     @ManyToOne
-    @JoinColumn(name="hotel_id",referencedColumnName = "hotel_id")
+    @JoinColumn(name = "hotel_id", referencedColumnName = "hotel_id")
     public Hotels getHotel() {
         return hotel;
     }
@@ -38,7 +38,7 @@ public class Reports {
     }
 
     @ManyToOne
-    @JoinColumn(name="client_id",referencedColumnName = "client_id")
+    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
     public Clients getClient() {
         return client;
     }
@@ -47,7 +47,7 @@ public class Reports {
         this.client = client;
     }
 
-    @Column(name="title")
+    @Column(name = "title")
     public String getTitle() {
         return title;
     }
@@ -56,7 +56,7 @@ public class Reports {
         this.title = title;
     }
 
-    @Column(name="status")
+    @Column(name = "status")
     public Integer getStatus() {
         return status;
     }
@@ -65,7 +65,7 @@ public class Reports {
         this.status = status;
     }
 
-    @Column(name="report_by")
+    @Column(name = "report_by")
     public Integer getReportBy() {
         return reportBy;
     }
@@ -74,7 +74,7 @@ public class Reports {
         this.reportBy = reportBy;
     }
 
-    @Column(name="created_on")
+    @Column(name = "created_on")
     public Date getCreatedOn() {
         return createdOn;
     }
@@ -83,7 +83,7 @@ public class Reports {
         this.createdOn = createdOn;
     }
 
-    @Column(name="completed_on")
+    @Column(name = "completed_on")
     public Date getCompletedOn() {
         return completedOn;
     }
