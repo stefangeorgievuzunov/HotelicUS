@@ -4,7 +4,7 @@ import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -16,8 +16,8 @@ public class Users {
     private String firstName;
     private String lastName;
     private UserState userState;
-    private Date startedOn;
-    private Date endedOn;
+    private LocalDate startedOn;
+    private LocalDate endedOn;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,20 +87,20 @@ public class Users {
     }
 
     @Column(name = "started_on")
-    public Date getStartedOn() {
+    public LocalDate getStartedOn() {
         return startedOn;
     }
 
-    public void setStartedOn(Date startedOn) {
+    public void setStartedOn(LocalDate startedOn) {
         this.startedOn = startedOn;
     }
 
     @Column(name = "ended_on")
-    public Date getEndedOn() {
+    public LocalDate getEndedOn() {
         return endedOn;
     }
 
-    public void setEndedOn(Date endedOn) {
+    public void setEndedOn(LocalDate endedOn) {
         this.endedOn = endedOn;
     }
 

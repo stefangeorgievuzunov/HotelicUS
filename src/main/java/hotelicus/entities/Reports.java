@@ -1,6 +1,7 @@
 package hotelicus.entities;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -12,8 +13,8 @@ public class Reports {
     private String title;
     private Integer status;
     private Integer reportBy;
-    private Date createdOn;
-    private Date completedOn;
+    private LocalDate createdOn;
+    private LocalDate completedOn;
 
 
     @Id
@@ -75,20 +76,20 @@ public class Reports {
     }
 
     @Column(name = "created_on")
-    public Date getCreatedOn() {
+    public LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(LocalDate createdOn) {
         this.createdOn = createdOn;
     }
 
     @Column(name = "completed_on")
-    public Date getCompletedOn() {
+    public LocalDate getCompletedOn() {
         return completedOn;
     }
 
-    public void setCompletedOn(Date completedOn) {
+    public void setCompletedOn(LocalDate completedOn) {
         this.completedOn = completedOn;
     }
 }

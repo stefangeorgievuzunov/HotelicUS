@@ -3,7 +3,7 @@ package hotelicus.entities;
 import hotelicus.enums.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "reservations")
@@ -18,9 +18,9 @@ public class Reservations {
     private ReservationCanceling cancelingType;
     private Double paidMoney;
     private ReservationStatus reservationStatus;
-    private Date createdOn;
-    private Date reservedFrom;
-    private Date reservedTo;
+    private LocalDate createdOn;
+    private LocalDate reservedFrom;
+    private LocalDate reservedTo;
 
 
     @Id
@@ -119,29 +119,29 @@ public class Reservations {
     }
 
     @Column(name = "created_on")
-    public Date getCreatedOn() {
+    public LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(LocalDate createdOn) {
         this.createdOn = createdOn;
     }
 
     @Column(name = "reserved_from")
-    public Date getReservedFrom() {
+    public LocalDate getReservedFrom() {
         return reservedFrom;
     }
 
-    public void setReservedFrom(Date reservedFrom) {
+    public void setReservedFrom(LocalDate reservedFrom) {
         this.reservedFrom = reservedFrom;
     }
 
     @Column(name = "reserved_to")
-    public Date getReservedTo() {
+    public LocalDate getReservedTo() {
         return reservedTo;
     }
 
-    public void setReservedTo(Date reservedTo) {
+    public void setReservedTo(LocalDate reservedTo) {
         this.reservedTo = reservedTo;
     }
 }

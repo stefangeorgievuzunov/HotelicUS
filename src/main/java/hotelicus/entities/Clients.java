@@ -2,6 +2,7 @@ package hotelicus.entities;
 
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -13,7 +14,7 @@ public class Clients {
     private String lastName;
     private String phoneNumber;
     private Float rate;
-    private Date createdOn;
+    private LocalDate createdOn;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,11 +75,11 @@ public class Clients {
     }
 
     @Column(name = "created_on")
-    public Date getCreatedOn() {
+    public LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(LocalDate createdOn) {
         this.createdOn = createdOn;
     }
 

@@ -14,6 +14,7 @@ import org.hibernate.NonUniqueResultException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static hotelicus.enums.UploadAction.*;
@@ -63,7 +64,7 @@ public class UploadUserForm {
             this.user.setUserState(UserState.ACTIVE);
             this.user.setPrivileges(this.priviliges);
             if(this.user.getStartedOn()==null){
-                Date startedOn=new Date();
+                LocalDate startedOn=LocalDate.now();
                 this.user.setStartedOn(startedOn);
             }
             boolean successfulRecord=true;

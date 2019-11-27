@@ -14,12 +14,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -47,9 +45,9 @@ public class AdminPanel implements Initializable {
     @FXML
     private TableColumn<Users, UserState> userStateColumn;
     @FXML
-    private TableColumn<Users, Date> startedOnColumn;
+    private TableColumn<Users, LocalDate> startedOnColumn;
     @FXML
-    private TableColumn<Users, Date> endedOnColumn;
+    private TableColumn<Users, LocalDate> endedOnColumn;
     @FXML
     private TableColumn<Users, Button> statusColumn;
     @FXML
@@ -66,8 +64,8 @@ public class AdminPanel implements Initializable {
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("lastName"));
         userStateColumn.setCellValueFactory(new PropertyValueFactory<Users, UserState>("userState"));
-        startedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, Date>("startedOn"));
-        endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, Date>("endedOn"));
+        startedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, LocalDate>("startedOn"));
+        endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, LocalDate>("endedOn"));
 
         statusColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Users user) -> {
             if (user.getUserState() == ACTIVE) {
@@ -128,7 +126,7 @@ public class AdminPanel implements Initializable {
     }
 
     private void disableUser(Users user) {
-        Date deletedOn = new Date();
+        LocalDate deletedOn = LocalDate.now();
         Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this user?");
         if (confirm.getConfirmationResult() == true) {
             user.setEndedOn(deletedOn);
