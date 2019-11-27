@@ -13,16 +13,18 @@ public class Confirmation {
     ButtonType cancelButton;
 
     public Confirmation(String title, String message) {
-        this.confirmationButton = new ButtonType("Yes");
-        this.cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        if (!title.isEmpty() && !message.isEmpty()) {
+            this.confirmationButton = new ButtonType("Yes");
+            this.cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(message);
-        alert.setContentText("Choose your option.");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(message);
+            alert.setContentText("Choose your option.");
 
-        alert.getButtonTypes().setAll(confirmationButton, cancelButton);
-        this.result = alert.showAndWait();
+            alert.getButtonTypes().setAll(confirmationButton, cancelButton);
+            this.result = alert.showAndWait();
+        }
     }
 
     public boolean getConfirmationResult() {

@@ -40,7 +40,9 @@ public class UserDbController {
         if (users.size() < 1) {
             new Error("Failed to login", "Invalid username or password!");
             return false;
-        } else {
+        }else if(users.size()>1){
+            throw new NonUniqueResultException(0);
+        }else{
             return true;
         }
     }

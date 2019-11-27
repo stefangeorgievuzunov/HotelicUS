@@ -56,7 +56,7 @@ public final class App extends Application {
         try {
             App.stage = primaryStage;
             App.stage.setResizable(false);
-            App.stage.setOnCloseRequest(e-> Platform.exit());
+            App.stage.setOnCloseRequest(e -> Platform.exit());
 
             App.loginWindow();
             primaryStage.show();
@@ -91,23 +91,22 @@ public final class App extends Application {
     }
 
     private static void changeScene(String fxml, String title) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + fxml));
+        if (!fxml.isEmpty() && !title.isEmpty()) {
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + fxml));
 
-        Parent page = (Parent) fxmlLoader.load();
-        Scene scene = getStage().getScene();
+            Parent page = (Parent) fxmlLoader.load();
+            Scene scene = getStage().getScene();
 
-        if (scene == null) {
-            scene = new Scene(page);
-            App.stage.setScene(scene);
+            if (scene == null) {
+                scene = new Scene(page);
+                App.stage.setScene(scene);
 
-        } else {
-            App.stage.getScene().setRoot(page);
+            } else {
+                App.stage.getScene().setRoot(page);
+            }
+            App.stage.setTitle(title);
         }
-
-        App.stage.setTitle(title);
     }
-
-
 
     public static Stage getAppStage() {
         return App.stage;

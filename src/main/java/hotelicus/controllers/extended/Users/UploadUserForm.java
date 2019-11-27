@@ -103,7 +103,7 @@ public class UploadUserForm {
 
     private boolean formValidation(){
 
-        if (!this.username.getText().equals("") && !this.password.getText().equals("") && !this.firstName.getText().equals("") && !this.lastName.getText().equals("")){
+        if (!this.username.getText().isEmpty() && !this.password.getText().isEmpty() && !this.firstName.getText().isEmpty() && !this.lastName.getText().isEmpty()){
             try{
                 Users testUser= UserDbController.selectUniqueUser(this.username.getText());
                 if(testUser==null){
