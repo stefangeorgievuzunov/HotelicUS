@@ -8,11 +8,13 @@ import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
 import hotelicus.window.Confirmation;
 
+import hotelicus.window.Error;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
@@ -52,6 +54,8 @@ public class AdminPanel implements Initializable {
     private TableColumn<Users, Button> statusColumn;
     @FXML
     private TableColumn<Users, Button> editColumn;
+    @FXML
+    private TextField searchUserByName;
     private DbController<Users> users;
 
     @Override
@@ -112,6 +116,23 @@ public class AdminPanel implements Initializable {
             LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Add new user", INSERT, null, OWNER);
         } catch (IOException excep) {
             excep.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void searchUser() {
+        System.out.println(this.searchUserByName.getText());
+        if (!this.searchUserByName.getText().equals("") && this.searchUserByName.getText() != null) {
+            List<Users> result = users.selectLike_START("firstName", searchUserByName.getText(), false);
+            if (!result.isEmpty()) {
+                this.tableView.getItems().clear();
+                result.forEach(user -> this.tableView.getItems().add(user));
+                this.searchUserByName.clear();
+            } else {
+                new Error("Note", "User with such name wasn't found.");
+            }
+        } else {
+            new Error("Error", "Empty field.");
         }
     }
 

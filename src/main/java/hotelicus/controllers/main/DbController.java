@@ -126,7 +126,7 @@ public class DbController<T> {
     public <T> List<T> selectLike_ANYWHERE(String criteria, Object like, boolean DESC) {
         this.session.beginTransaction();
         Criteria crit = this.session.createCriteria(this.type);
-        crit.add(Restrictions.ilike(criteria, like + "%", MatchMode.ANYWHERE));
+        crit.add(Restrictions.like(criteria, like + "%", MatchMode.ANYWHERE));
         if (DESC == true) {
             this.DESC(criteria, crit);
         }
@@ -137,7 +137,7 @@ public class DbController<T> {
     public <T> List<T> selectLike_START(String criteria, Object like, boolean DESC) {
         this.session.beginTransaction();
         Criteria crit = this.session.createCriteria(this.type);
-        crit.add(Restrictions.ilike(criteria, like + "%", MatchMode.START));
+        crit.add(Restrictions.like(criteria, like + "%", MatchMode.START));
         if (DESC == true) {
             this.DESC(criteria, crit);
         }
@@ -148,7 +148,7 @@ public class DbController<T> {
     public <T> List<T> selectLike_END(String criteria, Object like, boolean DESC) {
         this.session.beginTransaction();
         Criteria crit = this.session.createCriteria(this.type);
-        crit.add(Restrictions.ilike(criteria, like + "%", MatchMode.END));
+        crit.add(Restrictions.like(criteria, like + "%", MatchMode.END));
         if (DESC == true) {
             this.DESC(criteria, crit);
         }
@@ -159,7 +159,7 @@ public class DbController<T> {
     public <T> List<T> selectLike_EXACT(String criteria, Object like, boolean DESC) {
         this.session.beginTransaction();
         Criteria crit = this.session.createCriteria(this.type);
-        crit.add(Restrictions.ilike(criteria, like + "%", MatchMode.EXACT));
+        crit.add(Restrictions.like(criteria, like + "%", MatchMode.EXACT));
         if (DESC == true) {
             this.DESC(criteria, crit);
         }

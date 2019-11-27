@@ -6,19 +6,31 @@ import hotelicus.entities.Users;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.hibernate.NonUniqueResultException;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class LoginController {
+
+public class LoginController implements Initializable {
     @FXML
     private TextField username;
 
     @FXML
     private PasswordField password;
+    @FXML
+    private Button loginButton;
 
     public LoginController() {
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb){
+        this.loginButton.setDefaultButton(true);
     }
 
     @FXML
