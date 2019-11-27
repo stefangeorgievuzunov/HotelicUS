@@ -6,6 +6,7 @@ import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
 import hotelicus.enums.UserPrivileges;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -46,11 +47,17 @@ public final class App extends Application {
         return App.loggedUser;
     }
 
+    public static void setLoggedUser(Users user) {
+        App.loggedUser = user;
+    }
+
     @Override
     public void start(Stage primaryStage) {
         try {
             App.stage = primaryStage;
             App.stage.setResizable(false);
+            App.stage.setOnCloseRequest(e-> Platform.exit());
+
             App.loginWindow();
             primaryStage.show();
         } catch (Exception excep) {
@@ -84,7 +91,7 @@ public final class App extends Application {
     }
 
     private static void changeScene(String fxml, String title) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getResource("/templates/" + fxml));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + fxml));
 
         Parent page = (Parent) fxmlLoader.load();
         Scene scene = getStage().getScene();
@@ -100,22 +107,12 @@ public final class App extends Application {
         App.stage.setTitle(title);
     }
 
-    public static void loadUploadUserFormWindow(TableView tableView, String title, UploadAction uploadAction, Users user, UserPrivileges privileges) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.type.getResource("/templates/edit.fxml"));
 
-        Parent root = (Parent) fxmlLoader.load();
-        UploadUserForm controller = fxmlLoader.<UploadUserForm>getController();
-        controller.init(tableView, user, privileges, uploadAction);
-        Stage stage = new Stage();
-        stage.setTitle(title);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
 
     public static Stage getAppStage() {
         return App.stage;
     }
+
 
     public static void main(String[] args) {
         launch(args);

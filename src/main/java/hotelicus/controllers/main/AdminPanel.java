@@ -2,6 +2,7 @@ package hotelicus.controllers.main;
 
 import hotelicus.App;
 import hotelicus.controllers.extended.ActionButtonTableCell;
+import hotelicus.controllers.extended.Users.LoadExtendedWindow;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
@@ -13,11 +14,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -66,7 +67,7 @@ public class AdminPanel implements Initializable {
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("lastName"));
         userStateColumn.setCellValueFactory(new PropertyValueFactory<Users, UserState>("userState"));
         startedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, Date>("startedOn"));
-        endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users,Date>("endedOn"));
+        endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, Date>("endedOn"));
 
         statusColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Users user) -> {
             if (user.getUserState() == ACTIVE) {
@@ -79,8 +80,7 @@ public class AdminPanel implements Initializable {
 
         editColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Users user) -> {
             try {
-                editUser(user);
-
+                LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Edit user", EDIT, user, OWNER);
             } catch (IOException excep) {
                 System.out.println(excep.getMessage());
             }
@@ -111,7 +111,7 @@ public class AdminPanel implements Initializable {
     @FXML
     private void addUser() {
         try {
-            App.loadUploadUserFormWindow(this.tableView, "Add new user", INSERT, null, OWNER);
+            LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Add new user", INSERT, null, OWNER);
         } catch (IOException excep) {
             excep.printStackTrace();
         }
@@ -156,9 +156,5 @@ public class AdminPanel implements Initializable {
                 }
             }
         }
-    }
-
-    private void editUser(Users user) throws IOException {
-        App.loadUploadUserFormWindow(this.tableView, "Edit user", EDIT, user, OWNER);
     }
 }
