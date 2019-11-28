@@ -8,9 +8,8 @@ import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
 import hotelicus.window.Confirmation;
 
-import hotelicus.window.Error;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.animation.PauseTransition;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,6 +17,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -65,14 +65,18 @@ public class AdminPanel implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.users = new DbController<Users>(Users.class);
 
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
         this.searchUserByName.textProperty().addListener(e -> {
-            List<Users> result = users.selectLike_START("firstName", searchUserByName.getText(), false);
-            if (!result.isEmpty()) {
-                this.tableView.getItems().clear();
-                result.forEach(user -> this.tableView.getItems().add(user));
-            }else{
-                this.tableView.getItems().clear();
-            }
+            pause.setOnFinished(event -> {
+                List<Users> result = users.selectLike_START("firstName", searchUserByName.getText(), false);
+                if (!result.isEmpty()) {
+                    tableView.getItems().clear();
+                    result.forEach(user -> tableView.getItems().add(user));
+                } else {
+                    tableView.getItems().clear();
+                }
+            });
+            pause.playFromStart();
         });
 
         usernameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("username"));
