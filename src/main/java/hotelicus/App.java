@@ -82,10 +82,18 @@ public final class App extends Application {
         }
     }
 
+    public static void ownerWindow(){
+        try {
+            changeScene("dashboard.xml", "Dashboard");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static void adminWindow() {
         try {
-            App.changeScene("adminpanel.fxml", "ADMIN PANEL");
-        } catch (Exception ex) {
+            App.changeScene("ownerpanel.fxml", "OWNER PANEL");
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }

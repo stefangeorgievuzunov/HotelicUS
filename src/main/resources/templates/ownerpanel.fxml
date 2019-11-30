@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import java.awt.Label?>
+<AnchorPane maxHeight="600.0" maxWidth="1100.0" minHeight="600.0" minWidth="1100.0" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.controllers.main.OwnerPanel">
+    <children>
+        <TextField fx:id="searchHotelByName" layoutX="97.0" layoutY="-2.0" prefHeight="36.0" prefWidth="912.0" style="-fx-border-color: #d80032; -fx-border-width: 0 10  0 0; -fx-font-size: 16;" promptText="Search hotel by name..."/>
+        <VBox prefHeight="600.0" prefWidth="102.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#addHotel" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="Add" textFill="WHITE" />
+                <Button mnemonicParsing="false" onAction="#filterActivate" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;" text="Active" textFill="WHITE" />
+                <Button mnemonicParsing="false" onAction="#filterDisable" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="Disabled" textFill="WHITE" />
+                <Button mnemonicParsing="false" onAction="#logOut" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;" text="Logout" textFill="WHITE" />
+            </children>
+        </VBox>
+        <TableView fx:id="tableView" layoutX="100.0" layoutY="31.0" prefHeight="569.0" prefWidth="1000.0" style="-fx-background-color: #8d99ae;" AnchorPane.leftAnchor="100.0">
+            <columns>
+                <TableColumn fx:id="hotelNameColumn" editable="false" prefWidth="436.0" sortable="false" text="Hotel name" />
+                <TableColumn fx:id="hotelStateColumn" editable="false" sortable="false" text="Hotel State" />
+                <TableColumn fx:id="createdOnColumn" editable="false" prefWidth="436.0" sortable="false" text="Started On" />
+                <TableColumn fx:id="removedOnColumn" editable="false" prefWidth="436.0" sortable="false" text="Ended On" />
+                <TableColumn fx:id="statusColumn" editable="false" prefWidth="436.0" sortable="false" text="Status" />
+                <TableColumn fx:id="editColumn" editable="false" prefWidth="436.0" sortable="false" text="Edit" />
+                <TableColumn fx:id="viewColumn" editable="false" prefWidth="436.0" sortable="false" text="Edit" />
+
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+    </children>
+</AnchorPane>

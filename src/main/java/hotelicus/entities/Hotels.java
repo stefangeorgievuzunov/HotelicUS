@@ -1,5 +1,7 @@
 package hotelicus.entities;
 
+import hotelicus.enums.HotelState;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -10,9 +12,8 @@ public class Hotels {
     private Users owner;
     private Users manager;
     private String name;
-    private Integer capacity;
-    private Integer status;
-    private LocalDate dateCreated;
+    private HotelState hotelState;
+    private LocalDate createdOn;
     private LocalDate removedOn;
 
     @Id
@@ -55,31 +56,22 @@ public class Hotels {
         this.name = name;
     }
 
-    @Column(name = "capacity")
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
-    }
-
     @Column(name = "status")
-    public Integer getStatus() {
-        return status;
+    public HotelState getHotelState() {
+        return hotelState;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setHotelState(HotelState hotelState) {
+        this.hotelState = hotelState;
     }
 
     @Column(name = "date_created")
     public LocalDate getDateCreated() {
-        return dateCreated;
+        return createdOn;
     }
 
     public void setDateCreated(LocalDate dateCreated) {
-        this.dateCreated = dateCreated;
+        this.createdOn = dateCreated;
     }
 
     @Column(name = "removed_on")

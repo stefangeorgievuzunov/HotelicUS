@@ -38,18 +38,24 @@ public class LoginController implements Initializable {
         try {
             if (loginValidation(username.getText(), password.getText())) {
                 UserDbController loginControl = new UserDbController();
-                try {
-                    Users loggedUser = loginControl.selectUniqueUser(username.getText());
-                    if (loggedUser != null) {
-                        App.setLoggedUser(loggedUser);
-                    } else {
-                        new Error("FATAL ERROR", "User doesn't exist.");
+                Users loggedUser = loginControl.selectUniqueUser(username.getText());
+                if (loggedUser != null) {
+                    switch (loggedUser.getPrivileges()) {
+                        case ADMIN:
+                            App.dashboardWindow();
+                            break;
+                        case OWNER:
+                            App.ownerWindow();
+                            break;
+                        default:
+                            new Error("FATAL ERROR", "Something went wrong.");
+                            break;
                     }
-                } catch (NonUniqueResultException excep) {
-                    excep.printStackTrace();
+                    App.setLoggedUser(loggedUser);
+                    System.out.println(App.getLoggedUser().getUsername());
+                } else {
+                    new Error("FATAL ERROR", "User doesn't exist.");
                 }
-                System.out.println(App.getLoggedUser().getUsername());
-                App.dashboardWindow();
             }
         } catch (NonUniqueResultException excp) {
             excp.printStackTrace();

@@ -1,7 +1,9 @@
 package hotelicus.controllers.extended.Users;
 
 import hotelicus.App;
+import hotelicus.entities.Hotels;
 import hotelicus.entities.Users;
+import hotelicus.enums.HotelState;
 import hotelicus.window.Error;
 import org.hibernate.Criteria;
 import org.hibernate.NonUniqueResultException;
@@ -45,5 +47,15 @@ public class UserDbController {
         }else{
             return true;
         }
+    }
+
+    public static List<Hotels> selectOwnerHotels(Users hotelOwner, HotelState hotelStae){
+        UserDbController.session.beginTransaction();
+        Criteria crit = UserDbController.session.createCriteria(Hotels.class);
+        crit.add(Restrictions.eq("owner", hotelOwner));
+        crit.add(Restrictions.eq("hotelState", hotelStae));
+        List<Hotels> hotels = crit.list();
+        UserDbController.session.getTransaction().commit();
+        return hotels;
     }
 }
