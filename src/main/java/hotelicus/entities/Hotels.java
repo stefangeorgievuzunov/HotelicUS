@@ -1,6 +1,7 @@
 package hotelicus.entities;
 
 import hotelicus.enums.HotelState;
+import org.hibernate.mapping.Join;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -27,8 +28,8 @@ public class Hotels {
         this.hotelId = hotelId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_owner_id", referencedColumnName = "user_id")
+    @OneToOne
+    @JoinColumn(name="user_owner_id",referencedColumnName = "user_id")
     public Users getOwner() {
         return owner;
     }
@@ -56,6 +57,7 @@ public class Hotels {
         this.name = name;
     }
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     public HotelState getHotelState() {
         return hotelState;
@@ -65,13 +67,13 @@ public class Hotels {
         this.hotelState = hotelState;
     }
 
-    @Column(name = "date_created")
-    public LocalDate getDateCreated() {
+    @Column(name = "created_on")
+    public LocalDate getCreatedOn() {
         return createdOn;
     }
 
-    public void setDateCreated(LocalDate dateCreated) {
-        this.createdOn = dateCreated;
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
     }
 
     @Column(name = "removed_on")

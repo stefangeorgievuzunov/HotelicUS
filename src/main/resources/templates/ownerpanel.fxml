@@ -27,7 +27,7 @@
                 <TableColumn fx:id="removedOnColumn" editable="false" prefWidth="436.0" sortable="false" text="Ended On" />
                 <TableColumn fx:id="statusColumn" editable="false" prefWidth="436.0" sortable="false" text="Status" />
                 <TableColumn fx:id="editColumn" editable="false" prefWidth="436.0" sortable="false" text="Edit" />
-                <TableColumn fx:id="viewColumn" editable="false" prefWidth="436.0" sortable="false" text="Edit" />
+                <TableColumn fx:id="viewColumn" editable="false" prefWidth="436.0" sortable="false" text="View" />
 
             </columns>
             <columnResizePolicy>

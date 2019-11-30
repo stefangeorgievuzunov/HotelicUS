@@ -49,11 +49,12 @@ public class UserDbController {
         }
     }
 
-    public static List<Hotels> selectOwnerHotels(Users hotelOwner, HotelState hotelStae){
+    public static List<Hotels> selectOwnerHotels(Users hotelOwner, HotelState hotelState){
         UserDbController.session.beginTransaction();
-        Criteria crit = UserDbController.session.createCriteria(Hotels.class);
-        crit.add(Restrictions.eq("owner", hotelOwner));
-        crit.add(Restrictions.eq("hotelState", hotelStae));
+        Criteria crit = UserDbController.session.createCriteria(Hotels.class,"h");
+//        crit.createAlias("users","u");
+        crit.add(Restrictions.eq("h.owner", hotelOwner));
+        crit.add(Restrictions.eq("h.hotelState", hotelState));
         List<Hotels> hotels = crit.list();
         UserDbController.session.getTransaction().commit();
         return hotels;

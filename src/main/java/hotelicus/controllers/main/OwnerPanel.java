@@ -7,6 +7,7 @@ import hotelicus.entities.Hotels;
 import hotelicus.entities.Users;
 import hotelicus.enums.HotelState;
 import hotelicus.window.Confirmation;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -43,15 +45,33 @@ public class OwnerPanel implements Initializable {
     @FXML
     private TableColumn<Hotels, Button> viewColumn;
     @FXML
-    private TextField searchUserByName;
+    private TextField searchHotelByName;
 
     private DbController<Hotels> hotels;
-    private Users loggedUser=App.getLoggedUser();
+    private Users loggedUser = App.getLoggedUser();
 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.hotels = new DbController<Hotels>(Hotels.class);
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+        this.searchHotelByName.textProperty().addListener(e -> {
+            pause.setOnFinished(event -> {
+                //TODO : Adding restrictions to load only logged user's hotels.
+                List<Hotels> result = this.hotels.selectLike_START("name", searchHotelByName.getText(), false);
+                if (!result.isEmpty()) {
+                    tableView.getItems().clear();
+                    result.forEach(hotel -> {
+                        tableView.getItems().add(hotel);
+                        System.out.println(hotel.getOwner().getPassword());
+                    });
+                } else {
+                    tableView.getItems().clear();
+                }
+            });
+            pause.playFromStart();
+        });
 
 
         hotelNameColumn.setCellValueFactory(new PropertyValueFactory<Hotels, String>("name"));
@@ -69,6 +89,15 @@ public class OwnerPanel implements Initializable {
         }));
 
         editColumn.setCellFactory(ActionButtonTableCell.<Hotels>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Hotels hotel) -> {
+//            try {
+//                LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Edit user", EDIT, user, OWNER);
+//            } catch (IOException excep) {
+//                System.out.println(excep.getMessage());
+//            }
+            return hotel;
+        }));
+
+        viewColumn.setCellFactory(ActionButtonTableCell.<Hotels>forTableColumn("View", EDIT_BUTTON_STYLE, tableView, (Hotels hotel) -> {
 //            try {
 //                LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Edit user", EDIT, user, OWNER);
 //            } catch (IOException excep) {
@@ -134,15 +163,18 @@ public class OwnerPanel implements Initializable {
 
         List<Hotels> hotels;
         if (hotelState == ACTIVE) {
-            hotels = UserDbController.selectOwnerHotels(this.loggedUser,ACTIVE);
+            hotels = UserDbController.selectOwnerHotels(this.loggedUser, ACTIVE);
 
         } else if (hotelState == DISABLED) {
-            hotels = UserDbController.selectOwnerHotels(this.loggedUser,DISABLED);
+            hotels = UserDbController.selectOwnerHotels(this.loggedUser, DISABLED);
         } else {
-            hotels = this.hotels.selectEqualTo("owner",this.loggedUser,false);
+            hotels = this.hotels.selectEqualTo("owner", this.loggedUser, false);
+            System.out.println("Im here");
         }
 
         for (Hotels hotel : hotels)
+        {
             this.tableView.getItems().add(hotel);
+        }
     }
 }

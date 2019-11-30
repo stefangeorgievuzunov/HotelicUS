@@ -67,24 +67,16 @@ public final class App extends Application {
 
     public static void loginWindow() {
         try {
-            changeScene("login.fxml", "Login");
+            App.changeScene("login.fxml", "Login");
         } catch (IOException excep) {
             excep.printStackTrace();
         }
 
     }
 
-    public static void dashboardWindow() {
-        try {
-            changeScene("dashboard.xml", "Dashboard");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public static void ownerWindow(){
         try {
-            changeScene("dashboard.xml", "Dashboard");
+            App.changeScene("ownerpanel.fxml", "OWNER PANEL:");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -92,7 +84,7 @@ public final class App extends Application {
 
     public static void adminWindow() {
         try {
-            App.changeScene("ownerpanel.fxml", "OWNER PANEL");
+            App.changeScene("adminpanel.fxml", "ADMIN PANEL");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -102,7 +94,7 @@ public final class App extends Application {
         if (!fxml.isEmpty() && !title.isEmpty()) {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + fxml));
 
-            Parent page = (Parent) fxmlLoader.load();
+            Parent page = (Parent)fxmlLoader.load();
             Scene scene = getStage().getScene();
 
             if (scene == null) {

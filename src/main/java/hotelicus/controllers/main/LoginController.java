@@ -42,7 +42,7 @@ public class LoginController implements Initializable {
                 if (loggedUser != null) {
                     switch (loggedUser.getPrivileges()) {
                         case ADMIN:
-                            App.dashboardWindow();
+                            App.adminWindow();
                             break;
                         case OWNER:
                             App.ownerWindow();
