@@ -17,5 +17,6 @@
         <mapping class="hotelicus.entities.Rooms"/>
         <mapping class="hotelicus.entities.Services"/>
         <mapping class="hotelicus.entities.Users"/>
+        <mapping class="hotelicus.entities.LoggedUsers"/>
     </session-factory>
 </hibernate-configuration>

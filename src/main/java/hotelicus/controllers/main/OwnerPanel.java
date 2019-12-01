@@ -2,7 +2,7 @@ package hotelicus.controllers.main;
 
 import hotelicus.App;
 import hotelicus.controllers.extended.ActionButtonTableCell;
-import hotelicus.controllers.extended.Users.UserDbController;
+import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.Hotels;
 import hotelicus.entities.Users;
 import hotelicus.enums.HotelState;
@@ -48,8 +48,6 @@ public class OwnerPanel implements Initializable {
     private TextField searchHotelByName;
 
     private DbController<Hotels> hotels;
-    private Users loggedUser = App.getLoggedUser();
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -124,6 +122,7 @@ public class OwnerPanel implements Initializable {
     private void logOut() {
         Confirmation logConfirmation = new Confirmation("Message", "Are you sure you want to log off ?");
         if (logConfirmation.getConfirmationResult() == true) {
+            UserController.setUserLoggedOff(App.getLoggedUser());
             App.loginWindow();
         }
     }
@@ -163,17 +162,17 @@ public class OwnerPanel implements Initializable {
 
         List<Hotels> hotels;
         if (hotelState == ACTIVE) {
-            hotels = UserDbController.selectOwnerHotels(this.loggedUser, ACTIVE);
+            hotels = UserController.selectOwnerHotels(App.getLoggedUser(), ACTIVE);
 
         } else if (hotelState == DISABLED) {
-            hotels = UserDbController.selectOwnerHotels(this.loggedUser, DISABLED);
+            hotels = UserController.selectOwnerHotels(App.getLoggedUser(), DISABLED);
         } else {
-            hotels = this.hotels.selectEqualTo("owner", this.loggedUser, false);
+            hotels = this.hotels.selectEqualTo("owner", App.getLoggedUser(), false);
             System.out.println("Im here");
         }
-
         for (Hotels hotel : hotels)
         {
+            System.out.println(hotel.getOwner().getUsername());
             this.tableView.getItems().add(hotel);
         }
     }

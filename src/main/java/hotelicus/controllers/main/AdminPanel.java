@@ -3,6 +3,7 @@ package hotelicus.controllers.main;
 import hotelicus.App;
 import hotelicus.controllers.extended.ActionButtonTableCell;
 import hotelicus.controllers.extended.Users.LoadExtendedWindow;
+import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
@@ -123,6 +124,7 @@ public class AdminPanel implements Initializable {
     private void logOut() {
         Confirmation logConfirmation = new Confirmation("Message", "Are you sure you want to log off ?");
         if (logConfirmation.getConfirmationResult() == true) {
+            UserController.setUserLoggedOff(App.getLoggedUser());
             App.loginWindow();
         }
     }

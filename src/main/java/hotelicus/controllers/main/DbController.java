@@ -42,6 +42,13 @@ public class DbController<T> {
         this.session.getTransaction().commit();
     }
 
+    public void delete(T object) {
+        System.out.println(object);
+        this.session.beginTransaction();
+        this.session.delete(object);
+        this.session.getTransaction().commit();
+    }
+
     public void update(T object) {
         this.session.beginTransaction();
         this.session.update(object);

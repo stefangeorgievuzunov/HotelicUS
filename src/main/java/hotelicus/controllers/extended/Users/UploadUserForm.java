@@ -13,9 +13,7 @@ import javafx.stage.Stage;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.exception.ConstraintViolationException;
 
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
 
 import static hotelicus.enums.UploadAction.*;
 
@@ -105,7 +103,7 @@ public class UploadUserForm {
 
         if (!this.username.getText().isEmpty() && !this.password.getText().isEmpty() && !this.firstName.getText().isEmpty() && !this.lastName.getText().isEmpty()){
             try{
-                Users testUser= UserDbController.selectUniqueUser(this.username.getText());
+                Users testUser= UserController.selectUniqueUser(this.username.getText());
                 if(testUser==null){
                     return true;
                 }

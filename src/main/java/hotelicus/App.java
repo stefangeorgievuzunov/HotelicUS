@@ -1,6 +1,7 @@
 package hotelicus;
 
 import hotelicus.controllers.extended.Users.UploadUserForm;
+import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.core.HibernateUtil;
 import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
@@ -64,7 +65,11 @@ public final class App extends Application {
             excep.printStackTrace();
         }
     }
-
+    @Override
+    public void stop(){
+        UserController.setUserLoggedOff(App.getLoggedUser());
+        App.session.close();
+    }
     public static void loginWindow() {
         try {
             App.changeScene("login.fxml", "Login");
@@ -95,7 +100,7 @@ public final class App extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + fxml));
 
             Parent page = (Parent)fxmlLoader.load();
-            Scene scene = getStage().getScene();
+            Scene scene = App.stage.getScene();
 
             if (scene == null) {
                 scene = new Scene(page);
@@ -107,12 +112,6 @@ public final class App extends Application {
             App.stage.setTitle(title);
         }
     }
-
-    public static Stage getAppStage() {
-        return App.stage;
-    }
-
-
     public static void main(String[] args) {
         launch(args);
     }
