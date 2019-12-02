@@ -67,7 +67,9 @@ public final class App extends Application {
     }
     @Override
     public void stop(){
-        UserController.setUserLoggedOff(App.getLoggedUser());
+        if(App.getLoggedUser()!=null){
+            UserController.setUserLoggedOff(App.getLoggedUser());
+        }
         App.session.close();
     }
     public static void loginWindow() {

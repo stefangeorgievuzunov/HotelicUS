@@ -16,6 +16,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
+import javafx.util.Pair;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -56,16 +59,15 @@ public class OwnerPanel implements Initializable {
         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
         this.searchHotelByName.textProperty().addListener(e -> {
             pause.setOnFinished(event -> {
-                //TODO : Adding restrictions to load only logged user's hotels.
-                List<Hotels> result = this.hotels.selectLike_START("name", searchHotelByName.getText(), false);
+                List<Hotels> result = this.hotels.select(Restrictions.like("name", searchHotelByName.getText(), MatchMode.START), Restrictions.eq("owner", App.getLoggedUser()));
                 if (!result.isEmpty()) {
-                    tableView.getItems().clear();
+                    this.tableView.getItems().clear();
                     result.forEach(hotel -> {
-                        tableView.getItems().add(hotel);
+                        this.tableView.getItems().add(hotel);
                         System.out.println(hotel.getOwner().getPassword());
                     });
                 } else {
-                    tableView.getItems().clear();
+                    this.tableView.getItems().clear();
                 }
             });
             pause.playFromStart();
@@ -162,17 +164,15 @@ public class OwnerPanel implements Initializable {
 
         List<Hotels> hotels;
         if (hotelState == ACTIVE) {
-            hotels = UserController.selectOwnerHotels(App.getLoggedUser(), ACTIVE);
+            hotels = this.hotels.select(Restrictions.eq("owner", App.getLoggedUser()), Restrictions.eq("hotelState", ACTIVE));
 
         } else if (hotelState == DISABLED) {
-            hotels = UserController.selectOwnerHotels(App.getLoggedUser(), DISABLED);
+            hotels = this.hotels.select(Restrictions.eq("owner", App.getLoggedUser()), Restrictions.eq("hotelState", DISABLED));
         } else {
-            hotels = this.hotels.selectEqualTo("owner", App.getLoggedUser(), false);
-            System.out.println("Im here");
+            hotels = this.hotels.select(Restrictions.eq("owner", App.getLoggedUser()));
         }
-        for (Hotels hotel : hotels)
-        {
-            System.out.println(hotel.getOwner().getUsername());
+
+        for (Hotels hotel : hotels) {
             this.tableView.getItems().add(hotel);
         }
     }

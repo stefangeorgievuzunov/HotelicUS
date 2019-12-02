@@ -1,4 +1,5 @@
 package hotelicus.controllers.extended.Users;
+
 import hotelicus.controllers.main.DbController;
 import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
@@ -11,6 +12,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.hibernate.NonUniqueResultException;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.time.LocalDate;
@@ -34,26 +36,26 @@ public class UploadUserForm {
     private UploadAction uploadAction;
     private TableView tableView;
 
-    public UploadUserForm(){
+    public UploadUserForm() {
 
     }
 
-    public void init(TableView tableVliew, Users user, UserPrivileges priviliges, UploadAction uploadAction){
-        this.tableView=tableVliew;
-        if(user!=null){
-            this.user=user;
-        }else{
-            this.user=new Users();
+    public void init(TableView tableVliew, Users user, UserPrivileges priviliges, UploadAction uploadAction) {
+        this.tableView = tableVliew;
+        if (user != null) {
+            this.user = user;
+        } else {
+            this.user = new Users();
         }
-        this.priviliges=priviliges;
-        this.uploadAction=uploadAction;
+        this.priviliges = priviliges;
+        this.uploadAction = uploadAction;
         this.uploadUserInfo();
     }
 
     @FXML
-    private void uploadRouter(){
-        if(this.formValidation()){
-           DbController<Users> updateUser=new DbController<Users>(Users.class);
+    private void uploadRouter() {
+        if (this.formValidation()) {
+            DbController<Users> updateUser = new DbController<Users>(Users.class);
 
             this.user.setUsername(this.username.getText());
             this.user.setPassword(this.password.getText());
@@ -61,28 +63,27 @@ public class UploadUserForm {
             this.user.setLastName(this.lastName.getText());
             this.user.setUserState(UserState.ACTIVE);
             this.user.setPrivileges(this.priviliges);
-            if(this.user.getStartedOn()==null){
-                LocalDate startedOn=LocalDate.now();
+            if (this.user.getStartedOn() == null) {
+                LocalDate startedOn = LocalDate.now();
                 this.user.setStartedOn(startedOn);
             }
-            boolean successfulRecord=true;
+            boolean successfulRecord = true;
 
-            if(this.uploadAction==EDIT){
-                    updateUser.update(this.user);
+            if (this.uploadAction == EDIT) {
+                updateUser.update(this.user);
             }
 
-            if(this.uploadAction==INSERT){
-                try{
+            if (this.uploadAction == INSERT) {
+                try {
                     updateUser.insert(this.user);
-                   this.tableView.getItems().add(this.user);
-                }
-                catch(ConstraintViolationException excp){
-                    successfulRecord=false;
+                    this.tableView.getItems().add(this.user);
+                } catch (ConstraintViolationException excp) {
+                    successfulRecord = false;
                     new Error("Upload failed", "Username is busy");
                 }
             }
 
-            if(successfulRecord){
+            if (successfulRecord) {
                 this.tableView.refresh();
                 Stage stage = (Stage) saveButton.getScene().getWindow();
                 stage.close();
@@ -90,8 +91,8 @@ public class UploadUserForm {
         }
     }
 
-    private  void uploadUserInfo(){
-        if( this.user.getUsername()!=null && this.user.getPassword()!=null && this.user.getFirstName()!=null && this.user.getLastName()!=null){
+    private void uploadUserInfo() {
+        if (this.user.getUsername() != null && this.user.getPassword() != null && this.user.getFirstName() != null && this.user.getLastName() != null) {
             this.username.setText(user.getUsername());
             this.password.setText(user.getPassword());
             this.firstName.setText(user.getFirstName());
@@ -99,30 +100,29 @@ public class UploadUserForm {
         }
     }
 
-    private boolean formValidation(){
+    private boolean formValidation() {
 
-        if (!this.username.getText().isEmpty() && !this.password.getText().isEmpty() && !this.firstName.getText().isEmpty() && !this.lastName.getText().isEmpty()){
-            try{
-                Users testUser= UserController.selectUniqueUser(this.username.getText());
-                if(testUser==null){
+        if (!this.username.getText().isEmpty() && !this.password.getText().isEmpty() && !this.firstName.getText().isEmpty() && !this.lastName.getText().isEmpty()) {
+            try {
+                DbController<Users> uniqueUser = new DbController<Users>(Users.class);
+                Users testUser = uniqueUser.selectUnique(Restrictions.eq("username", username));
+                if (testUser == null) {
                     return true;
                 }
-                if(this.user.getUsername()!=null){
-                    if(this.user.getUsername().equals(testUser.getUsername())){
+                if (this.user.getUsername() != null) {
+                    if (this.user.getUsername().equals(testUser.getUsername())) {
                         return true;
-                    }
-                    else{
+                    } else {
                         throw new NonUniqueResultException(0);
                     }
                 }
-                if(this.username.getText().equals(testUser.getUsername())){
+                if (this.username.getText().equals(testUser.getUsername())) {
                     throw new NonUniqueResultException(0);
                 }
-            }
-            catch(NonUniqueResultException uniqueExcep){
+            } catch (NonUniqueResultException uniqueExcep) {
                 new Error("Upload failed", "Username is busy");
             }
-        }else{
+        } else {
             new Error("Upload failed", "There are empty fields!");
         }
         return false;

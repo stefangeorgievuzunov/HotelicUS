@@ -19,6 +19,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 
 import java.io.IOException;
 import java.net.URL;
@@ -69,7 +71,7 @@ public class AdminPanel implements Initializable {
         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
         this.searchUserByName.textProperty().addListener(e -> {
             pause.setOnFinished(event -> {
-                List<Users> result = users.selectLike_START("firstName", searchUserByName.getText(), false);
+                List<Users> result = users.select(Restrictions.like("firstName", searchUserByName.getText(), MatchMode.START));
                 if (!result.isEmpty()) {
                     tableView.getItems().clear();
                     result.forEach(user -> tableView.getItems().add(user));
@@ -161,7 +163,7 @@ public class AdminPanel implements Initializable {
 
     private void loadUsers(UserState userState) {
         tableView.getItems().clear();
-        List<Users> users = this.users.selectEqualTo("privileges", OWNER, false);
+        List<Users> users = this.users.select(Restrictions.eq("privileges", OWNER));
         for (Users user : users) {
             if (userState == ACTIVE) {
                 if (user.getPrivileges() == OWNER && user.getUserState() == ACTIVE) {

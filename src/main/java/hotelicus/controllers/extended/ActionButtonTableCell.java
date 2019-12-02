@@ -1,7 +1,5 @@
 package hotelicus.controllers.extended;
 
-
-import hotelicus.styles.Styles;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -12,12 +10,12 @@ import javafx.util.Callback;
 
 import java.util.function.Function;
 
-public class ActionButtonTableCell<S> extends TableCell<S, Button> {
+public class ActionButtonTableCell<T> extends TableCell<T, Button> {
 
     private final Button actionButton;
     private  TableView table;
 
-    public ActionButtonTableCell(String label, String buttonStyle,TableView table, Function<S, S> function) {
+    public ActionButtonTableCell(String label, String buttonStyle,TableView table, Function<T, T> function) {
         this.actionButton = new Button(label);
         this.table=table;
         if(buttonStyle!=null){
@@ -31,11 +29,11 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
         });
     }
 
-    public S getCurrentItem() {
-        return (S) this.table.getItems().get(getIndex());
+    public T getCurrentItem() {
+        return (T) this.table.getItems().get(getIndex());
     }
 
-    public static <S> Callback<TableColumn<S, Button>, TableCell<S, Button>> forTableColumn(String label,String buttonStyle,TableView table, Function<S, S> function) {
+    public static <T> Callback<TableColumn<T, Button>, TableCell<T, Button>> forTableColumn(String label,String buttonStyle,TableView table, Function<T, T> function) {
         return param -> new ActionButtonTableCell<>(label,buttonStyle,table, function);
     }
 

@@ -3,6 +3,7 @@ package hotelicus.controllers.main;
 import hotelicus.App;
 import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.Users;
+import hotelicus.enums.UserState;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 
@@ -11,9 +12,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.hibernate.NonUniqueResultException;
+import org.hibernate.criterion.Restrictions;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import static hotelicus.enums.UserState.ACTIVE;
 
 
 public class LoginController implements Initializable {
@@ -24,8 +29,10 @@ public class LoginController implements Initializable {
     private PasswordField password;
     @FXML
     private Button loginButton;
+    private DbController<Users> usersRelated;
 
     public LoginController() {
+        this.usersRelated = new DbController<Users>(Users.class);
     }
 
     @Override
@@ -37,11 +44,11 @@ public class LoginController implements Initializable {
     private void loginRouter() {
         if (loginValidation(username.getText(), password.getText())) {
             try {
-                Users loggedUser = UserController.selectUniqueUser(username.getText());
+                Users loggedUser = this.usersRelated.selectUnique(Restrictions.eq("username", username.getText()),Restrictions.eq("userState", ACTIVE));
                 if (loggedUser != null) {
                     if (!UserController.isUserLoggedIn(loggedUser)) {
-                        UserController.setUserLoggedIn(loggedUser);
                         App.setLoggedUser(loggedUser);
+                        UserController.setUserLoggedIn(loggedUser);
                         switch (loggedUser.getPrivileges()) {
                             case ADMIN:
                                 App.adminWindow();
@@ -67,10 +74,24 @@ public class LoginController implements Initializable {
 
     private boolean loginValidation(String username, String password) throws NonUniqueResultException {
         if (!username.isEmpty() && !password.isEmpty()) {
-            if (UserController.usernamePasswordValidator(username, password))
-                return true;
-            else
+            try {
+                List<Users> users = this.usersRelated.select(Restrictions.eq("username", username), Restrictions.eq("password", password));
+                if (users.size() < 1) {
+                    throw new NullPointerException();
+                } else if (users.size() > 1) {
+                    throw new NonUniqueResultException(0);
+                } else {
+                    return true;
+                }
+            } catch (Exception excep) {
+                if (excep instanceof NonUniqueResultException) {
+                    new Error("Failed to login", "Invalid username or password!");
+                }
+                if (excep instanceof NullPointerException) {
+                    new Error("Failed to login", "Invalid username or password!");
+                }
                 return false;
+            }
         } else {
             new Error("Failed to login", "There are empty fields!");
             return false;
