@@ -76,7 +76,6 @@ public class DbController<T> {
         for(Criterion criteria : args){
             crit.add(criteria);
         }
-        System.out.println("in select uniq");
         this.session.getTransaction().commit();
         return (T)crit.uniqueResult();
     }

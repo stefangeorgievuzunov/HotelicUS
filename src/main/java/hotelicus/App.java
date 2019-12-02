@@ -2,7 +2,9 @@ package hotelicus;
 
 import hotelicus.controllers.extended.Users.UploadUserForm;
 import hotelicus.controllers.extended.Users.UserController;
+import hotelicus.controllers.main.DbController;
 import hotelicus.core.HibernateUtil;
+import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
 import hotelicus.enums.UserPrivileges;
@@ -14,8 +16,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public final class App extends Application {
@@ -25,11 +32,13 @@ public final class App extends Application {
     private static Session session;
     private static App instance;
     private static Class type;
+    private static ScheduledExecutorService loggedUserPinging;
 
     public App() {
         App.instance = this;
         App.session = HibernateUtil.getSessionFactory().openSession();
         App.type = getClass();
+        App.loggedUserPinging= Executors.newSingleThreadScheduledExecutor();
     }
 
     public static Session getSession() {
@@ -57,7 +66,19 @@ public final class App extends Application {
         try {
             App.stage = primaryStage;
             App.stage.setResizable(false);
-            App.stage.setOnCloseRequest(e -> Platform.exit());
+            App.loggedUserPinging.scheduleAtFixedRate(() -> {
+                if (App.loggedUser != null) {
+                    DbController<LoggedUsers> setUserLoggedIn = new DbController<LoggedUsers>(LoggedUsers.class);
+                    LoggedUsers result = setUserLoggedIn.selectUnique(Restrictions.eq("loggedUser", App.loggedUser));
+                    result.setLastPinged(new Date());
+                    setUserLoggedIn.update(result);
+                }
+            },0,60, TimeUnit.SECONDS);
+
+            App.stage.setOnCloseRequest(e -> {
+                Platform.exit();
+                this.loggedUserPinging.shutdown();
+            });
 
             App.loginWindow();
             primaryStage.show();
@@ -65,13 +86,15 @@ public final class App extends Application {
             excep.printStackTrace();
         }
     }
+
     @Override
-    public void stop(){
-        if(App.getLoggedUser()!=null){
+    public void stop() {
+        if (App.getLoggedUser() != null) {
             UserController.setUserLoggedOff(App.getLoggedUser());
         }
         App.session.close();
     }
+
     public static void loginWindow() {
         try {
             App.changeScene("login.fxml", "Login");
@@ -81,7 +104,7 @@ public final class App extends Application {
 
     }
 
-    public static void ownerWindow(){
+    public static void ownerWindow() {
         try {
             App.changeScene("ownerpanel.fxml", "OWNER PANEL:");
         } catch (IOException ex) {
@@ -101,7 +124,7 @@ public final class App extends Application {
         if (!fxml.isEmpty() && !title.isEmpty()) {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + fxml));
 
-            Parent page = (Parent)fxmlLoader.load();
+            Parent page = (Parent) fxmlLoader.load();
             Scene scene = App.stage.getScene();
 
             if (scene == null) {
@@ -114,6 +137,7 @@ public final class App extends Application {
             App.stage.setTitle(title);
         }
     }
+
     public static void main(String[] args) {
         launch(args);
     }

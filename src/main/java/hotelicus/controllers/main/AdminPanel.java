@@ -127,6 +127,7 @@ public class AdminPanel implements Initializable {
         Confirmation logConfirmation = new Confirmation("Message", "Are you sure you want to log off ?");
         if (logConfirmation.getConfirmationResult() == true) {
             UserController.setUserLoggedOff(App.getLoggedUser());
+            App.setLoggedUser(null);
             App.loginWindow();
         }
     }

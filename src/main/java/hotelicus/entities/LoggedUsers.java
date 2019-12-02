@@ -1,12 +1,17 @@
 package hotelicus.entities;
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "loggedusers")
 public class LoggedUsers {
     private Integer id;
     private Users loggedUser;
+    private Date lastPinged;
 
+    public LoggedUsers(){
+        this.setLastPinged(new Date());
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +32,14 @@ public class LoggedUsers {
 
     public void setLoggedUser(Users loggedUser) {
         this.loggedUser = loggedUser;
+    }
+
+    @Column(name="last_pinged")
+    public Date getLastPinged() {
+        return lastPinged;
+    }
+
+    public void setLastPinged(Date lastPinged) {
+        this.lastPinged = lastPinged;
     }
 }

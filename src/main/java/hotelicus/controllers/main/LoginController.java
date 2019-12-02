@@ -2,8 +2,8 @@ package hotelicus.controllers.main;
 
 import hotelicus.App;
 import hotelicus.controllers.extended.Users.UserController;
+import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
-import hotelicus.enums.UserState;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 
@@ -15,6 +15,7 @@ import org.hibernate.NonUniqueResultException;
 import org.hibernate.criterion.Restrictions;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -30,9 +31,11 @@ public class LoginController implements Initializable {
     @FXML
     private Button loginButton;
     private DbController<Users> usersRelated;
+    private DbController<LoggedUsers> handleLoggedUser;
 
     public LoginController() {
         this.usersRelated = new DbController<Users>(Users.class);
+        this.handleLoggedUser = new DbController<LoggedUsers>(LoggedUsers.class);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class LoginController implements Initializable {
     private void loginRouter() {
         if (loginValidation(username.getText(), password.getText())) {
             try {
-                Users loggedUser = this.usersRelated.selectUnique(Restrictions.eq("username", username.getText()),Restrictions.eq("userState", ACTIVE));
+                Users loggedUser = this.usersRelated.selectUnique(Restrictions.eq("username", username.getText()), Restrictions.eq("userState", ACTIVE));
                 if (loggedUser != null) {
                     if (!UserController.isUserLoggedIn(loggedUser)) {
                         App.setLoggedUser(loggedUser);
@@ -60,7 +63,11 @@ public class LoginController implements Initializable {
                                 throw new Exception();
                         }
                     } else {
-                        new Error("Login Failed", "User is already logged in !");
+                        new Error("Login Failed", "User is already logged in ! Try again later.");
+                        LoggedUsers result = this.handleLoggedUser.selectUnique(Restrictions.eq("loggedUser", loggedUser));
+                        if (((new Date().getTime()-result.getLastPinged().getTime())/1000)>60) {
+                            this.handleLoggedUser.delete(result);
+                        }
                     }
                 } else {
                     throw new Exception();

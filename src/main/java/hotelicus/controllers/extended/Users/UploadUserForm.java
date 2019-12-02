@@ -105,7 +105,7 @@ public class UploadUserForm {
         if (!this.username.getText().isEmpty() && !this.password.getText().isEmpty() && !this.firstName.getText().isEmpty() && !this.lastName.getText().isEmpty()) {
             try {
                 DbController<Users> uniqueUser = new DbController<Users>(Users.class);
-                Users testUser = uniqueUser.selectUnique(Restrictions.eq("username", username));
+                Users testUser = uniqueUser.selectUnique(Restrictions.eq("username", username.getText()));
                 if (testUser == null) {
                     return true;
                 }
