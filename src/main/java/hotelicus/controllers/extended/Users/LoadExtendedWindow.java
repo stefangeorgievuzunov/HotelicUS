@@ -40,6 +40,7 @@ public class LoadExtendedWindow {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
             stage.show();
         }
     }
