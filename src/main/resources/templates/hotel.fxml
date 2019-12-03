@@ -9,14 +9,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.controllers.extended.Users.UploadHotelForm">
+<AnchorPane maxHeight="600.0" maxWidth="1100.0" minHeight="600.0" minWidth="1100.0" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.controllers.extended.Users.UploadHotelForm">
    <children>
       <HBox prefHeight="41.0" prefWidth="1100.0">
          <children>
-            <Button onAction="#addNewRoom" mnemonicParsing="false" prefHeight="38.0" prefWidth="78.0" style="-fx-background-color: #d80032; -fx-font-size: 16px; -fx-font-weight: bold;" text="Add" textFill="WHITE" />
-             <Button onAction="#manageManager" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" style="-fx-background-color: #ef233c; -fx-font-size: 16px; -fx-font-weight: bold;" text="Manage Manager" textFill="WHITE"/>
-             <TextField fx:id="hotelNameField" prefHeight="38.0" prefWidth="773.0" promptText="Enter hotel name..." style="-fx-border-color: #d80032; -fx-font-size: 16px;" HBox.hgrow="ALWAYS">
+            <Button mnemonicParsing="false" onAction="#addNewRoom" prefHeight="38.0" prefWidth="78.0" style="-fx-background-color: #d80032; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 0px;" text="Add" textFill="WHITE" />
+             <Button mnemonicParsing="false" onAction="#manageManager" prefHeight="38.0" prefWidth="177.0" style="-fx-background-color: #ef233c; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 0px;" text="Manage Manager" textFill="WHITE" />
+            <TextField prefHeight="38.0" prefWidth="400.0" promptText="Search room..." style="-fx-font-size: 16px; -fx-border-color: #d80032; -fx-border-image-width: 0 10  0 0;" />
+             <TextField fx:id="hotelNameField" prefHeight="38.0" prefWidth="400.0" promptText="Enter hotel name..." style="-fx-border-color: #d80032; -fx-font-size: 16px;" HBox.hgrow="ALWAYS">
                <font>
                   <Font size="13.0" />
                </font>
@@ -24,18 +24,18 @@
                   <Insets />
                </HBox.margin>
             </TextField>
-             <Button fx:id="saveButton" onAction="#saveHotel" mnemonicParsing="false" prefHeight="38.0" prefWidth="78.0" style="-fx-background-color: #ef233c; -fx-font-size: 16px; -fx-font-weight: bold;" text="Save" textFill="WHITE"/>
+             <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveHotel" prefHeight="38.0" prefWidth="78.0" style="-fx-background-color: #ef233c; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 0px;" text="Save" textFill="WHITE" />
          </children>
       </HBox>
-      <TableView fx:id="tableView" layoutY="42.0" prefHeight="559.0" prefWidth="1100.0">
+      <TableView fx:id="tableView" layoutY="41.0" prefHeight="559.0" prefWidth="1100.0" style="-fx-background-color: #8d99ae;" AnchorPane.leftAnchor="0.0">
         <columns>
-          <TableColumn fx:id="categoryColumn" maxWidth="200.0" minWidth="-1.0" prefWidth="150.0" resizable="false" text="Category" />
-          <TableColumn fx:id="capacityColumn" prefWidth="100.0" text="Capacity" />
-            <TableColumn fx:id="roomNumberColumn" prefWidth="104.0" text="Room Number" />
-            <TableColumn fx:id="priceColumn" prefWidth="100.0" text="Price" />
-            <TableColumn fx:id="roomStateColumn" prefWidth="150.0" text="Room State" />
-            <TableColumn fx:id="editColumn" prefWidth="100.0" text="Edit" />
-            <TableColumn fx:id="statusColumn" prefWidth="150.0" text="Status" />
+          <TableColumn fx:id="categoryColumn" maxWidth="202.99996376037598" minWidth="-1.0" prefWidth="195.99996376037598" resizable="false" text="Category" />
+          <TableColumn fx:id="capacityColumn" prefWidth="156.0" resizable="false" text="Capacity" />
+            <TableColumn fx:id="roomNumberColumn" prefWidth="211.00003051757812" resizable="false" text="Room Number" />
+            <TableColumn fx:id="priceColumn" prefWidth="100.0" resizable="false" text="Price" />
+            <TableColumn fx:id="roomStateColumn" prefWidth="150.0" resizable="false" text="Room State" />
+            <TableColumn fx:id="editColumn" prefWidth="158.0" resizable="false" text="Edit" />
+            <TableColumn fx:id="statusColumn" prefWidth="128.0" resizable="false" text="Status" />
         </columns>
           <columnResizePolicy>
               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

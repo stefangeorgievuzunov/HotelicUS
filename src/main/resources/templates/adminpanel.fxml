@@ -10,7 +10,7 @@
 <?import java.awt.Label?>
 <AnchorPane maxHeight="600.0" maxWidth="1100.0" minHeight="600.0" minWidth="1100.0" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.controllers.main.AdminPanel">
    <children>
-      <TextField fx:id="searchUserByName" layoutX="97.0" layoutY="-2.0" prefHeight="36.0" prefWidth="912.0" style="-fx-border-color: #d80032; -fx-border-width: 0 10  0 0; -fx-font-size: 16;" promptText="Search user by first name..."/>
+      <TextField fx:id="searchUserByName" layoutX="97.0" layoutY="-2.0" prefHeight="36.0" prefWidth="912.0" style="-fx-border-color: #d80032; -fx-border-width: 0 20 0 0; -fx-font-size: 16;" promptText="Search user by first name..."/>
       <VBox prefHeight="600.0" prefWidth="102.0">
          <children>
             <Button mnemonicParsing="false" onAction="#addUser" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="Add" textFill="WHITE" />
