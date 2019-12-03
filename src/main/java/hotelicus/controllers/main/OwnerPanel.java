@@ -2,9 +2,9 @@ package hotelicus.controllers.main;
 
 import hotelicus.App;
 import hotelicus.controllers.extended.ActionButtonTableCell;
+import hotelicus.controllers.extended.Users.LoadExtendedWindow;
 import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.Hotels;
-import hotelicus.entities.Users;
 import hotelicus.enums.HotelState;
 import hotelicus.window.Confirmation;
 import javafx.animation.PauseTransition;
@@ -16,10 +16,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
-import javafx.util.Pair;
+
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.ResourceBundle;
 
 import static hotelicus.enums.HotelState.ACTIVE;
 import static hotelicus.enums.HotelState.DISABLED;
+import static hotelicus.enums.UploadAction.INSERT;
 import static hotelicus.styles.Styles.CHANGE_STATUS_BUTTON_STYLE;
 import static hotelicus.styles.Styles.EDIT_BUTTON_STYLE;
 
@@ -64,7 +66,6 @@ public class OwnerPanel implements Initializable {
                     this.tableView.getItems().clear();
                     result.forEach(hotel -> {
                         this.tableView.getItems().add(hotel);
-                        System.out.println(hotel.getOwner().getPassword());
                     });
                 } else {
                     this.tableView.getItems().clear();
@@ -122,21 +123,16 @@ public class OwnerPanel implements Initializable {
 
     @FXML
     private void logOut() {
-        Confirmation logConfirmation = new Confirmation("Message", "Are you sure you want to log off ?");
-        if (logConfirmation.getConfirmationResult() == true) {
-            UserController.setUserLoggedOff(App.getLoggedUser());
-            App.setLoggedUser(null);
-            App.loginWindow();
-        }
+        UserController.logOut();
     }
 
     @FXML
     private void addHotel() {
-//        try {
-//            LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Add new user", INSERT, null, OWNER);
-//        } catch (IOException excep) {
-//            excep.printStackTrace();
-//        }
+        try {
+            LoadExtendedWindow.loadUploadHotelFormWindow(this.tableView,"Add new hotel", null,INSERT);
+        } catch (IOException excep) {
+            excep.printStackTrace();
+        }
     }
 
     private void activateHotel(Hotels hotel) {

@@ -12,7 +12,7 @@ public class Rooms {
     private Hotels hotel;
     private RoomCategories category;
     private Integer capacity;
-    private Integer roomNumber;
+    private String roomNumber;
     private Double price;
     private RoomStatus status;
 
@@ -27,7 +27,7 @@ public class Rooms {
         this.roomId = roomId;
     }
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "hotel_id", referencedColumnName = "hotel_id")
     public Hotels getHotel() {
         return hotel;
@@ -37,6 +37,7 @@ public class Rooms {
         this.hotel = hotel;
     }
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "category")
     public RoomCategories getCategory() {
         return category;
@@ -56,11 +57,11 @@ public class Rooms {
     }
 
     @Column(name = "room_number")
-    public Integer getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
-    public void setRoomNumber(Integer room_number) {
+    public void setRoomNumber(String room_number) {
         this.roomNumber = room_number;
     }
 
@@ -73,6 +74,7 @@ public class Rooms {
         this.price = price;
     }
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "room_status")
     public RoomStatus getStatus() {
         return status;

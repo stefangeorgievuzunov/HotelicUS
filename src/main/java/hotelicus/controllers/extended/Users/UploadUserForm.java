@@ -5,6 +5,7 @@ import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
+import hotelicus.window.Confirmation;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,7 +33,7 @@ public class UploadUserForm {
     private Button saveButton;
 
     private Users user;
-    private UserPrivileges priviliges;
+    private UserPrivileges privileges;
     private UploadAction uploadAction;
     private TableView tableView;
 
@@ -47,14 +48,15 @@ public class UploadUserForm {
         } else {
             this.user = new Users();
         }
-        this.priviliges = priviliges;
+        this.privileges = priviliges;
         this.uploadAction = uploadAction;
         this.uploadUserInfo();
     }
 
     @FXML
     private void uploadRouter() {
-        if (this.formValidation()) {
+        Confirmation confirm = new Confirmation("Confirmation", "Are you sure you want to save?");
+        if (this.formValidation()&&confirm.getConfirmationResult() == true) {
             DbController<Users> updateUser = new DbController<Users>(Users.class);
 
             this.user.setUsername(this.username.getText());
@@ -62,7 +64,7 @@ public class UploadUserForm {
             this.user.setFirstName(this.firstName.getText());
             this.user.setLastName(this.lastName.getText());
             this.user.setUserState(UserState.ACTIVE);
-            this.user.setPrivileges(this.priviliges);
+            this.user.setPrivileges(this.privileges);
             if (this.user.getStartedOn() == null) {
                 LocalDate startedOn = LocalDate.now();
                 this.user.setStartedOn(startedOn);

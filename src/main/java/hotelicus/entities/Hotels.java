@@ -17,6 +17,9 @@ public class Hotels {
     private LocalDate createdOn;
     private LocalDate removedOn;
 
+    public Hotels(){
+        this.setCreatedOn(LocalDate.now());
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hotel_id")
