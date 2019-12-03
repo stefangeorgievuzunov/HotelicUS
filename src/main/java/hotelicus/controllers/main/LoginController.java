@@ -49,6 +49,12 @@ public class LoginController implements Initializable {
             try {
                 Users loggedUser = this.usersRelated.selectUnique(Restrictions.eq("username", username.getText()), Restrictions.eq("userState", ACTIVE));
                 if (loggedUser != null) {
+                    LoggedUsers result = this.handleLoggedUser.selectUnique(Restrictions.eq("loggedUser", loggedUser));
+                    if (result != null) {
+                        if (((new Date().getTime() - result.getLastPinged().getTime()) / 1000) > 60) {
+                            this.handleLoggedUser.delete(result);
+                        }
+                    }
                     if (!UserController.isUserLoggedIn(loggedUser)) {
                         App.setLoggedUser(loggedUser);
                         UserController.setUserLoggedIn(loggedUser);
@@ -64,10 +70,6 @@ public class LoginController implements Initializable {
                         }
                     } else {
                         new Error("Login Failed", "User is already logged in ! Try again later.");
-                        LoggedUsers result = this.handleLoggedUser.selectUnique(Restrictions.eq("loggedUser", loggedUser));
-                        if (((new Date().getTime()-result.getLastPinged().getTime())/1000)>60) {
-                            this.handleLoggedUser.delete(result);
-                        }
                     }
                 } else {
                     throw new Exception();
