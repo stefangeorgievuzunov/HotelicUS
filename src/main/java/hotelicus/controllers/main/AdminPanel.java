@@ -6,6 +6,9 @@ import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
+import hotelicus.exceptions.DbControllerNullConstructorException;
+import hotelicus.exceptions.SelectNullObjectException;
+import hotelicus.exceptions.UpdateNullObjectException;
 import hotelicus.window.Confirmation;
 
 import javafx.animation.PauseTransition;
@@ -20,6 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.Update;
 
 import java.io.IOException;
 import java.net.URL;
@@ -65,50 +69,56 @@ public class AdminPanel implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.users = new DbController<Users>(Users.class);
+        try {
+            this.users = new DbController<Users>(Users.class);
 
-        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-        this.searchUserByName.textProperty().addListener(e -> {
-            pause.setOnFinished(event -> {
-                List<Users> result = users.select(Restrictions.like("firstName", searchUserByName.getText(), MatchMode.START));
-                if (!result.isEmpty()) {
-                    tableView.getItems().clear();
-                    result.forEach(user -> tableView.getItems().add(user));
-                } else {
-                    tableView.getItems().clear();
-                }
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+            this.searchUserByName.textProperty().addListener(e -> {
+                pause.setOnFinished(event -> {
+                    List<Users> result = users.select(Restrictions.like("firstName", searchUserByName.getText(), MatchMode.START));
+                    if (!result.isEmpty()) {
+                        this.tableView.getItems().clear();
+                        result.forEach(user -> this.tableView.getItems().add(user));
+                    } else {
+                        this.tableView.getItems().clear();
+                    }
+                });
+                pause.playFromStart();
             });
-            pause.playFromStart();
-        });
 
-        usernameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("username"));
-        passwordColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("password"));
-        privilegesColumn.setCellValueFactory(new PropertyValueFactory<Users, UserPrivileges>("privileges"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("firstName"));
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("lastName"));
-        userStateColumn.setCellValueFactory(new PropertyValueFactory<Users, UserState>("userState"));
-        startedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, LocalDate>("startedOn"));
-        endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, LocalDate>("endedOn"));
+            usernameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("username"));
+            passwordColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("password"));
+            privilegesColumn.setCellValueFactory(new PropertyValueFactory<Users, UserPrivileges>("privileges"));
+            firstNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("firstName"));
+            lastNameColumn.setCellValueFactory(new PropertyValueFactory<Users, String>("lastName"));
+            userStateColumn.setCellValueFactory(new PropertyValueFactory<Users, UserState>("userState"));
+            startedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, LocalDate>("startedOn"));
+            endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, LocalDate>("endedOn"));
 
-        statusColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Users user) -> {
-            if (user.getUserState() == ACTIVE) {
-                disableUser(user);
-            } else {
-                activateUser(user);
-            }
-            return user;
-        }));
+            statusColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Users user) -> {
+                if (user.getUserState() == ACTIVE) {
+                    disableUser(user);
+                } else {
+                    activateUser(user);
+                }
+                return user;
+            }));
 
-        editColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Users user) -> {
-            try {
-                LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Edit user", EDIT, user, OWNER);
-            } catch (IOException excep) {
-                System.out.println(excep.getMessage());
-            }
-            return user;
-        }));
+            editColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Users user) -> {
+                try {
+                    LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Edit user",user, OWNER,EDIT);
+                } catch (IOException excep) {
+                    System.out.println(excep.getMessage());
+                }
+                return user;
+            }));
 
-        this.loadUsers(null);
+            this.loadUsers(null);
+        } catch (DbControllerNullConstructorException excep) {
+            excep.printStackTrace();
+        } catch (SelectNullObjectException excep) {
+            excep.printStackTrace();
+        }
     }
 
     @FXML
@@ -129,50 +139,64 @@ public class AdminPanel implements Initializable {
     @FXML
     private void addUser() {
         try {
-            LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Add new user", INSERT, null, OWNER);
+            LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Add new user",null, OWNER,INSERT);
         } catch (IOException excep) {
+            excep.printStackTrace();
+        } catch (NullPointerException excep) {
             excep.printStackTrace();
         }
     }
 
     private void activateUser(Users user) {
-        Confirmation confirm = new Confirmation("Confirmation", "Do you want to activate this user?");
-        if (confirm.getConfirmationResult() == true) {
-            user.setEndedOn(null);
-            user.setUserState(ACTIVE);
-            this.users.update(user);
-            this.tableView.refresh();
+        try {
+            Confirmation confirm = new Confirmation("Confirmation", "Do you want to activate this user?");
+            if (confirm.getConfirmationResult() == true && user != null) {
+                user.setEndedOn(null);
+                user.setUserState(ACTIVE);
+                this.users.update(user);
+                this.tableView.refresh();
+            }
+        } catch (UpdateNullObjectException excep) {
+            excep.printStackTrace();
         }
     }
 
     private void disableUser(Users user) {
-        LocalDate deletedOn = LocalDate.now();
-        Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this user?");
-        if (confirm.getConfirmationResult() == true) {
-            user.setEndedOn(deletedOn);
-            user.setUserState(DISABLED);
-            this.users.update(user);
-            this.tableView.refresh();
+        try {
+            LocalDate deletedOn = LocalDate.now();
+            Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this user?");
+            if (confirm.getConfirmationResult() == true && user != null) {
+                user.setEndedOn(deletedOn);
+                user.setUserState(DISABLED);
+                this.users.update(user);
+                this.tableView.refresh();
+            }
+        } catch (UpdateNullObjectException excep) {
+            excep.printStackTrace();
         }
     }
 
     private void loadUsers(UserState userState) {
-        tableView.getItems().clear();
-        List<Users> users = this.users.select(Restrictions.eq("privileges", OWNER));
-        for (Users user : users) {
-            if (userState == ACTIVE) {
-                if (user.getPrivileges() == OWNER && user.getUserState() == ACTIVE) {
-                    this.tableView.getItems().add(user);
-                }
-            } else if (userState == DISABLED) {
-                if (user.getPrivileges() == OWNER && user.getUserState() == DISABLED) {
-                    this.tableView.getItems().add(user);
-                }
-            } else {
-                if (user.getPrivileges() == OWNER) {
-                    this.tableView.getItems().add(user);
+        try {
+            tableView.getItems().clear();
+            List<Users> users = this.users.select(Restrictions.eq("privileges", OWNER));
+            for (Users user : users) {
+                if (userState == ACTIVE) {
+                    if (user.getPrivileges() == OWNER && user.getUserState() == ACTIVE) {
+                        this.tableView.getItems().add(user);
+                    }
+                } else if (userState == DISABLED) {
+                    if (user.getPrivileges() == OWNER && user.getUserState() == DISABLED) {
+                        this.tableView.getItems().add(user);
+                    }
+                } else {
+                    if (user.getPrivileges() == OWNER) {
+                        this.tableView.getItems().add(user);
+                    }
                 }
             }
+        } catch (SelectNullObjectException excep) {
+            excep.printStackTrace();
         }
     }
 }

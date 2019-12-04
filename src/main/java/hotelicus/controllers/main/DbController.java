@@ -4,7 +4,7 @@ package hotelicus.controllers.main;
 import java.lang.Class;
 
 import hotelicus.App;
-import javafx.util.Pair;
+import hotelicus.exceptions.*;
 import org.hibernate.Criteria;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
@@ -12,7 +12,6 @@ import org.hibernate.criterion.*;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
-import java.util.Properties;
 
 @SuppressWarnings("all")
 public class DbController<T> {
@@ -21,7 +20,11 @@ public class DbController<T> {
 
     public DbController(Class<T> type) {
         this.session = App.getSession();
-        this.type = type;
+        if (type != null) {
+            this.type = type;
+        } else {
+            throw new DbControllerNullConstructorException();
+        }
     }
 
     public <T> List<T> findAll() {
@@ -31,53 +34,82 @@ public class DbController<T> {
         return all;
     }
 
-    public void insert(T object) throws ConstraintViolationException {
-        this.session.beginTransaction();
-        this.session.save(object);
-        this.session.getTransaction().commit();
-    }
-
-    public void delete(T ...objects) {
-        this.session.beginTransaction();
-        for(T object : objects){
-
-            this.session.delete(object);
+    public void insert(T... objects) throws ConstraintViolationException {
+        if (objects != null) {
+            this.session.beginTransaction();
+            for (T object : objects) {
+                if (object != null) {
+                    this.session.save(object);
+                } else {
+                    throw new InsertNullObjectException();
+                }
+            }
+            this.session.getTransaction().commit();
         }
-        this.session.getTransaction().commit();
     }
 
-    public void update(T ...objects) {
-        this.session.beginTransaction();
-        for(T object : objects){
-            this.session.update(object);
+    public void delete(T... objects) {
+        if (objects != null) {
+            this.session.beginTransaction();
+            for (T object : objects) {
+                if (object != null) {
+                    this.session.delete(object);
+                } else {
+                    throw new DeleteNullObjectException();
+                }
+            }
+            this.session.getTransaction().commit();
         }
-        this.session.getTransaction().commit();
     }
 
-    public void insertOrUpdate(T ...objects) throws ConstraintViolationException {
+    public void update(T... objects) {
+        if (objects != null) {
+            this.session.beginTransaction();
+            for (T object : objects) {
+                if (object != null) {
+                    this.session.update(object);
+                } else {
+                    throw new UpdateNullObjectException();
+                }
+            }
+            this.session.getTransaction().commit();
+        }
+    }
+
+    public void insertOrUpdate(T... objects) throws ConstraintViolationException {
         this.session.beginTransaction();
-        for(T object : objects){
+        for (T object : objects) {
             this.session.saveOrUpdate(object);
         }
         this.session.getTransaction().commit();
     }
-    public <T> List<T> select(Criterion ...args){
+
+    public <T> List<T> select(Criterion... args) {
         this.session.beginTransaction();
         Criteria crit = this.session.createCriteria(this.type);
-        for(Criterion criteria : args){
-            crit.add(criteria);
+        for (Criterion criteria : args) {
+            try {
+                crit.add(criteria);
+            } catch (NullPointerException excp) {
+                throw new SelectNullObjectException();
+            }
         }
         this.session.getTransaction().commit();
         return (List<T>) crit.list();
     }
-    public T selectUnique(Criterion ...args)throws NonUniqueResultException,NullPointerException,IllegalArgumentException {
+
+    public T selectUnique(Criterion... args) throws NonUniqueResultException {
         this.session.beginTransaction();
         Criteria crit = this.session.createCriteria(this.type);
-        for(Criterion criteria : args){
-            crit.add(criteria);
+        for (Criterion criteria : args) {
+            try{
+                crit.add(criteria);
+            }catch(NullPointerException excep){
+                throw new SelectNullObjectException();
+            }
         }
         this.session.getTransaction().commit();
-        return (T)crit.uniqueResult();
+        return (T) crit.uniqueResult();
     }
 
     public <T> List<T> selectNull(String criteria) {

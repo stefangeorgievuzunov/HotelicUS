@@ -1,20 +1,20 @@
 package hotelicus;
 
-import hotelicus.controllers.extended.Users.UploadUserForm;
 import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.controllers.main.DbController;
 import hotelicus.core.HibernateUtil;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
-import hotelicus.enums.UploadAction;
-import hotelicus.enums.UserPrivileges;
+import hotelicus.exceptions.DbControllerNullConstructorException;
+import hotelicus.exceptions.SelectNullObjectException;
+import hotelicus.exceptions.UpdateNullObjectException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -38,7 +38,7 @@ public final class App extends Application {
         App.instance = this;
         App.session = HibernateUtil.getSessionFactory().openSession();
         App.type = getClass();
-        App.loggedUserPinging= Executors.newSingleThreadScheduledExecutor();
+        App.loggedUserPinging = Executors.newSingleThreadScheduledExecutor();
     }
 
     public static Session getSession() {
@@ -73,7 +73,7 @@ public final class App extends Application {
                     result.setLastPinged(new Date());
                     setUserLoggedIn.update(result);
                 }
-            },0,60, TimeUnit.SECONDS);
+            }, 0, 60, TimeUnit.SECONDS);
 
             App.stage.setOnCloseRequest(e -> {
                 Platform.exit();
@@ -82,7 +82,13 @@ public final class App extends Application {
 
             App.loginWindow();
             primaryStage.show();
-        } catch (Exception excep) {
+        } catch (SelectNullObjectException excep) {
+            excep.printStackTrace();
+        } catch (DbControllerNullConstructorException excep) {
+            excep.printStackTrace();
+        } catch (UpdateNullObjectException excep) {
+            excep.printStackTrace();
+        } catch (NonUniqueResultException excep) {
             excep.printStackTrace();
         }
     }
@@ -107,16 +113,16 @@ public final class App extends Application {
     public static void ownerWindow() {
         try {
             App.changeScene("ownerpanel.fxml", "OWNER PANEL:");
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException excep) {
+            excep.printStackTrace();
         }
     }
 
     public static void adminWindow() {
         try {
             App.changeScene("adminpanel.fxml", "ADMIN PANEL");
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException excep) {
+            excep.printStackTrace();
         }
     }
 
@@ -141,5 +147,4 @@ public final class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }

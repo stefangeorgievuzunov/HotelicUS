@@ -9,16 +9,14 @@ public class HibernateUtil {
 
     private static SessionFactory buildSessionFactory() {
         try {
-                return new Configuration().configure().buildSessionFactory();
-        }
-        catch (Throwable ex) {
+            return new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
     }
-
     public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+        return HibernateUtil.sessionFactory;
     }
 
     public static void shutdown() {

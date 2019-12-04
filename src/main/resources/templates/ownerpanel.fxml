@@ -13,7 +13,7 @@
         <TextField fx:id="searchHotelByName" layoutX="97.0" layoutY="-2.0" prefHeight="36.0" prefWidth="912.0" style="-fx-border-color: #d80032; -fx-border-width: 0 10  0 0; -fx-font-size: 16;" promptText="Search hotel by name..."/>
         <VBox prefHeight="600.0" prefWidth="102.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#addHotel" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="Add" textFill="WHITE" />
+                <Button mnemonicParsing="false" onAction="#addHotel" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="Add Hotel" textFill="WHITE" />
                 <Button mnemonicParsing="false" onAction="#filterActivate" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;" text="Active" textFill="WHITE" />
                 <Button mnemonicParsing="false" onAction="#filterDisable" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="Disabled" textFill="WHITE" />
                 <Button mnemonicParsing="false" onAction="#logOut" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;" text="Logout" textFill="WHITE" />

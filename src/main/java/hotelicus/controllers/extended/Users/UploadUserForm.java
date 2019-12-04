@@ -5,6 +5,10 @@ import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
+import hotelicus.exceptions.DbControllerNullConstructorException;
+import hotelicus.exceptions.InsertNullObjectException;
+import hotelicus.exceptions.SelectNullObjectException;
+import hotelicus.exceptions.UpdateNullObjectException;
 import hotelicus.window.Confirmation;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
@@ -42,54 +46,72 @@ public class UploadUserForm {
     }
 
     public void init(TableView tableVliew, Users user, UserPrivileges priviliges, UploadAction uploadAction) {
-        this.tableView = tableVliew;
+        if (tableVliew != null && priviliges != null && uploadAction != null) {
+            this.tableView = tableVliew;
+            this.privileges = priviliges;
+            this.uploadAction = uploadAction;
+        }else{
+            throw new NullPointerException();
+        }
         if (user != null) {
             this.user = user;
         } else {
             this.user = new Users();
         }
-        this.privileges = priviliges;
-        this.uploadAction = uploadAction;
+
         this.uploadUserInfo();
     }
 
     @FXML
     private void uploadRouter() {
-        Confirmation confirm = new Confirmation("Confirmation", "Are you sure you want to save?");
-        if (this.formValidation()&&confirm.getConfirmationResult() == true) {
-            DbController<Users> updateUser = new DbController<Users>(Users.class);
+        try {
+            Confirmation confirm = new Confirmation("Confirmation", "Are you sure you want to save?");
+            if (confirm.getConfirmationResult() == true) {
+                if (this.formValidation()) {
 
-            this.user.setUsername(this.username.getText());
-            this.user.setPassword(this.password.getText());
-            this.user.setFirstName(this.firstName.getText());
-            this.user.setLastName(this.lastName.getText());
-            this.user.setUserState(UserState.ACTIVE);
-            this.user.setPrivileges(this.privileges);
-            if (this.user.getStartedOn() == null) {
-                LocalDate startedOn = LocalDate.now();
-                this.user.setStartedOn(startedOn);
-            }
-            boolean successfulRecord = true;
+                    DbController<Users> updateUser = new DbController<Users>(Users.class);
 
-            if (this.uploadAction == EDIT) {
-                updateUser.update(this.user);
-            }
+                    this.user.setUsername(this.username.getText());
+                    this.user.setPassword(this.password.getText());
+                    this.user.setFirstName(this.firstName.getText());
+                    this.user.setLastName(this.lastName.getText());
+                    this.user.setUserState(UserState.ACTIVE);
+                    this.user.setPrivileges(this.privileges);
+                    if (this.user.getStartedOn() == null) {
+                        LocalDate startedOn = LocalDate.now();
+                        this.user.setStartedOn(startedOn);
+                    }
+                    boolean successfulRecord = true;
 
-            if (this.uploadAction == INSERT) {
-                try {
-                    updateUser.insert(this.user);
-                    this.tableView.getItems().add(this.user);
-                } catch (ConstraintViolationException excp) {
-                    successfulRecord = false;
-                    new Error("Upload failed", "Username is busy");
+                    if (this.uploadAction == EDIT) {
+                        updateUser.update(this.user);
+                    }
+
+                    if (this.uploadAction == INSERT) {
+                        try {
+                            updateUser.insert(this.user);
+                            this.tableView.getItems().add(this.user);
+                        } catch (ConstraintViolationException excep) {
+                            successfulRecord = false;
+                            new Error("Upload failed", "Username is busy");
+                            excep.printStackTrace();
+                        } catch (InsertNullObjectException excep) {
+                            successfulRecord = false;
+                            excep.printStackTrace();
+                        }
+                    }
+                    if (successfulRecord) {
+                        this.tableView.refresh();
+                        Stage stage = (Stage) saveButton.getScene().getWindow();
+                        stage.close();
+                    }
+
                 }
             }
-
-            if (successfulRecord) {
-                this.tableView.refresh();
-                Stage stage = (Stage) saveButton.getScene().getWindow();
-                stage.close();
-            }
+        } catch (DbControllerNullConstructorException excep) {
+            excep.printStackTrace();
+        } catch (UpdateNullObjectException excep) {
+            excep.printStackTrace();
         }
     }
 
@@ -103,9 +125,9 @@ public class UploadUserForm {
     }
 
     private boolean formValidation() {
+        try {
+            if (!this.username.getText().isEmpty() && !this.password.getText().isEmpty() && !this.firstName.getText().isEmpty() && !this.lastName.getText().isEmpty()) {
 
-        if (!this.username.getText().isEmpty() && !this.password.getText().isEmpty() && !this.firstName.getText().isEmpty() && !this.lastName.getText().isEmpty()) {
-            try {
                 DbController<Users> uniqueUser = new DbController<Users>(Users.class);
                 Users testUser = uniqueUser.selectUnique(Restrictions.eq("username", username.getText()));
                 if (testUser == null) {
@@ -121,11 +143,17 @@ public class UploadUserForm {
                 if (this.username.getText().equals(testUser.getUsername())) {
                     throw new NonUniqueResultException(0);
                 }
-            } catch (NonUniqueResultException uniqueExcep) {
-                new Error("Upload failed", "Username is busy");
+
+            } else {
+                new Error("Upload failed", "There are empty fields!");
             }
-        } else {
-            new Error("Upload failed", "There are empty fields!");
+        } catch (SelectNullObjectException excep) {
+            excep.printStackTrace();
+        } catch (DbControllerNullConstructorException excep) {
+            excep.printStackTrace();
+        } catch (NonUniqueResultException excep) {
+            excep.printStackTrace();
+            new Error("Upload failed", "Username is busy");
         }
         return false;
     }

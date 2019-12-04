@@ -4,6 +4,9 @@ import hotelicus.App;
 import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
+import hotelicus.exceptions.DbControllerNullConstructorException;
+import hotelicus.exceptions.DeleteNullObjectException;
+import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 
@@ -34,8 +37,12 @@ public class LoginController implements Initializable {
     private DbController<LoggedUsers> handleLoggedUser;
 
     public LoginController() {
-        this.usersRelated = new DbController<Users>(Users.class);
-        this.handleLoggedUser = new DbController<LoggedUsers>(LoggedUsers.class);
+        try {
+            this.usersRelated = new DbController<Users>(Users.class);
+            this.handleLoggedUser = new DbController<LoggedUsers>(LoggedUsers.class);
+        } catch (DbControllerNullConstructorException excep) {
+            excep.printStackTrace();
+        }
     }
 
     @Override
@@ -45,8 +52,9 @@ public class LoginController implements Initializable {
 
     @FXML
     private void loginRouter() {
-        if (loginValidation(username.getText(), password.getText())) {
-            try {
+        try {
+            if (loginValidation(username.getText(), password.getText())) {
+
                 Users loggedUser = this.usersRelated.selectUnique(Restrictions.eq("username", username.getText()), Restrictions.eq("userState", ACTIVE));
                 if (loggedUser != null) {
                     LoggedUsers result = this.handleLoggedUser.selectUnique(Restrictions.eq("loggedUser", loggedUser));
@@ -65,45 +73,46 @@ public class LoginController implements Initializable {
                             case OWNER:
                                 App.ownerWindow();
                                 break;
-                            default:
-                                throw new Exception();
                         }
                     } else {
                         new Error("Login Failed", "User is already logged in ! Try again later.");
                     }
                 } else {
-                    throw new Exception();
+                    throw new SelectNullObjectException();
                 }
-            } catch (Exception excep) {
-                excep.printStackTrace();
-                new Error("FATAL ERROR", "Something went wrong.");
             }
+        } catch (SelectNullObjectException excep) {
+            excep.printStackTrace();
+        } catch (NonUniqueResultException excep) {
+            excep.printStackTrace();
+        } catch (DeleteNullObjectException excep) {
+            excep.printStackTrace();
         }
     }
 
     private boolean loginValidation(String username, String password) throws NonUniqueResultException {
-        if (!username.isEmpty() && !password.isEmpty()) {
-            try {
+        try {
+            if (!username.isEmpty() && !password.isEmpty()) {
+
                 List<Users> users = this.usersRelated.select(Restrictions.eq("username", username), Restrictions.eq("password", password));
                 if (users.size() < 1) {
-                    throw new NullPointerException();
+                    throw new SelectNullObjectException();
                 } else if (users.size() > 1) {
                     throw new NonUniqueResultException(0);
                 } else {
                     return true;
                 }
-            } catch (Exception excep) {
-                if (excep instanceof NonUniqueResultException) {
-                    new Error("Failed to login", "Invalid username or password!");
-                }
-                if (excep instanceof NullPointerException) {
-                    new Error("Failed to login", "Invalid username or password!");
-                }
+            } else {
+                new Error("Failed to login", "There are empty fields!");
                 return false;
             }
-        } else {
-            new Error("Failed to login", "There are empty fields!");
-            return false;
+        } catch (NonUniqueResultException excep) {
+            excep.printStackTrace();
+            new Error("Failed to login", "Invalid username or password!");
+        }catch(SelectNullObjectException excep) {
+            excep.printStackTrace();
+            new Error("Failed to login", "Invalid username or password!");
         }
+        return false;
     }
 }
