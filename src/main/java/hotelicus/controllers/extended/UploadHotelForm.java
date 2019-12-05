@@ -5,10 +5,7 @@ import hotelicus.controllers.extended.Users.LoadExtendedWindow;
 import hotelicus.controllers.main.DbController;
 import hotelicus.entities.Hotels;
 import hotelicus.entities.Rooms;
-import hotelicus.enums.HotelState;
-import hotelicus.enums.RoomCategories;
-import hotelicus.enums.RoomStatus;
-import hotelicus.enums.UploadAction;
+import hotelicus.enums.*;
 import hotelicus.exceptions.DbControllerNullConstructorException;
 import hotelicus.exceptions.InsertNullObjectException;
 import hotelicus.exceptions.SelectNullObjectException;
@@ -23,7 +20,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -37,8 +33,9 @@ import java.util.ResourceBundle;
 
 import static hotelicus.enums.RoomStatus.BUSY;
 import static hotelicus.enums.RoomStatus.FREE;
-import static hotelicus.enums.UploadAction.EDIT;
-import static hotelicus.enums.UploadAction.INSERT;
+import static hotelicus.enums.UploadAction.*;
+import static hotelicus.enums.UserPrivileges.MANAGER;
+import static hotelicus.enums.UserPrivileges.OWNER;
 import static hotelicus.styles.Styles.CHANGE_STATUS_BUTTON_STYLE;
 import static hotelicus.styles.Styles.EDIT_BUTTON_STYLE;
 
@@ -127,7 +124,6 @@ public class UploadHotelForm implements Initializable {
                         takeRoom(room);
                     } else {
                         freeRoom(room);
-
                     }
                 }
                 return room;
@@ -152,27 +148,11 @@ public class UploadHotelForm implements Initializable {
     }
 
     @FXML
-    private void addNewRoom() {
-        try {
-            LoadExtendedWindow.loadUploadRoomFormWindow(this.tableView, "Add new room", this.hotel, null, INSERT);
-        } catch (IOException excep) {
-            excep.printStackTrace();
-        } catch (NullPointerException excep) {
-            excep.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void manageManager() {
-    }
-
-    @FXML
     private void uploadRouter() {
         try {
             Confirmation confirm = new Confirmation("Confirmation", "Are you sure you want to save?");
             if (confirm.getConfirmationResult() == true) {
                 if (!this.hotelNameField.getText().isEmpty()) {
-
                     DbController<Hotels> updateHotel = new DbController<Hotels>(Hotels.class);
                     if (this.hotel == null) {
                         this.hotel = new Hotels();
@@ -185,7 +165,7 @@ public class UploadHotelForm implements Initializable {
 
                     boolean successfulRecord = true;
 
-                    if (this.uploadAction == EDIT && this.hotel != null) {
+                    if (this.uploadAction == EDIT) {
                         updateHotel.update(this.hotel);
                     }
 
@@ -211,6 +191,28 @@ public class UploadHotelForm implements Initializable {
         } catch (ConstraintViolationException excep) {
             excep.printStackTrace();
         } catch (UpdateNullObjectException excep) {
+            excep.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void addNewRoom() {
+        try {
+            LoadExtendedWindow.loadUploadRoomFormWindow(this.tableView, "Room", this.hotel, null, INSERT);
+        } catch (IOException excep) {
+            excep.printStackTrace();
+        } catch (NullPointerException excep) {
+            excep.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void manageManager() {
+        try {
+            LoadExtendedWindow.loadUploadUserFormWindow(null, this.hotel,"Manager", this.hotel.getManager(), MANAGER, INSERT_OR_EDIT);
+        } catch (IOException excep) {
+            excep.printStackTrace();
+        } catch (NullPointerException excep) {
             excep.printStackTrace();
         }
     }

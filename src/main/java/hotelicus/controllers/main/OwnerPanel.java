@@ -5,7 +5,9 @@ import hotelicus.controllers.extended.ActionButtonTableCell;
 import hotelicus.controllers.extended.Users.LoadExtendedWindow;
 import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.Hotels;
+import hotelicus.entities.Users;
 import hotelicus.enums.HotelState;
+import hotelicus.enums.UserState;
 import hotelicus.exceptions.DbControllerNullConstructorException;
 import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.exceptions.UpdateNullObjectException;
@@ -151,6 +153,12 @@ public class OwnerPanel implements Initializable {
         try {
             Confirmation confirm = new Confirmation("Confirmation", "Do you want to activate this hotel?");
             if (confirm.getConfirmationResult() == true && hotel != null) {
+                if(hotel.getManager()!=null){
+                    DbController<Users> updateManager=new DbController<Users>(Users.class);
+                    hotel.getManager().setUserState(UserState.ACTIVE);
+                    hotel.getManager().setEndedOn(null);
+                    updateManager.update(hotel.getManager());
+                }
                 hotel.setRemovedOn(null);
                 hotel.setHotelState(ACTIVE);
                 this.hotels.update(hotel);
@@ -166,6 +174,12 @@ public class OwnerPanel implements Initializable {
             LocalDate deletedOn = LocalDate.now();
             Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this hotel?");
             if (confirm.getConfirmationResult() == true && hotel != null) {
+                if(hotel.getManager()!=null){
+                    DbController<Users> updateManager=new DbController<Users>(Users.class);
+                    hotel.getManager().setUserState(UserState.DISABLED);
+                    hotel.getManager().setEndedOn(deletedOn);
+                    updateManager.update(hotel.getManager());
+                }
                 hotel.setRemovedOn(deletedOn);
                 hotel.setHotelState(DISABLED);
                 this.hotels.update(hotel);

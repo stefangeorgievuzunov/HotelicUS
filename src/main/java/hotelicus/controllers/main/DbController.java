@@ -77,11 +77,17 @@ public class DbController<T> {
     }
 
     public void insertOrUpdate(T... objects) throws ConstraintViolationException {
-        this.session.beginTransaction();
-        for (T object : objects) {
-            this.session.saveOrUpdate(object);
+        if (objects != null) {
+            this.session.beginTransaction();
+            for (T object : objects) {
+                if (object != null) {
+                    this.session.saveOrUpdate(object);
+                } else {
+                    throw new InsertOrUpdateNullObjectException();
+                }
+            }
+            this.session.getTransaction().commit();
         }
-        this.session.getTransaction().commit();
     }
 
     public <T> List<T> select(Criterion... args) {
@@ -102,9 +108,9 @@ public class DbController<T> {
         this.session.beginTransaction();
         Criteria crit = this.session.createCriteria(this.type);
         for (Criterion criteria : args) {
-            try{
+            try {
                 crit.add(criteria);
-            }catch(NullPointerException excep){
+            } catch (NullPointerException excep) {
                 throw new SelectNullObjectException();
             }
         }
@@ -119,5 +125,4 @@ public class DbController<T> {
         this.session.getTransaction().commit();
         return (List<T>) crit.list();
     }
-
 }

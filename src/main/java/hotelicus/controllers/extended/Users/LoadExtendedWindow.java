@@ -19,12 +19,33 @@ import java.io.IOException;
 
 public class LoadExtendedWindow {
     public static void loadUploadUserFormWindow(TableView tableView, String title, Users user, UserPrivileges privileges, UploadAction uploadAction) throws IOException {
-        if (tableView != null && title != null && privileges != null && uploadAction != null) {
+        if (title != null && privileges != null && uploadAction != null) {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/edit.fxml"));
 
             Parent root = (Parent) fxmlLoader.load();
             UploadUserForm controller = fxmlLoader.<UploadUserForm>getController();
-            controller.init(tableView, user, privileges, uploadAction);
+            try {
+                controller.init(tableView, user, privileges, uploadAction);
+            } catch (NullPointerException excep) {
+                excep.printStackTrace();
+            }
+            LoadExtendedWindow.loadNewScene(root, title);
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public static void loadUploadUserFormWindow(TableView tableView, Hotels hotel, String title, Users user, UserPrivileges privileges, UploadAction uploadAction) throws IOException {
+        if (hotel != null && title != null && privileges != null && uploadAction != null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/edit.fxml"));
+
+            Parent root = (Parent) fxmlLoader.load();
+            UploadUserForm controller = fxmlLoader.<UploadUserForm>getController();
+            try {
+                controller.init(tableView, hotel, user, privileges, uploadAction);
+            } catch(NullPointerException excep) {
+                excep.printStackTrace();
+            }
             LoadExtendedWindow.loadNewScene(root, title);
         } else {
             throw new NullPointerException();
@@ -37,7 +58,11 @@ public class LoadExtendedWindow {
 
             Parent root = (Parent) fxmlLoader.load();
             UploadRoomForm controller = fxmlLoader.<UploadRoomForm>getController();
-            controller.init(tableView, hotel, room, uploadAction);
+            try{
+                controller.init(tableView, hotel, room, uploadAction);
+            } catch(NullPointerException excep) {
+                excep.printStackTrace();
+            }
             LoadExtendedWindow.loadNewScene(root, title);
         } else {
             throw new NullPointerException();
@@ -50,7 +75,11 @@ public class LoadExtendedWindow {
 
             Parent root = (Parent) fxmlLoader.load();
             UploadHotelForm controller = fxmlLoader.<UploadHotelForm>getController();
-            controller.init(tableView, hotel, uploadAction);
+            try{
+                controller.init(tableView, hotel, uploadAction);
+            }catch(NullPointerException excep) {
+                excep.printStackTrace();
+            }
             LoadExtendedWindow.loadNewScene(root, title);
         } else {
             throw new NullPointerException();
