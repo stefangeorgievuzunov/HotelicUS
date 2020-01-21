@@ -1,7 +1,7 @@
 package hotelicus.controllers.main;
 
 import hotelicus.controllers.extended.ActionButtonTableCell;
-import hotelicus.controllers.extended.Users.LoadExtendedWindow;
+import hotelicus.controllers.extended.Users.UploadUserForm;
 import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
@@ -23,7 +23,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.Update;
 
 import java.io.IOException;
 import java.net.URL;
@@ -106,7 +105,11 @@ public class AdminPanel implements Initializable {
 
             editColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Users user) -> {
                 try {
-                    LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Edit user",user, OWNER,EDIT);
+                    Monitor.openNewScene(UploadUserForm.class, "Edit user");
+                    Monitor.getStageAccessTo(UploadUserForm.class).setTableView(this.tableView);
+                    Monitor.getStageAccessTo(UploadUserForm.class).setUser(user);
+                    Monitor.getStageAccessTo(UploadUserForm.class).setPrivileges(OWNER);
+                    Monitor.getStageAccessTo(UploadUserForm.class).setUploadAction(EDIT);
                 } catch (IOException excep) {
                     System.out.println(excep.getMessage());
                 }
@@ -139,7 +142,10 @@ public class AdminPanel implements Initializable {
     @FXML
     private void addUser() {
         try {
-            LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Add new user",null, OWNER,INSERT);
+            Monitor.openNewScene(UploadUserForm.class, "Add new user");
+            Monitor.getStageAccessTo(UploadUserForm.class).setTableView(this.tableView);
+            Monitor.getStageAccessTo(UploadUserForm.class).setPrivileges(OWNER);
+            Monitor.getStageAccessTo(UploadUserForm.class).setUploadAction(INSERT);
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {

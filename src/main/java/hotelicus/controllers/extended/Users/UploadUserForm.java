@@ -2,6 +2,7 @@ package hotelicus.controllers.extended.Users;
 
 import hotelicus.controllers.main.DbController;
 import hotelicus.entities.Hotels;
+import hotelicus.entities.Rooms;
 import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
 import hotelicus.enums.UserPrivileges;
@@ -10,6 +11,7 @@ import hotelicus.exceptions.*;
 import hotelicus.window.Confirmation;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -18,11 +20,13 @@ import org.hibernate.NonUniqueResultException;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
+import java.net.URL;
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 
 import static hotelicus.enums.UploadAction.*;
 
-public class UploadUserForm {
+public class UploadUserForm implements Initializable {
     @FXML
     private TextField username;
     @FXML
@@ -40,42 +44,11 @@ public class UploadUserForm {
     private TableView tableView;
     private Hotels hotel;
 
-    public UploadUserForm() {
-
-    }
-
-    public void init(TableView tableVliew, Users user, UserPrivileges priviliges, UploadAction uploadAction) {
-        this.tableView = tableVliew;
-        if (priviliges != null && uploadAction != null) {
-            this.privileges = priviliges;
-            this.uploadAction = uploadAction;
-        } else {
-            throw new NullPointerException();
-        }
-        if (user != null) {
-            this.user = user;
-        } else {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        if (this.user == null) {
             this.user = new Users();
         }
-
-        this.uploadUserInfo();
-    }
-
-    public void init(TableView tableVliew, Hotels hotel, Users user, UserPrivileges priviliges, UploadAction uploadAction) {
-        this.tableView = tableVliew;
-        if (priviliges != null && uploadAction != null && hotel != null) {
-            this.hotel = hotel;
-            this.privileges = priviliges;
-            this.uploadAction = uploadAction;
-        } else {
-            throw new NullPointerException();
-        }
-        if (user != null) {
-            this.user = user;
-        } else {
-            this.user = new Users();
-        }
-
         this.uploadUserInfo();
     }
 
@@ -189,5 +162,65 @@ public class UploadUserForm {
             new Error("Upload failed", "Username is busy");
         }
         return false;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        if (user != null) {
+            this.user = user;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public UserPrivileges getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(UserPrivileges privileges) {
+        if (privileges != null) {
+            this.privileges = privileges;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public UploadAction getUploadAction() {
+        return uploadAction;
+    }
+
+    public void setUploadAction(UploadAction uploadAction) {
+        if (uploadAction != null) {
+            this.uploadAction = uploadAction;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public TableView getTableView() {
+        return tableView;
+    }
+
+    public void setTableView(TableView tableView) {
+        if (tableView != null) {
+            this.tableView = tableView;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public Hotels getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotels hotel) {
+        if (hotel != null) {
+            this.hotel = hotel;
+        } else {
+            throw new NullPointerException();
+        }
     }
 }

@@ -12,16 +12,20 @@ import hotelicus.exceptions.UpdateNullObjectException;
 import hotelicus.window.Confirmation;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import static hotelicus.enums.UploadAction.EDIT;
 import static hotelicus.enums.UploadAction.INSERT;
 
-public class UploadRoomForm {
+public class UploadRoomForm implements Initializable {
     @FXML
     private ChoiceBox<RoomCategories> categoryMenu;
     @FXML
@@ -38,17 +42,9 @@ public class UploadRoomForm {
     private UploadAction uploadAction;
     private TableView parentTable;
 
-    public void init(TableView parentTable, Hotels hotel, Rooms room, UploadAction uploadAction) {
-        if (hotel != null && parentTable != null && uploadAction != null) {
-            this.hotel = hotel;
-            this.parentTable = parentTable;
-            this.uploadAction = uploadAction;
-        }else{
-            throw new NullPointerException();
-        }
-        if (room != null) {
-            this.room = room;
-        } else {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        if (room == null) {
             this.room = new Rooms();
         }
         this.uploadRoomInfo();
@@ -93,17 +89,61 @@ public class UploadRoomForm {
             excep.printStackTrace();
         } catch (InsertNullObjectException excep) {
             excep.printStackTrace();
-        }catch(UpdateNullObjectException excep){
+        } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
         }
     }
 
     private void uploadRoomInfo() {
-        if (this.room.getCapacity() != null && this.room.getPrice() != null && this.room.getRoomNumber() != null && this.room.getCategory()!=null) {
+        if (this.room.getCapacity() != null && this.room.getPrice() != null && this.room.getRoomNumber() != null && this.room.getCategory() != null) {
             this.capacity.setText(this.room.getCapacity().toString());
             this.price.setText(this.room.getPrice().toString());
             this.roomNumber.setText(this.room.getRoomNumber());
             this.categoryMenu.setValue(this.room.getCategory());
+        }
+    }
+
+    public Hotels getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotels hotel) {
+        this.hotel = hotel;
+    }
+
+    public Rooms getRoom() {
+        return room;
+    }
+
+    public void setRoom(Rooms room) {
+        if (room != null) {
+            this.room = room;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public UploadAction getUploadAction() {
+        return uploadAction;
+    }
+
+    public void setUploadAction(UploadAction uploadAction) {
+        if (uploadAction != null) {
+            this.uploadAction = uploadAction;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public TableView getParentTable() {
+        return parentTable;
+    }
+
+    public void setParentTable(TableView parentTable) {
+        if (parentTable != null) {
+            this.parentTable = parentTable;
+        } else {
+            throw new NullPointerException();
         }
     }
 }

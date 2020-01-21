@@ -1,7 +1,11 @@
 package hotelicus;
 
+import hotelicus.controllers.extended.ActionButtonTableCell;
 import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.controllers.main.DbController;
+import hotelicus.controllers.main.LoginController;
+import hotelicus.controllers.main.Monitor;
+import hotelicus.controllers.main.OwnerPanel;
 import hotelicus.core.HibernateUtil;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
@@ -14,12 +18,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,14 +40,10 @@ public final class App extends Application {
     private static Stage stage;
     private static Users loggedUser;
     private static Session session;
-    private static App instance;
-    private static Class type;
     private static ScheduledExecutorService loggedUserPinging;
 
     public App() {
-        App.instance = this;
         App.session = HibernateUtil.getSessionFactory().openSession();
-        App.type = getClass();
         App.loggedUserPinging = Executors.newSingleThreadScheduledExecutor();
     }
 
@@ -45,11 +51,7 @@ public final class App extends Application {
         return App.session;
     }
 
-    public static App getInstance() {
-        return App.instance;
-    }
-
-    private static Stage getStage() {
+    public static Stage getStage() {
         return App.stage;
     }
 
@@ -65,7 +67,7 @@ public final class App extends Application {
     public void start(Stage primaryStage) {
         try {
             App.stage = primaryStage;
-            App.stage.setResizable(false);
+
             App.loggedUserPinging.scheduleAtFixedRate(() -> {
                 if (App.loggedUser != null) {
                     DbController<LoggedUsers> setUserLoggedIn = new DbController<LoggedUsers>(LoggedUsers.class);
@@ -80,8 +82,9 @@ public final class App extends Application {
                 this.loggedUserPinging.shutdown();
             });
 
-            App.loginWindow();
-            primaryStage.show();
+            Monitor.changePrimaryScene(LoginController.class, "Login Panel");
+        } catch (IOException excep) {
+            excep.printStackTrace();
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
         } catch (DbControllerNullConstructorException excep) {
@@ -99,49 +102,6 @@ public final class App extends Application {
             UserController.setUserLoggedOff(App.getLoggedUser());
         }
         App.session.close();
-    }
-
-    public static void loginWindow() {
-        try {
-            App.changeScene("login.fxml", "Login");
-        } catch (IOException excep) {
-            excep.printStackTrace();
-        }
-
-    }
-
-    public static void ownerWindow() {
-        try {
-            App.changeScene("ownerpanel.fxml", "OWNER PANEL:");
-        } catch (IOException excep) {
-            excep.printStackTrace();
-        }
-    }
-
-    public static void adminWindow() {
-        try {
-            App.changeScene("adminpanel.fxml", "ADMIN PANEL");
-        } catch (IOException excep) {
-            excep.printStackTrace();
-        }
-    }
-
-    private static void changeScene(String fxml, String title) throws IOException {
-        if (!fxml.isEmpty() && !title.isEmpty()) {
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + fxml));
-
-            Parent page = (Parent) fxmlLoader.load();
-            Scene scene = App.stage.getScene();
-
-            if (scene == null) {
-                scene = new Scene(page);
-                App.stage.setScene(scene);
-
-            } else {
-                App.stage.getScene().setRoot(page);
-            }
-            App.stage.setTitle(title);
-        }
     }
 
     public static void main(String[] args) {

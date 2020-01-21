@@ -1,8 +1,9 @@
 package hotelicus.controllers.extended;
 
 import hotelicus.App;
-import hotelicus.controllers.extended.Users.LoadExtendedWindow;
+import hotelicus.controllers.extended.Users.UploadUserForm;
 import hotelicus.controllers.main.DbController;
+import hotelicus.controllers.main.Monitor;
 import hotelicus.entities.Hotels;
 import hotelicus.entities.Rooms;
 import hotelicus.enums.*;
@@ -35,7 +36,6 @@ import static hotelicus.enums.RoomStatus.BUSY;
 import static hotelicus.enums.RoomStatus.FREE;
 import static hotelicus.enums.UploadAction.*;
 import static hotelicus.enums.UserPrivileges.MANAGER;
-import static hotelicus.enums.UserPrivileges.OWNER;
 import static hotelicus.styles.Styles.CHANGE_STATUS_BUTTON_STYLE;
 import static hotelicus.styles.Styles.EDIT_BUTTON_STYLE;
 
@@ -61,8 +61,6 @@ public class UploadHotelForm implements Initializable {
     @FXML
     private TextField searchRoomByNumber;
     @FXML
-    private Button saveButton;
-    @FXML
     private Button addNewRoomButton;
     @FXML
     private Button manageManagerButton;
@@ -71,27 +69,20 @@ public class UploadHotelForm implements Initializable {
     private UploadAction uploadAction;
     private Hotels hotel;
 
-    public void init(TableView parentTableView, Hotels hotel, UploadAction uploadAction) {
-        if (parentTableView != null && uploadAction != null) {
-            this.parentTableView = parentTableView;
-            this.uploadAction = uploadAction;
-            if (this.uploadAction == INSERT) {
-                this.addNewRoomButton.setVisible(false);
-                this.manageManagerButton.setVisible(false);
-                this.searchRoomByNumber.setVisible(false);
-            }
-        } else {
-            throw new NullPointerException();
-        }
-        if (hotel != null) {
-            this.hotel = hotel;
-        }
-        this.uploadHotelInfo();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+
+            //TODO
+
+//            if (this.uploadAction == INSERT) {
+//                this.addNewRoomButton.setVisible(false);
+//                this.manageManagerButton.setVisible(false);
+//                this.searchRoomByNumber.setVisible(false);
+//            }
+
+            this.uploadHotelInfo();
+
             DbController<Rooms> rooms = new DbController<Rooms>(Rooms.class);
             PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
             this.searchRoomByNumber.textProperty().addListener(e -> {
@@ -111,7 +102,6 @@ public class UploadHotelForm implements Initializable {
                 pause.playFromStart();
             });
 
-
             this.categoryColumn.setCellValueFactory(new PropertyValueFactory<Rooms, RoomCategories>("category"));
             this.capacityColumn.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("capacity"));
             this.roomNumberColumn.setCellValueFactory(new PropertyValueFactory<Rooms, String>("roomNumber"));
@@ -121,9 +111,9 @@ public class UploadHotelForm implements Initializable {
             statusColumn.setCellFactory(ActionButtonTableCell.<Rooms>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, this.tableView, (Rooms room) -> {
                 if (room != null) {
                     if (room.getStatus() == FREE) {
-                        takeRoom(room);
+                        changeRoomStatus(room, BUSY);
                     } else {
-                        freeRoom(room);
+                        changeRoomStatus(room, FREE);
                     }
                 }
                 return room;
@@ -131,7 +121,12 @@ public class UploadHotelForm implements Initializable {
 
             editColumn.setCellFactory(ActionButtonTableCell.<Rooms>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Rooms room) -> {
                 try {
-                    LoadExtendedWindow.loadUploadRoomFormWindow(this.tableView, "Edit user", this.hotel, room, EDIT);
+                    Monitor.openNewScene(UploadRoomForm.class, "Edit user");
+                    Monitor.getStageAccessTo(UploadRoomForm.class).setHotel(this.hotel);
+                    Monitor.getStageAccessTo(UploadRoomForm.class).setUploadAction(EDIT);
+                    Monitor.getStageAccessTo(UploadRoomForm.class).setParentTable(tableView);
+                    Monitor.getStageAccessTo(UploadRoomForm.class).setRoom(room);
+
                 } catch (IOException excep) {
                     System.out.println(excep.getMessage());
                 } catch (NullPointerException excep) {
@@ -162,7 +157,6 @@ public class UploadHotelForm implements Initializable {
                     }
 
                     this.hotel.setName(this.hotelNameField.getText());
-
                     boolean successfulRecord = true;
 
                     if (this.uploadAction == EDIT) {
@@ -198,7 +192,9 @@ public class UploadHotelForm implements Initializable {
     @FXML
     private void addNewRoom() {
         try {
-            LoadExtendedWindow.loadUploadRoomFormWindow(this.tableView, "Room", this.hotel, null, INSERT);
+            Monitor.openNewScene(UploadRoomForm.class, "Room");
+            Monitor.getStageAccessTo(UploadRoomForm.class).setHotel(this.hotel);
+            Monitor.getStageAccessTo(UploadRoomForm.class).setUploadAction(INSERT);
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {
@@ -209,7 +205,11 @@ public class UploadHotelForm implements Initializable {
     @FXML
     private void manageManager() {
         try {
-            LoadExtendedWindow.loadUploadUserFormWindow(null, this.hotel,"Manager", this.hotel.getManager(), MANAGER, INSERT_OR_EDIT);
+            Monitor.openNewScene(UploadUserForm.class, "Manager");
+            Monitor.getStageAccessTo(UploadUserForm.class).setHotel(this.hotel);
+            Monitor.getStageAccessTo(UploadUserForm.class).setUser(this.hotel.getManager());
+            Monitor.getStageAccessTo(UploadUserForm.class).setPrivileges(MANAGER);
+            Monitor.getStageAccessTo(UploadUserForm.class).setUploadAction(INSERT_OR_EDIT);
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {
@@ -237,12 +237,12 @@ public class UploadHotelForm implements Initializable {
         }
     }
 
-    private void takeRoom(Rooms room) {
+    private void changeRoomStatus(Rooms room, RoomStatus status) {
         try {
             Confirmation confirm = new Confirmation("Confirmation", "Do you want to set busy this room?");
-            if (confirm.getConfirmationResult() == true && room != null) {
+            if (confirm.getConfirmationResult() == true && room != null && status != null) {
                 DbController<Rooms> updateRoom = new DbController<Rooms>(Rooms.class);
-                room.setStatus(BUSY);
+                room.setStatus(status);
                 updateRoom.update(room);
                 this.tableView.refresh();
             }
@@ -251,17 +251,39 @@ public class UploadHotelForm implements Initializable {
         }
     }
 
-    private void freeRoom(Rooms room) {
-        try {
-            Confirmation confirm = new Confirmation("Confirmation", "Do you want to set free this room?");
-            if (confirm.getConfirmationResult() == true && room != null) {
-                DbController<Rooms> updateRoom = new DbController<Rooms>(Rooms.class);
-                room.setStatus(FREE);
-                updateRoom.update(room);
-                this.tableView.refresh();
-            }
-        } catch (UpdateNullObjectException excep) {
-            excep.printStackTrace();
+    public Hotels getHotel() {
+        return hotel;
+    }
+
+    public TableView getParentTableView() {
+        return parentTableView;
+    }
+
+    public UploadAction getUploadAction() {
+        return uploadAction;
+    }
+
+    public void setParentTableView(TableView parentTableView) {
+        if (parentTableView != null) {
+            this.parentTableView = parentTableView;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public void setUploadAction(UploadAction uploadAction) {
+        if (uploadAction != null) {
+            this.uploadAction = uploadAction;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    public void setHotel(Hotels hotel) {
+        if (hotel != null) {
+            this.hotel = hotel;
+        } else {
+            throw new NullPointerException();
         }
     }
 }

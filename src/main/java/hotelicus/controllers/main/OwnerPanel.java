@@ -2,7 +2,7 @@ package hotelicus.controllers.main;
 
 import hotelicus.App;
 import hotelicus.controllers.extended.ActionButtonTableCell;
-import hotelicus.controllers.extended.Users.LoadExtendedWindow;
+import hotelicus.controllers.extended.UploadHotelForm;
 import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.Hotels;
 import hotelicus.entities.Users;
@@ -24,7 +24,6 @@ import javafx.util.Duration;
 
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.Update;
 
 import java.io.IOException;
 import java.net.URL;
@@ -98,8 +97,13 @@ public class OwnerPanel implements Initializable {
 
             editColumn.setCellFactory(ActionButtonTableCell.<Hotels>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Hotels hotel) -> {
                 try {
-                    LoadExtendedWindow.loadUploadHotelFormWindow(this.tableView, "Edit hotel", hotel, EDIT);
+                    Monitor.openNewScene(UploadHotelForm.class, "Edit hotel");
+                    Monitor.getStageAccessTo(UploadHotelForm.class).setUploadAction(EDIT);
+                    Monitor.getStageAccessTo(UploadHotelForm.class).setParentTableView(this.tableView);
+                    Monitor.getStageAccessTo(UploadHotelForm.class).setHotel(hotel);
                 } catch (IOException excep) {
+                    excep.printStackTrace();
+                } catch (NullPointerException excep) {
                     excep.printStackTrace();
                 }
                 return hotel;
@@ -138,10 +142,13 @@ public class OwnerPanel implements Initializable {
         UserController.logOut();
     }
 
+
     @FXML
     private void addHotel() {
         try {
-            LoadExtendedWindow.loadUploadHotelFormWindow(this.tableView, "Add new hotel", null, INSERT);
+            Monitor.openNewScene(UploadHotelForm.class, "Add new Hotel");
+            Monitor.getStageAccessTo(UploadHotelForm.class).setUploadAction(INSERT);
+            Monitor.getStageAccessTo(UploadHotelForm.class).setParentTableView(this.tableView);
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {
@@ -153,8 +160,8 @@ public class OwnerPanel implements Initializable {
         try {
             Confirmation confirm = new Confirmation("Confirmation", "Do you want to activate this hotel?");
             if (confirm.getConfirmationResult() == true && hotel != null) {
-                if(hotel.getManager()!=null){
-                    DbController<Users> updateManager=new DbController<Users>(Users.class);
+                if (hotel.getManager() != null) {
+                    DbController<Users> updateManager = new DbController<Users>(Users.class);
                     hotel.getManager().setUserState(UserState.ACTIVE);
                     hotel.getManager().setEndedOn(null);
                     updateManager.update(hotel.getManager());
@@ -169,13 +176,14 @@ public class OwnerPanel implements Initializable {
         }
     }
 
+
     private void disableHotel(Hotels hotel) {
         try {
             LocalDate deletedOn = LocalDate.now();
             Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this hotel?");
             if (confirm.getConfirmationResult() == true && hotel != null) {
-                if(hotel.getManager()!=null){
-                    DbController<Users> updateManager=new DbController<Users>(Users.class);
+                if (hotel.getManager() != null) {
+                    DbController<Users> updateManager = new DbController<Users>(Users.class);
                     hotel.getManager().setUserState(UserState.DISABLED);
                     hotel.getManager().setEndedOn(deletedOn);
                     updateManager.update(hotel.getManager());
@@ -209,5 +217,9 @@ public class OwnerPanel implements Initializable {
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
         }
+    }
+
+    public TableView<Hotels> getTableView() {
+        return tableView;
     }
 }

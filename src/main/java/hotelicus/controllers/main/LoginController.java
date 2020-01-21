@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.criterion.Restrictions;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -68,10 +69,10 @@ public class LoginController implements Initializable {
                         UserController.setUserLoggedIn(loggedUser);
                         switch (loggedUser.getPrivileges()) {
                             case ADMIN:
-                                App.adminWindow();
+                                Monitor.changePrimaryScene(AdminPanel.class, "Admin Panel");
                                 break;
                             case OWNER:
-                                App.ownerWindow();
+                                Monitor.changePrimaryScene(OwnerPanel.class, "Owner Panel");
                                 break;
                         }
                     } else {
@@ -81,6 +82,8 @@ public class LoginController implements Initializable {
                     throw new SelectNullObjectException();
                 }
             }
+        } catch (IOException excep) {
+            excep.printStackTrace();
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
         } catch (NonUniqueResultException excep) {
@@ -109,7 +112,7 @@ public class LoginController implements Initializable {
         } catch (NonUniqueResultException excep) {
             excep.printStackTrace();
             new Error("Failed to login", "Invalid username or password!");
-        }catch(SelectNullObjectException excep) {
+        } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
             new Error("Failed to login", "Invalid username or password!");
         }
