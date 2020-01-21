@@ -11,26 +11,29 @@ import hotelicus.exceptions.DeleteNullObjectException;
 import hotelicus.exceptions.InsertNullObjectException;
 import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.window.Confirmation;
+import javafx.fxml.FXMLLoader;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class UserController {
     public UserController() {
     }
 
     public static void logOut() {
-        Confirmation logConfirmation = new Confirmation("Message", "Are you sure you want to log off ?");
-        if (logConfirmation.getConfirmationResult() == true) {
-            UserController.setUserLoggedOff(App.getLoggedUser());
-            App.setLoggedUser(null);
-            try {
+        try {
+            Confirmation logConfirmation = new Confirmation("Message", "Are you sure you want to log off ?");
+            if (logConfirmation.getConfirmationResult() == true) {
+                UserController.setUserLoggedOff(App.getLoggedUser());
+                App.setLoggedUser(null);
                 Monitor.changePrimaryScene(LoginController.class, "Login Panel");
-            } catch (IOException excep) {
-                excep.printStackTrace();
+                Monitor.wipeStages();
             }
+        } catch (IOException excep) {
+            excep.printStackTrace();
         }
     }
 

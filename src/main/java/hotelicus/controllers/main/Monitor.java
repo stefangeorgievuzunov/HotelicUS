@@ -48,7 +48,7 @@ public class Monitor {
             App.getStage().setResizable(false);
             App.getStage().show();
 
-            Monitor.stagesAccess.put(clazz, fxmlLoader);
+            stagesAccess.put(clazz, fxmlLoader);
         }
     }
 
@@ -65,7 +65,20 @@ public class Monitor {
             stage.setResizable(false);
             stage.show();
 
-            Monitor.stagesAccess.put(clazz, fxmlLoader);
+            stagesAccess.put(clazz, fxmlLoader);
+
+            stage.setOnCloseRequest(e -> {
+                        for (Map.Entry<Class<?>, FXMLLoader> entry : stagesAccess.entrySet()) {
+                            System.out.println(entry.getKey().toString());
+                        }
+                        if (stagesAccess.containsKey(clazz)) {
+                            stagesAccess.remove(clazz);
+                        }
+                        for (Map.Entry<Class<?>, FXMLLoader> entry : stagesAccess.entrySet()) {
+                            System.out.println(entry.getKey().toString());
+                        }
+                    }
+            );
         }
     }
 
@@ -75,5 +88,9 @@ public class Monitor {
             return controller;
         }
         return null;
+    }
+
+    public static void wipeStages() {
+        stagesAccess.clear();
     }
 }
