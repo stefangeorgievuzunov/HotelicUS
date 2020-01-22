@@ -1,9 +1,6 @@
-package hotelicus.controllers.extended.Users;
+package hotelicus.panels.controllers;
 
 import hotelicus.App;
-import hotelicus.controllers.main.DbController;
-import hotelicus.controllers.main.LoginController;
-import hotelicus.controllers.main.Monitor;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
 import hotelicus.exceptions.DbControllerNullConstructorException;
@@ -11,13 +8,11 @@ import hotelicus.exceptions.DeleteNullObjectException;
 import hotelicus.exceptions.InsertNullObjectException;
 import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.window.Confirmation;
-import javafx.fxml.FXMLLoader;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class UserController {
     public UserController() {
@@ -29,8 +24,8 @@ public class UserController {
             if (logConfirmation.getConfirmationResult() == true) {
                 UserController.setUserLoggedOff(App.getLoggedUser());
                 App.setLoggedUser(null);
-                Monitor.changePrimaryScene(LoginController.class, "Login Panel");
-                Monitor.wipeStages();
+                SceneController.changePrimaryScene(LoginController.class, "Login Panel");
+                SceneController.wipeStages();
             }
         } catch (IOException excep) {
             excep.printStackTrace();

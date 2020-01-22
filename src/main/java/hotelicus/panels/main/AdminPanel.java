@@ -1,8 +1,10 @@
-package hotelicus.controllers.main;
+package hotelicus.panels.main;
 
-import hotelicus.controllers.extended.ActionButtonTableCell;
-import hotelicus.controllers.extended.Users.UploadUserForm;
-import hotelicus.controllers.extended.Users.UserController;
+import hotelicus.panels.controllers.DbController;
+import hotelicus.panels.controllers.SceneController;
+import hotelicus.panels.extended.ActionButtonTrigger;
+import hotelicus.panels.extended.UploadUserForm;
+import hotelicus.panels.controllers.UserController;
 import hotelicus.entities.Users;
 import hotelicus.enums.UserPrivileges;
 import hotelicus.enums.UserState;
@@ -94,7 +96,7 @@ public class AdminPanel implements Initializable {
             startedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, LocalDate>("startedOn"));
             endedOnColumn.setCellValueFactory(new PropertyValueFactory<Users, LocalDate>("endedOn"));
 
-            statusColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Users user) -> {
+            statusColumn.setCellFactory(ActionButtonTrigger.<Users>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Users user) -> {
                 if (user.getUserState() == ACTIVE) {
                     disableUser(user);
                 } else {
@@ -103,13 +105,13 @@ public class AdminPanel implements Initializable {
                 return user;
             }));
 
-            editColumn.setCellFactory(ActionButtonTableCell.<Users>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Users user) -> {
+            editColumn.setCellFactory(ActionButtonTrigger.<Users>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Users user) -> {
                 try {
-                    Monitor.openNewScene(UploadUserForm.class, "Edit user");
-                    Monitor.getStageAccessTo(UploadUserForm.class).setTableView(this.tableView);
-                    Monitor.getStageAccessTo(UploadUserForm.class).setUser(user);
-                    Monitor.getStageAccessTo(UploadUserForm.class).setPrivileges(OWNER);
-                    Monitor.getStageAccessTo(UploadUserForm.class).setUploadAction(EDIT);
+                    SceneController.openNewScene(UploadUserForm.class, "Edit user");
+                    SceneController.getStageAccessTo(UploadUserForm.class).setTableView(this.tableView);
+                    SceneController.getStageAccessTo(UploadUserForm.class).setUser(user);
+                    SceneController.getStageAccessTo(UploadUserForm.class).setPrivileges(OWNER);
+                    SceneController.getStageAccessTo(UploadUserForm.class).setUploadAction(EDIT);
                 } catch (IOException excep) {
                     System.out.println(excep.getMessage());
                 }
@@ -142,10 +144,10 @@ public class AdminPanel implements Initializable {
     @FXML
     private void addUser() {
         try {
-            Monitor.openNewScene(UploadUserForm.class, "Add new user");
-            Monitor.getStageAccessTo(UploadUserForm.class).setTableView(this.tableView);
-            Monitor.getStageAccessTo(UploadUserForm.class).setPrivileges(OWNER);
-            Monitor.getStageAccessTo(UploadUserForm.class).setUploadAction(INSERT);
+            SceneController.openNewScene(UploadUserForm.class, "Add new user");
+            SceneController.getStageAccessTo(UploadUserForm.class).setTableView(this.tableView);
+            SceneController.getStageAccessTo(UploadUserForm.class).setPrivileges(OWNER);
+            SceneController.getStageAccessTo(UploadUserForm.class).setUploadAction(INSERT);
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {

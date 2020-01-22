@@ -1,9 +1,8 @@
-package hotelicus.controllers.extended;
+package hotelicus.panels.extended;
 
 import hotelicus.App;
-import hotelicus.controllers.extended.Users.UploadUserForm;
-import hotelicus.controllers.main.DbController;
-import hotelicus.controllers.main.Monitor;
+import hotelicus.panels.controllers.DbController;
+import hotelicus.panels.controllers.SceneController;
 import hotelicus.entities.Hotels;
 import hotelicus.entities.Rooms;
 import hotelicus.enums.*;
@@ -108,7 +107,7 @@ public class UploadHotelForm implements Initializable {
             this.priceColumn.setCellValueFactory(new PropertyValueFactory<Rooms, Double>("price"));
             this.roomStateColumn.setCellValueFactory(new PropertyValueFactory<Rooms, RoomStatus>("status"));
 
-            statusColumn.setCellFactory(ActionButtonTableCell.<Rooms>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, this.tableView, (Rooms room) -> {
+            statusColumn.setCellFactory(ActionButtonTrigger.<Rooms>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, this.tableView, (Rooms room) -> {
                 if (room != null) {
                     if (room.getStatus() == FREE) {
                         changeRoomStatus(room, BUSY);
@@ -119,13 +118,13 @@ public class UploadHotelForm implements Initializable {
                 return room;
             }));
 
-            editColumn.setCellFactory(ActionButtonTableCell.<Rooms>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Rooms room) -> {
+            editColumn.setCellFactory(ActionButtonTrigger.<Rooms>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Rooms room) -> {
                 try {
-                    Monitor.openNewScene(UploadRoomForm.class, "Edit user");
-                    Monitor.getStageAccessTo(UploadRoomForm.class).setHotel(this.hotel);
-                    Monitor.getStageAccessTo(UploadRoomForm.class).setUploadAction(EDIT);
-                    Monitor.getStageAccessTo(UploadRoomForm.class).setParentTable(tableView);
-                    Monitor.getStageAccessTo(UploadRoomForm.class).setRoom(room);
+                    SceneController.openNewScene(UploadRoomForm.class, "Edit user");
+                    SceneController.getStageAccessTo(UploadRoomForm.class).setHotel(this.hotel);
+                    SceneController.getStageAccessTo(UploadRoomForm.class).setUploadAction(EDIT);
+                    SceneController.getStageAccessTo(UploadRoomForm.class).setParentTable(tableView);
+                    SceneController.getStageAccessTo(UploadRoomForm.class).setRoom(room);
 
                 } catch (IOException excep) {
                     System.out.println(excep.getMessage());
@@ -192,9 +191,9 @@ public class UploadHotelForm implements Initializable {
     @FXML
     private void addNewRoom() {
         try {
-            Monitor.openNewScene(UploadRoomForm.class, "Room");
-            Monitor.getStageAccessTo(UploadRoomForm.class).setHotel(this.hotel);
-            Monitor.getStageAccessTo(UploadRoomForm.class).setUploadAction(INSERT);
+            SceneController.openNewScene(UploadRoomForm.class, "Room");
+            SceneController.getStageAccessTo(UploadRoomForm.class).setHotel(this.hotel);
+            SceneController.getStageAccessTo(UploadRoomForm.class).setUploadAction(INSERT);
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {
@@ -205,11 +204,11 @@ public class UploadHotelForm implements Initializable {
     @FXML
     private void manageManager() {
         try {
-            Monitor.openNewScene(UploadUserForm.class, "Manager");
-            Monitor.getStageAccessTo(UploadUserForm.class).setHotel(this.hotel);
-            Monitor.getStageAccessTo(UploadUserForm.class).setUser(this.hotel.getManager());
-            Monitor.getStageAccessTo(UploadUserForm.class).setPrivileges(MANAGER);
-            Monitor.getStageAccessTo(UploadUserForm.class).setUploadAction(INSERT_OR_EDIT);
+            SceneController.openNewScene(UploadUserForm.class, "Manager");
+            SceneController.getStageAccessTo(UploadUserForm.class).setHotel(this.hotel);
+            SceneController.getStageAccessTo(UploadUserForm.class).setUser(this.hotel.getManager());
+            SceneController.getStageAccessTo(UploadUserForm.class).setPrivileges(MANAGER);
+            SceneController.getStageAccessTo(UploadUserForm.class).setUploadAction(INSERT_OR_EDIT);
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {

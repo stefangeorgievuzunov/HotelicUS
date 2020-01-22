@@ -1,12 +1,13 @@
-package hotelicus.controllers.main;
+package hotelicus.panels.controllers;
 
 import hotelicus.App;
-import hotelicus.controllers.extended.Users.UserController;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
 import hotelicus.exceptions.DbControllerNullConstructorException;
 import hotelicus.exceptions.DeleteNullObjectException;
 import hotelicus.exceptions.SelectNullObjectException;
+import hotelicus.panels.main.AdminPanel;
+import hotelicus.panels.main.OwnerPanel;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 
@@ -69,10 +70,10 @@ public class LoginController implements Initializable {
                         UserController.setUserLoggedIn(loggedUser);
                         switch (loggedUser.getPrivileges()) {
                             case ADMIN:
-                                Monitor.changePrimaryScene(AdminPanel.class, "Admin Panel");
+                                SceneController.changePrimaryScene(AdminPanel.class, "Admin Panel");
                                 break;
                             case OWNER:
-                                Monitor.changePrimaryScene(OwnerPanel.class, "Owner Panel");
+                                SceneController.changePrimaryScene(OwnerPanel.class, "Owner Panel");
                                 break;
                         }
                     } else {

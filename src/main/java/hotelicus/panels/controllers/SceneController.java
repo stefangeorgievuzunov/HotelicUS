@@ -1,9 +1,11 @@
-package hotelicus.controllers.main;
+package hotelicus.panels.controllers;
 
 import hotelicus.App;
-import hotelicus.controllers.extended.UploadHotelForm;
-import hotelicus.controllers.extended.UploadRoomForm;
-import hotelicus.controllers.extended.Users.UploadUserForm;
+import hotelicus.panels.extended.UploadHotelForm;
+import hotelicus.panels.extended.UploadRoomForm;
+import hotelicus.panels.extended.UploadUserForm;
+import hotelicus.panels.main.AdminPanel;
+import hotelicus.panels.main.OwnerPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,14 +17,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Monitor {
+public class SceneController {
+    private static final String  XML_DIRECTORY="/templates/";
     private static final String UPLOAD_ROOM_FORM_XML = "room.fxml";
     private static final String UPLOAD_USER_FORM_XML = "edit.fxml";
     private static final String UPLOAD_HOTEL_FORM_XML = "hotel.fxml";
     private static final String OWNER_PANEL_XML = "ownerpanel.fxml";
     private static final String LOGIN_PANEL_XML = "login.fxml";
     private static final String ADMIN_PANEL_XML = "adminpanel.fxml";
-
 
     private static final Map<Class<?>, String> XML_RELATIONS = new HashMap<Class<?>, String>() {
         {
@@ -39,7 +41,7 @@ public class Monitor {
 
     public static <T> void changePrimaryScene(final Class<T> clazz, final String title) throws IOException {
         if (clazz != null && XML_RELATIONS.containsKey(clazz) && title != null) {
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + XML_RELATIONS.get(clazz)));
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(XML_DIRECTORY + XML_RELATIONS.get(clazz)));
             Parent page = fxmlLoader.load();
 
             Scene scene = new Scene(page);
@@ -54,7 +56,7 @@ public class Monitor {
 
     public static <T> void openNewScene(final Class<T> clazz, final String title) throws IOException {
         if (clazz != null && XML_RELATIONS.containsKey(clazz) && title != null) {
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + XML_RELATIONS.get(clazz)));
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(XML_DIRECTORY + XML_RELATIONS.get(clazz)));
             Parent page = fxmlLoader.load();
 
             Scene scene = new Scene(page);
@@ -68,14 +70,8 @@ public class Monitor {
             stagesAccess.put(clazz, fxmlLoader);
 
             stage.setOnCloseRequest(e -> {
-                        for (Map.Entry<Class<?>, FXMLLoader> entry : stagesAccess.entrySet()) {
-                            System.out.println(entry.getKey().toString());
-                        }
                         if (stagesAccess.containsKey(clazz)) {
                             stagesAccess.remove(clazz);
-                        }
-                        for (Map.Entry<Class<?>, FXMLLoader> entry : stagesAccess.entrySet()) {
-                            System.out.println(entry.getKey().toString());
                         }
                     }
             );

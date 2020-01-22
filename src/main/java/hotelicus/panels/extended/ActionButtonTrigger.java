@@ -1,4 +1,4 @@
-package hotelicus.controllers.extended;
+package hotelicus.panels.extended;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -10,12 +10,12 @@ import javafx.util.Callback;
 
 import java.util.function.Function;
 
-public class ActionButtonTableCell<T> extends TableCell<T, Button> {
+public class ActionButtonTrigger<T> extends TableCell<T, Button> {
 
     private final Button actionButton;
     private  TableView table;
 
-    public ActionButtonTableCell(String label, String buttonStyle,TableView table, Function<T, T> function) {
+    public ActionButtonTrigger(String label, String buttonStyle, TableView table, Function<T, T> function) {
         this.actionButton = new Button(label);
         this.table=table;
         if(buttonStyle!=null){
@@ -34,7 +34,7 @@ public class ActionButtonTableCell<T> extends TableCell<T, Button> {
     }
 
     public static <T> Callback<TableColumn<T, Button>, TableCell<T, Button>> forTableColumn(String label,String buttonStyle,TableView table, Function<T, T> function) {
-        return param -> new ActionButtonTableCell<>(label,buttonStyle,table, function);
+        return param -> new ActionButtonTrigger<>(label,buttonStyle,table, function);
     }
 
     @Override

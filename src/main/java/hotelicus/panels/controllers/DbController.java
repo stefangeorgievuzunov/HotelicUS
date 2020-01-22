@@ -1,4 +1,4 @@
-package hotelicus.controllers.main;
+package hotelicus.panels.controllers;
 
 
 import java.lang.Class;

@@ -1,11 +1,9 @@
 package hotelicus;
 
-import hotelicus.controllers.extended.ActionButtonTableCell;
-import hotelicus.controllers.extended.Users.UserController;
-import hotelicus.controllers.main.DbController;
-import hotelicus.controllers.main.LoginController;
-import hotelicus.controllers.main.Monitor;
-import hotelicus.controllers.main.OwnerPanel;
+import hotelicus.panels.controllers.UserController;
+import hotelicus.panels.controllers.DbController;
+import hotelicus.panels.controllers.LoginController;
+import hotelicus.panels.controllers.SceneController;
 import hotelicus.core.HibernateUtil;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
@@ -14,9 +12,6 @@ import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.exceptions.UpdateNullObjectException;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import org.hibernate.NonUniqueResultException;
@@ -24,12 +19,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -82,7 +72,7 @@ public final class App extends Application {
                 this.loggedUserPinging.shutdown();
             });
 
-            Monitor.changePrimaryScene(LoginController.class, "Login Panel");
+            SceneController.changePrimaryScene(LoginController.class, "Login Panel");
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (SelectNullObjectException excep) {

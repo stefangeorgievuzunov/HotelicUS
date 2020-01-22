@@ -1,6 +1,6 @@
-package hotelicus.controllers.extended;
+package hotelicus.panels.extended;
 
-import hotelicus.controllers.main.DbController;
+import hotelicus.panels.controllers.DbController;
 import hotelicus.entities.Hotels;
 import hotelicus.entities.Rooms;
 import hotelicus.enums.RoomCategories;

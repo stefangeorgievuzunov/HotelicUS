@@ -1,9 +1,11 @@
-package hotelicus.controllers.main;
+package hotelicus.panels.main;
 
 import hotelicus.App;
-import hotelicus.controllers.extended.ActionButtonTableCell;
-import hotelicus.controllers.extended.UploadHotelForm;
-import hotelicus.controllers.extended.Users.UserController;
+import hotelicus.panels.controllers.DbController;
+import hotelicus.panels.controllers.SceneController;
+import hotelicus.panels.extended.ActionButtonTrigger;
+import hotelicus.panels.extended.UploadHotelForm;
+import hotelicus.panels.controllers.UserController;
 import hotelicus.entities.Hotels;
 import hotelicus.entities.Users;
 import hotelicus.enums.HotelState;
@@ -86,7 +88,7 @@ public class OwnerPanel implements Initializable {
             createdOnColumn.setCellValueFactory(new PropertyValueFactory<Hotels, LocalDate>("createdOn"));
             removedOnColumn.setCellValueFactory(new PropertyValueFactory<Hotels, LocalDate>("removedOn"));
 
-            statusColumn.setCellFactory(ActionButtonTableCell.<Hotels>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Hotels hotel) -> {
+            statusColumn.setCellFactory(ActionButtonTrigger.<Hotels>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Hotels hotel) -> {
                 if (hotel.getHotelState() == ACTIVE) {
                     disableHotel(hotel);
                 } else {
@@ -95,12 +97,12 @@ public class OwnerPanel implements Initializable {
                 return hotel;
             }));
 
-            editColumn.setCellFactory(ActionButtonTableCell.<Hotels>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Hotels hotel) -> {
+            editColumn.setCellFactory(ActionButtonTrigger.<Hotels>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Hotels hotel) -> {
                 try {
-                    Monitor.openNewScene(UploadHotelForm.class, "Edit hotel");
-                    Monitor.getStageAccessTo(UploadHotelForm.class).setUploadAction(EDIT);
-                    Monitor.getStageAccessTo(UploadHotelForm.class).setParentTableView(this.tableView);
-                    Monitor.getStageAccessTo(UploadHotelForm.class).setHotel(hotel);
+                    SceneController.openNewScene(UploadHotelForm.class, "Edit hotel");
+                    SceneController.getStageAccessTo(UploadHotelForm.class).setUploadAction(EDIT);
+                    SceneController.getStageAccessTo(UploadHotelForm.class).setParentTableView(this.tableView);
+                    SceneController.getStageAccessTo(UploadHotelForm.class).setHotel(hotel);
                 } catch (IOException excep) {
                     excep.printStackTrace();
                 } catch (NullPointerException excep) {
@@ -109,7 +111,7 @@ public class OwnerPanel implements Initializable {
                 return hotel;
             }));
 
-            viewColumn.setCellFactory(ActionButtonTableCell.<Hotels>forTableColumn("View", EDIT_BUTTON_STYLE, tableView, (Hotels hotel) -> {
+            viewColumn.setCellFactory(ActionButtonTrigger.<Hotels>forTableColumn("View", EDIT_BUTTON_STYLE, tableView, (Hotels hotel) -> {
 //            try {
 //                LoadExtendedWindow.loadUploadUserFormWindow(this.tableView, "Edit user", EDIT, user, OWNER);
 //            } catch (IOException excep) {
@@ -146,9 +148,9 @@ public class OwnerPanel implements Initializable {
     @FXML
     private void addHotel() {
         try {
-            Monitor.openNewScene(UploadHotelForm.class, "Add new Hotel");
-            Monitor.getStageAccessTo(UploadHotelForm.class).setUploadAction(INSERT);
-            Monitor.getStageAccessTo(UploadHotelForm.class).setParentTableView(this.tableView);
+            SceneController.openNewScene(UploadHotelForm.class, "Add new Hotel");
+            SceneController.getStageAccessTo(UploadHotelForm.class).setUploadAction(INSERT);
+            SceneController.getStageAccessTo(UploadHotelForm.class).setParentTableView(this.tableView);
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {

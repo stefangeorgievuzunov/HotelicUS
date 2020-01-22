@@ -1,8 +1,7 @@
-package hotelicus.controllers.extended.Users;
+package hotelicus.panels.extended;
 
-import hotelicus.controllers.main.DbController;
+import hotelicus.panels.controllers.DbController;
 import hotelicus.entities.Hotels;
-import hotelicus.entities.Rooms;
 import hotelicus.entities.Users;
 import hotelicus.enums.UploadAction;
 import hotelicus.enums.UserPrivileges;

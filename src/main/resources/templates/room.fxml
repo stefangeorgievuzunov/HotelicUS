@@ -12,7 +12,7 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 <?import hotelicus.enums.RoomCategories?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="340.0" style="-fx-background-color: #8d99ae;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.controllers.extended.UploadRoomForm">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="340.0" style="-fx-background-color: #8d99ae;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.panels.extended.UploadRoomForm">
     <children>
         <Label text="Capacity" textFill="WHITE">
             <font>
