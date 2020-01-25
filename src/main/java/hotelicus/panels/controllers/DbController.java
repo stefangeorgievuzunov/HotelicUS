@@ -117,12 +117,4 @@ public class DbController<T> {
         this.session.getTransaction().commit();
         return (T) crit.uniqueResult();
     }
-
-    public <T> List<T> selectNull(String criteria) {
-        this.session.beginTransaction();
-        Criteria crit = this.session.createCriteria(this.type);
-        crit.add(Restrictions.isNull(criteria));
-        this.session.getTransaction().commit();
-        return (List<T>) crit.list();
-    }
 }

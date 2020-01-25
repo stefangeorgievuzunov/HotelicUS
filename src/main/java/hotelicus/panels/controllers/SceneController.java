@@ -14,11 +14,12 @@ import javafx.stage.Stage;
 
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SceneController {
-    private static final String  XML_DIRECTORY="/templates/";
+    private static final String XML_DIRECTORY = "/templates/";
     private static final String UPLOAD_ROOM_FORM_XML = "room.fxml";
     private static final String UPLOAD_USER_FORM_XML = "edit.fxml";
     private static final String UPLOAD_HOTEL_FORM_XML = "hotel.fxml";
@@ -54,10 +55,18 @@ public class SceneController {
         }
     }
 
-    public static <T> void openNewScene(final Class<T> clazz, final String title) throws IOException {
+    public static <T> void openNewScene(final Class<T> clazz, final String title, Runnable block) throws IOException {
         if (clazz != null && XML_RELATIONS.containsKey(clazz) && title != null) {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(XML_DIRECTORY + XML_RELATIONS.get(clazz)));
             Parent page = fxmlLoader.load();
+
+            stagesAccess.put(clazz, fxmlLoader);
+
+            if (block != null) {
+                block.run();
+            } else {
+                throw new NullPointerException();
+            }
 
             Scene scene = new Scene(page);
             Stage stage = new Stage();
@@ -66,8 +75,6 @@ public class SceneController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
             stage.show();
-
-            stagesAccess.put(clazz, fxmlLoader);
 
             stage.setOnCloseRequest(e -> {
                         if (stagesAccess.containsKey(clazz)) {

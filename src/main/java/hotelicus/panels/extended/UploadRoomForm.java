@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -47,7 +48,6 @@ public class UploadRoomForm implements Initializable {
         if (room == null) {
             this.room = new Rooms();
         }
-        this.uploadRoomInfo();
     }
 
     @FXML
@@ -94,7 +94,7 @@ public class UploadRoomForm implements Initializable {
         }
     }
 
-    private void uploadRoomInfo() {
+    public void uploadInfo() {
         if (this.room.getCapacity() != null && this.room.getPrice() != null && this.room.getRoomNumber() != null && this.room.getCategory() != null) {
             this.capacity.setText(this.room.getCapacity().toString());
             this.price.setText(this.room.getPrice().toString());

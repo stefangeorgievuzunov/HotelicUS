@@ -30,7 +30,6 @@ import static hotelicus.enums.UserState.ACTIVE;
 public class LoginController implements Initializable {
     @FXML
     private TextField username;
-
     @FXML
     private PasswordField password;
     @FXML

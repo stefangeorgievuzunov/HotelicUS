@@ -107,11 +107,15 @@ public class AdminPanel implements Initializable {
 
             editColumn.setCellFactory(ActionButtonTrigger.<Users>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Users user) -> {
                 try {
-                    SceneController.openNewScene(UploadUserForm.class, "Edit user");
-                    SceneController.getStageAccessTo(UploadUserForm.class).setTableView(this.tableView);
-                    SceneController.getStageAccessTo(UploadUserForm.class).setUser(user);
-                    SceneController.getStageAccessTo(UploadUserForm.class).setPrivileges(OWNER);
-                    SceneController.getStageAccessTo(UploadUserForm.class).setUploadAction(EDIT);
+                    SceneController.openNewScene(UploadUserForm.class, "Edit user", () -> {
+                        UploadUserForm uploadUserForm= SceneController.getStageAccessTo(UploadUserForm.class);
+                        uploadUserForm.setParentTableView(tableView);
+                        uploadUserForm.setPrivileges(OWNER);
+                        uploadUserForm.setUploadAction(EDIT);
+                        uploadUserForm.setUser(user);
+                        uploadUserForm.uploadUserInfo();
+                    });
+
                 } catch (IOException excep) {
                     System.out.println(excep.getMessage());
                 }
@@ -144,10 +148,13 @@ public class AdminPanel implements Initializable {
     @FXML
     private void addUser() {
         try {
-            SceneController.openNewScene(UploadUserForm.class, "Add new user");
-            SceneController.getStageAccessTo(UploadUserForm.class).setTableView(this.tableView);
-            SceneController.getStageAccessTo(UploadUserForm.class).setPrivileges(OWNER);
-            SceneController.getStageAccessTo(UploadUserForm.class).setUploadAction(INSERT);
+            SceneController.openNewScene(UploadUserForm.class, "Add new user", () -> {
+                UploadUserForm uploadUserForm= SceneController.getStageAccessTo(UploadUserForm.class);
+                uploadUserForm.setParentTableView(this.tableView);
+                uploadUserForm.setPrivileges(OWNER);
+                uploadUserForm.setUploadAction(INSERT);
+            });
+
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {

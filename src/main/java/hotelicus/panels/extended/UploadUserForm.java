@@ -40,7 +40,7 @@ public class UploadUserForm implements Initializable {
     private Users user;
     private UserPrivileges privileges;
     private UploadAction uploadAction;
-    private TableView tableView;
+    private TableView parentTableView;
     private Hotels hotel;
 
     @Override
@@ -48,7 +48,6 @@ public class UploadUserForm implements Initializable {
         if (this.user == null) {
             this.user = new Users();
         }
-        this.uploadUserInfo();
     }
 
     @FXML
@@ -79,8 +78,8 @@ public class UploadUserForm implements Initializable {
                     if (this.uploadAction == INSERT) {
                         try {
                             updateUser.insert(this.user);
-                            if (this.tableView != null) {
-                                this.tableView.getItems().add(this.user);
+                            if (this.parentTableView != null) {
+                                this.parentTableView.getItems().add(this.user);
                             }
                         } catch (ConstraintViolationException excep) {
                             successfulRecord = false;
@@ -98,11 +97,11 @@ public class UploadUserForm implements Initializable {
                         }
                     }
                     if (successfulRecord) {
-                        if (this.hotel != null) {
+                        if (this.hotel != null&&this.user!=null) {
                             this.hotel.setManager(this.user);
                         }
-                        if (this.tableView != null) {
-                            this.tableView.refresh();
+                        if (this.parentTableView != null) {
+                            this.parentTableView.refresh();
                         }
                         Stage stage = (Stage) saveButton.getScene().getWindow();
                         stage.close();
@@ -120,7 +119,7 @@ public class UploadUserForm implements Initializable {
         }
     }
 
-    private void uploadUserInfo() {
+    public void uploadUserInfo() {
         if (this.user.getUsername() != null && this.user.getPassword() != null && this.user.getFirstName() != null && this.user.getLastName() != null) {
             this.username.setText(user.getUsername());
             this.password.setText(user.getPassword());
@@ -148,7 +147,6 @@ public class UploadUserForm implements Initializable {
                 if (this.username.getText().equals(testUser.getUsername())) {
                     throw new NonUniqueResultException(0);
                 }
-
             } else {
                 new Error("Upload failed", "There are empty fields!");
             }
@@ -199,13 +197,13 @@ public class UploadUserForm implements Initializable {
         }
     }
 
-    public TableView getTableView() {
-        return tableView;
+    public TableView getParentTableView() {
+        return parentTableView;
     }
 
-    public void setTableView(TableView tableView) {
-        if (tableView != null) {
-            this.tableView = tableView;
+    public void setParentTableView(TableView parentTableView) {
+        if (parentTableView != null) {
+            this.parentTableView = parentTableView;
         } else {
             throw new NullPointerException();
         }

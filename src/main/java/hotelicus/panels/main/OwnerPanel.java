@@ -99,10 +99,14 @@ public class OwnerPanel implements Initializable {
 
             editColumn.setCellFactory(ActionButtonTrigger.<Hotels>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Hotels hotel) -> {
                 try {
-                    SceneController.openNewScene(UploadHotelForm.class, "Edit hotel");
-                    SceneController.getStageAccessTo(UploadHotelForm.class).setUploadAction(EDIT);
-                    SceneController.getStageAccessTo(UploadHotelForm.class).setParentTableView(this.tableView);
-                    SceneController.getStageAccessTo(UploadHotelForm.class).setHotel(hotel);
+                    SceneController.openNewScene(UploadHotelForm.class, "Edit hotel", () -> {
+                        UploadHotelForm uploadHotelForm = SceneController.getStageAccessTo(UploadHotelForm.class);
+                        uploadHotelForm.setUploadAction(EDIT);
+                        uploadHotelForm.setParentTableView(this.tableView);
+                        uploadHotelForm.setHotel(hotel);
+                        uploadHotelForm.uploadInfo();
+                    });
+
                 } catch (IOException excep) {
                     excep.printStackTrace();
                 } catch (NullPointerException excep) {
@@ -148,9 +152,13 @@ public class OwnerPanel implements Initializable {
     @FXML
     private void addHotel() {
         try {
-            SceneController.openNewScene(UploadHotelForm.class, "Add new Hotel");
-            SceneController.getStageAccessTo(UploadHotelForm.class).setUploadAction(INSERT);
-            SceneController.getStageAccessTo(UploadHotelForm.class).setParentTableView(this.tableView);
+            SceneController.openNewScene(UploadHotelForm.class, "Add new Hotel", () -> {
+                UploadHotelForm uploadHotelForm = SceneController.getStageAccessTo(UploadHotelForm.class);
+                uploadHotelForm.setUploadAction(INSERT);
+                uploadHotelForm.setParentTableView(this.tableView);
+                uploadHotelForm.uploadInfo();
+            });
+
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {
