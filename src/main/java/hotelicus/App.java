@@ -1,20 +1,20 @@
 package hotelicus;
 
-import hotelicus.panels.controllers.UserController;
-import hotelicus.panels.controllers.DbController;
-import hotelicus.panels.controllers.LoginController;
-import hotelicus.panels.controllers.SceneController;
+import hotelicus.controllers.extended.Users.UploadUserForm;
+import hotelicus.controllers.extended.Users.UserController;
+import hotelicus.controllers.main.DbController;
 import hotelicus.core.HibernateUtil;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
-import hotelicus.exceptions.DbControllerNullConstructorException;
-import hotelicus.exceptions.SelectNullObjectException;
-import hotelicus.exceptions.UpdateNullObjectException;
+import hotelicus.enums.UploadAction;
+import hotelicus.enums.UserPrivileges;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-
-import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -30,18 +30,26 @@ public final class App extends Application {
     private static Stage stage;
     private static Users loggedUser;
     private static Session session;
+    private static App instance;
+    private static Class type;
     private static ScheduledExecutorService loggedUserPinging;
 
     public App() {
+        App.instance = this;
         App.session = HibernateUtil.getSessionFactory().openSession();
-        App.loggedUserPinging = Executors.newSingleThreadScheduledExecutor();
+        App.type = getClass();
+        App.loggedUserPinging= Executors.newSingleThreadScheduledExecutor();
     }
 
     public static Session getSession() {
         return App.session;
     }
 
-    public static Stage getStage() {
+    public static App getInstance() {
+        return App.instance;
+    }
+
+    private static Stage getStage() {
         return App.stage;
     }
 
@@ -57,7 +65,7 @@ public final class App extends Application {
     public void start(Stage primaryStage) {
         try {
             App.stage = primaryStage;
-
+            App.stage.setResizable(false);
             App.loggedUserPinging.scheduleAtFixedRate(() -> {
                 if (App.loggedUser != null) {
                     DbController<LoggedUsers> setUserLoggedIn = new DbController<LoggedUsers>(LoggedUsers.class);
@@ -65,23 +73,16 @@ public final class App extends Application {
                     result.setLastPinged(new Date());
                     setUserLoggedIn.update(result);
                 }
-            }, 0, 60, TimeUnit.SECONDS);
+            },0,60, TimeUnit.SECONDS);
 
             App.stage.setOnCloseRequest(e -> {
                 Platform.exit();
                 this.loggedUserPinging.shutdown();
             });
 
-            SceneController.changePrimaryScene(LoginController.class, "Login Panel");
-        } catch (IOException excep) {
-            excep.printStackTrace();
-        } catch (SelectNullObjectException excep) {
-            excep.printStackTrace();
-        } catch (DbControllerNullConstructorException excep) {
-            excep.printStackTrace();
-        } catch (UpdateNullObjectException excep) {
-            excep.printStackTrace();
-        } catch (NonUniqueResultException excep) {
+            App.loginWindow();
+            primaryStage.show();
+        } catch (Exception excep) {
             excep.printStackTrace();
         }
     }
@@ -94,7 +95,50 @@ public final class App extends Application {
         App.session.close();
     }
 
+    public static void loginWindow() {
+        try {
+            App.changeScene("login.fxml", "Login");
+        } catch (IOException excep) {
+            excep.printStackTrace();
+        }
+
+    }
+
+    public static void ownerWindow() {
+        try {
+            App.changeScene("ownerpanel.fxml", "OWNER PANEL:");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void adminWindow() {
+        try {
+            App.changeScene("adminpanel.fxml", "ADMIN PANEL");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static void changeScene(String fxml, String title) throws IOException {
+        if (!fxml.isEmpty() && !title.isEmpty()) {
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/templates/" + fxml));
+
+            Parent page = (Parent) fxmlLoader.load();
+            Scene scene = App.stage.getScene();
+
+            if (scene == null) {
+                scene = new Scene(page);
+                App.stage.setScene(scene);
+            } else {
+                App.stage.getScene().setRoot(page);
+            }
+            App.stage.setTitle(title);
+        }
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
+
 }
