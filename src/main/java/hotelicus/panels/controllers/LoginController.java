@@ -3,7 +3,6 @@ package hotelicus.panels.controllers;
 import hotelicus.App;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
-import hotelicus.exceptions.DbControllerNullConstructorException;
 import hotelicus.exceptions.DeleteNullObjectException;
 import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.panels.main.AdminPanel;
@@ -45,11 +44,11 @@ public class LoginController implements Initializable {
     private void loginRouter() {
         try {
             if (formValidation()) {
-                DbController<Users> handleUserRetrieving=new DbController<>(Users.class);
+                DbController<Users> handleUserRetrieving = new DbController<>(Users.class);
                 Users loggedUser = handleUserRetrieving.selectUnique(Restrictions.eq("username", username.getText()), Restrictions.eq("userState", ACTIVE));
 
                 if (loggedUser != null) {
-                    DbController<LoggedUsers> handleLoggedUsers=new DbController<>(LoggedUsers.class);
+                    DbController<LoggedUsers> handleLoggedUsers = new DbController<>(LoggedUsers.class);
                     LoggedUsers result = handleLoggedUsers.selectUnique(Restrictions.eq("loggedUser", loggedUser));
 
                     if (result != null) {
@@ -89,10 +88,10 @@ public class LoginController implements Initializable {
         }
     }
 
-    private boolean formValidation() throws NonUniqueResultException {
+    private boolean formValidation(){
         try {
             if (!username.getText().isEmpty() && !password.getText().isEmpty()) {
-                DbController<Users> retrieveUser=new DbController<>(Users.class);
+                DbController<Users> retrieveUser = new DbController<>(Users.class);
 
                 List<Users> users = retrieveUser.select(Restrictions.eq("username", username.getText()), Restrictions.eq("password", password.getText()));
                 if (users.size() < 1) {

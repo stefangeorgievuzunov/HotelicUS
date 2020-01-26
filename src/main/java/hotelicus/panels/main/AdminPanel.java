@@ -66,17 +66,15 @@ public class AdminPanel implements Initializable {
     @FXML
     private TextField searchUserByName;
 
-    private DbController<Users> users;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            this.users = new DbController<Users>(Users.class);
+            DbController<Users> retrieveUsers = new DbController<Users>(Users.class);
 
             PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
             this.searchUserByName.textProperty().addListener(e -> {
                 pause.setOnFinished(event -> {
-                    List<Users> result = users.select(Restrictions.like("firstName", searchUserByName.getText(), MatchMode.START));
+                    List<Users> result = retrieveUsers.select(Restrictions.like("firstName", searchUserByName.getText(), MatchMode.START));
                     if (!result.isEmpty()) {
                         this.tableView.getItems().clear();
                         result.forEach(user -> this.tableView.getItems().add(user));
@@ -108,7 +106,7 @@ public class AdminPanel implements Initializable {
             editColumn.setCellFactory(ActionButtonTrigger.<Users>forTableColumn("Edit", EDIT_BUTTON_STYLE, tableView, (Users user) -> {
                 try {
                     SceneController.openNewScene(UploadUserForm.class, "Edit user", () -> {
-                        UploadUserForm uploadUserForm= SceneController.getStageAccessTo(UploadUserForm.class);
+                        UploadUserForm uploadUserForm = SceneController.getStageAccessTo(UploadUserForm.class);
                         uploadUserForm.setParentTableView(tableView);
                         uploadUserForm.setPrivileges(OWNER);
                         uploadUserForm.setUploadAction(EDIT);
@@ -149,12 +147,11 @@ public class AdminPanel implements Initializable {
     private void addUser() {
         try {
             SceneController.openNewScene(UploadUserForm.class, "Add new user", () -> {
-                UploadUserForm uploadUserForm= SceneController.getStageAccessTo(UploadUserForm.class);
+                UploadUserForm uploadUserForm = SceneController.getStageAccessTo(UploadUserForm.class);
                 uploadUserForm.setParentTableView(this.tableView);
                 uploadUserForm.setPrivileges(OWNER);
                 uploadUserForm.setUploadAction(INSERT);
             });
-
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {
@@ -166,9 +163,12 @@ public class AdminPanel implements Initializable {
         try {
             Confirmation confirm = new Confirmation("Confirmation", "Do you want to activate this user?");
             if (confirm.getConfirmationResult() == true && user != null) {
+                DbController<Users> activateUser = new DbController<Users>(Users.class);
+                List<Users> users = activateUser.select(Restrictions.eq("privileges", OWNER));
+
                 user.setEndedOn(null);
                 user.setUserState(ACTIVE);
-                this.users.update(user);
+                activateUser.update(user);
                 this.tableView.refresh();
             }
         } catch (UpdateNullObjectException excep) {
@@ -178,12 +178,17 @@ public class AdminPanel implements Initializable {
 
     private void disableUser(Users user) {
         try {
-            LocalDate deletedOn = LocalDate.now();
+
             Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this user?");
             if (confirm.getConfirmationResult() == true && user != null) {
+                DbController<Users> disableUser = new DbController<Users>(Users.class);
+                List<Users> users = disableUser.select(Restrictions.eq("privileges", OWNER));
+
+                LocalDate deletedOn = LocalDate.now();
+
                 user.setEndedOn(deletedOn);
                 user.setUserState(DISABLED);
-                this.users.update(user);
+                disableUser.update(user);
                 this.tableView.refresh();
             }
         } catch (UpdateNullObjectException excep) {
@@ -194,7 +199,10 @@ public class AdminPanel implements Initializable {
     private void loadUsers(UserState userState) {
         try {
             tableView.getItems().clear();
-            List<Users> users = this.users.select(Restrictions.eq("privileges", OWNER));
+
+            DbController<Users> retrieveUsers = new DbController<Users>(Users.class);
+            List<Users> users = retrieveUsers.select(Restrictions.eq("privileges", OWNER));
+
             for (Users user : users) {
                 if (userState == ACTIVE) {
                     if (user.getPrivileges() == OWNER && user.getUserState() == ACTIVE) {
