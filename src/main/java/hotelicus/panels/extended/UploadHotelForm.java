@@ -202,9 +202,12 @@ public class UploadHotelForm implements Initializable {
             SceneController.openNewScene(UploadUserForm.class, "Manager", () -> {
                 UploadUserForm uploadUserForm = SceneController.getStageAccessTo(UploadUserForm.class);
                 uploadUserForm.setHotel(this.hotel);
-                uploadUserForm.setUser(this.hotel.getManager());
+                if(this.hotel.getManager()!=null){
+                    uploadUserForm.setUser(this.hotel.getManager());
+                }
                 uploadUserForm.setPrivileges(MANAGER);
                 uploadUserForm.setUploadAction(INSERT_OR_EDIT);
+                uploadUserForm.uploadInfo();
             });
 
         } catch (IOException excep) {

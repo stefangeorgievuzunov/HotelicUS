@@ -57,7 +57,7 @@ public class LoginController implements Initializable {
                         }
                     }
                     if (!UserController.isUserLoggedIn(loggedUser)) {
-                        App.setLoggedUser(loggedUser);
+                        App. setLoggedUser(loggedUser);
                         UserController.setUserLoggedIn(loggedUser);
 
                         switch (loggedUser.getPrivileges()) {

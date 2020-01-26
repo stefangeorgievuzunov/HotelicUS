@@ -90,9 +90,9 @@ public class OwnerPanel implements Initializable {
 
             statusColumn.setCellFactory(ActionButtonTrigger.<Hotels>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Hotels hotel) -> {
                 if (hotel.getHotelState() == ACTIVE) {
-                    disableHotel(hotel);
+                    changeHotelStatus(hotel, DISABLED);
                 } else {
-                    activateHotel(hotel);
+                    changeHotelStatus(hotel, ACTIVE);
                 }
                 return hotel;
             }));
@@ -148,7 +148,6 @@ public class OwnerPanel implements Initializable {
         UserController.logOut();
     }
 
-
     @FXML
     private void addHotel() {
         try {
@@ -158,7 +157,6 @@ public class OwnerPanel implements Initializable {
                 uploadHotelForm.setParentTableView(this.tableView);
                 uploadHotelForm.uploadInfo();
             });
-
         } catch (IOException excep) {
             excep.printStackTrace();
         } catch (NullPointerException excep) {
@@ -166,40 +164,28 @@ public class OwnerPanel implements Initializable {
         }
     }
 
-    private void activateHotel(Hotels hotel) {
+    private void changeHotelStatus(Hotels hotel, HotelState state) {
         try {
-            Confirmation confirm = new Confirmation("Confirmation", "Do you want to activate this hotel?");
-            if (confirm.getConfirmationResult() == true && hotel != null) {
-                if (hotel.getManager() != null) {
-                    DbController<Users> updateManager = new DbController<Users>(Users.class);
-                    hotel.getManager().setUserState(UserState.ACTIVE);
-                    hotel.getManager().setEndedOn(null);
-                    updateManager.update(hotel.getManager());
-                }
-                hotel.setRemovedOn(null);
-                hotel.setHotelState(ACTIVE);
-                this.hotels.update(hotel);
-                this.tableView.refresh();
-            }
-        } catch (UpdateNullObjectException excep) {
-            excep.printStackTrace();
-        }
-    }
-
-
-    private void disableHotel(Hotels hotel) {
-        try {
-            LocalDate deletedOn = LocalDate.now();
             Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this hotel?");
-            if (confirm.getConfirmationResult() == true && hotel != null) {
+            if (confirm.getConfirmationResult() == true && hotel != null && state != null) {
+                LocalDate deletedOn = LocalDate.now();
                 if (hotel.getManager() != null) {
-                    DbController<Users> updateManager = new DbController<Users>(Users.class);
-                    hotel.getManager().setUserState(UserState.DISABLED);
-                    hotel.getManager().setEndedOn(deletedOn);
+                    DbController<Users> updateManager = new DbController<>(Users.class);
+                    if (state == DISABLED) {
+                        hotel.getManager().setUserState(UserState.DISABLED);
+                        hotel.getManager().setEndedOn(deletedOn);
+                    } else {
+                        hotel.getManager().setUserState(UserState.ACTIVE);
+                        hotel.getManager().setEndedOn(null);
+                    }
                     updateManager.update(hotel.getManager());
                 }
-                hotel.setRemovedOn(deletedOn);
-                hotel.setHotelState(DISABLED);
+                if (state == DISABLED) {
+                    hotel.setRemovedOn(deletedOn);
+                } else {
+                    hotel.setRemovedOn(null);
+                }
+                hotel.setHotelState(state);
                 this.hotels.update(hotel);
                 this.tableView.refresh();
             }

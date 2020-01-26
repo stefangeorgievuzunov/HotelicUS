@@ -96,9 +96,9 @@ public class AdminPanel implements Initializable {
 
             statusColumn.setCellFactory(ActionButtonTrigger.<Users>forTableColumn("Switch", CHANGE_STATUS_BUTTON_STYLE, tableView, (Users user) -> {
                 if (user.getUserState() == ACTIVE) {
-                    disableUser(user);
+                    changeUserStatus(user, DISABLED);
                 } else {
-                    activateUser(user);
+                    changeUserStatus(user, ACTIVE);
                 }
                 return user;
             }));
@@ -159,36 +159,21 @@ public class AdminPanel implements Initializable {
         }
     }
 
-    private void activateUser(Users user) {
+    private void changeUserStatus(Users user, UserState state) {
         try {
-            Confirmation confirm = new Confirmation("Confirmation", "Do you want to activate this user?");
-            if (confirm.getConfirmationResult() == true && user != null) {
-                DbController<Users> activateUser = new DbController<Users>(Users.class);
-                List<Users> users = activateUser.select(Restrictions.eq("privileges", OWNER));
-
-                user.setEndedOn(null);
-                user.setUserState(ACTIVE);
-                activateUser.update(user);
-                this.tableView.refresh();
-            }
-        } catch (UpdateNullObjectException excep) {
-            excep.printStackTrace();
-        }
-    }
-
-    private void disableUser(Users user) {
-        try {
-
             Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this user?");
-            if (confirm.getConfirmationResult() == true && user != null) {
-                DbController<Users> disableUser = new DbController<Users>(Users.class);
-                List<Users> users = disableUser.select(Restrictions.eq("privileges", OWNER));
+            if (confirm.getConfirmationResult() == true && user != null && state != null) {
+                DbController<Users> stateUser = new DbController<Users>(Users.class);
 
-                LocalDate deletedOn = LocalDate.now();
+                if (state == DISABLED) {
+                    LocalDate deletedOn = LocalDate.now();
+                    user.setEndedOn(deletedOn);
+                } else {
+                    user.setEndedOn(null);
+                }
 
-                user.setEndedOn(deletedOn);
-                user.setUserState(DISABLED);
-                disableUser.update(user);
+                user.setUserState(state);
+                stateUser.update(user);
                 this.tableView.refresh();
             }
         } catch (UpdateNullObjectException excep) {
