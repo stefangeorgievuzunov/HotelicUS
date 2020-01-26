@@ -8,6 +8,7 @@ import hotelicus.exceptions.DeleteNullObjectException;
 import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.panels.main.AdminPanel;
 import hotelicus.panels.main.OwnerPanel;
+import hotelicus.panels.main.ReceptionistPanel;
 import hotelicus.window.Error;
 import javafx.fxml.FXML;
 
@@ -34,36 +35,32 @@ public class LoginController implements Initializable {
     private PasswordField password;
     @FXML
     private Button loginButton;
-    private DbController<Users> usersRelated;
-    private DbController<LoggedUsers> handleLoggedUser;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            this.loginButton.setDefaultButton(true);
-            this.usersRelated = new DbController<Users>(Users.class);
-            this.handleLoggedUser = new DbController<LoggedUsers>(LoggedUsers.class);
-        } catch (DbControllerNullConstructorException excep) {
-            excep.printStackTrace();
-        }
+        this.loginButton.setDefaultButton(true);
     }
 
     @FXML
     private void loginRouter() {
         try {
             if (formValidation()) {
+                DbController<Users> handleUserRetrieving=new DbController<>(Users.class);
+                Users loggedUser = handleUserRetrieving.selectUnique(Restrictions.eq("username", username.getText()), Restrictions.eq("userState", ACTIVE));
 
-                Users loggedUser = this.usersRelated.selectUnique(Restrictions.eq("username", username.getText()), Restrictions.eq("userState", ACTIVE));
                 if (loggedUser != null) {
-                    LoggedUsers result = this.handleLoggedUser.selectUnique(Restrictions.eq("loggedUser", loggedUser));
+                    DbController<LoggedUsers> handleLoggedUsers=new DbController<>(LoggedUsers.class);
+                    LoggedUsers result = handleLoggedUsers.selectUnique(Restrictions.eq("loggedUser", loggedUser));
+
                     if (result != null) {
                         if (((new Date().getTime() - result.getLastPinged().getTime()) / 1000) > 60) {
-                            this.handleLoggedUser.delete(result);
+                            handleLoggedUsers.delete(result);
                         }
                     }
                     if (!UserController.isUserLoggedIn(loggedUser)) {
                         App.setLoggedUser(loggedUser);
                         UserController.setUserLoggedIn(loggedUser);
+
                         switch (loggedUser.getPrivileges()) {
                             case ADMIN:
                                 SceneController.changePrimaryScene(AdminPanel.class, "Admin Panel");
@@ -71,6 +68,8 @@ public class LoginController implements Initializable {
                             case OWNER:
                                 SceneController.changePrimaryScene(OwnerPanel.class, "Owner Panel");
                                 break;
+                            case RECEPTIONIST:
+                                SceneController.changePrimaryScene(ReceptionistPanel.class, "Receptionist Panel");
                         }
                     } else {
                         new Error("Login Failed", "User is already logged in ! Try again later.");
@@ -93,8 +92,9 @@ public class LoginController implements Initializable {
     private boolean formValidation() throws NonUniqueResultException {
         try {
             if (!username.getText().isEmpty() && !password.getText().isEmpty()) {
+                DbController<Users> retrieveUser=new DbController<>(Users.class);
 
-                List<Users> users = this.usersRelated.select(Restrictions.eq("username", username.getText()), Restrictions.eq("password", password.getText()));
+                List<Users> users = retrieveUser.select(Restrictions.eq("username", username.getText()), Restrictions.eq("password", password.getText()));
                 if (users.size() < 1) {
                     throw new SelectNullObjectException();
                 } else if (users.size() > 1) {

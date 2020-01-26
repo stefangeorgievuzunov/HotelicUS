@@ -6,6 +6,7 @@ import hotelicus.panels.extended.UploadRoomForm;
 import hotelicus.panels.extended.UploadUserForm;
 import hotelicus.panels.main.AdminPanel;
 import hotelicus.panels.main.OwnerPanel;
+import hotelicus.panels.main.ReceptionistPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,11 +26,13 @@ public class SceneController {
     private static final String OWNER_PANEL_XML = "ownerpanel.fxml";
     private static final String LOGIN_PANEL_XML = "login.fxml";
     private static final String ADMIN_PANEL_XML = "adminpanel.fxml";
+    private static final String RECEPTIONIST_PANEL_XML="receptionistpanel.fxml";
 
     private static final Map<Class<?>, String> XML_RELATIONS = new HashMap<Class<?>, String>() {
         {
             put(OwnerPanel.class, OWNER_PANEL_XML);
             put(AdminPanel.class, ADMIN_PANEL_XML);
+            put(ReceptionistPanel.class,RECEPTIONIST_PANEL_XML);
             put(LoginController.class, LOGIN_PANEL_XML);
             put(UploadHotelForm.class, UPLOAD_HOTEL_FORM_XML);
             put(UploadRoomForm.class, UPLOAD_ROOM_FORM_XML);
