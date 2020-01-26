@@ -37,8 +37,10 @@ public class LoginController implements Initializable {
     private DbController<Users> usersRelated;
     private DbController<LoggedUsers> handleLoggedUser;
 
-    public LoginController() {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
         try {
+            this.loginButton.setDefaultButton(true);
             this.usersRelated = new DbController<Users>(Users.class);
             this.handleLoggedUser = new DbController<LoggedUsers>(LoggedUsers.class);
         } catch (DbControllerNullConstructorException excep) {
@@ -46,15 +48,10 @@ public class LoginController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        this.loginButton.setDefaultButton(true);
-    }
-
     @FXML
     private void loginRouter() {
         try {
-            if (loginValidation(username.getText(), password.getText())) {
+            if (formValidation()) {
 
                 Users loggedUser = this.usersRelated.selectUnique(Restrictions.eq("username", username.getText()), Restrictions.eq("userState", ACTIVE));
                 if (loggedUser != null) {
@@ -93,11 +90,11 @@ public class LoginController implements Initializable {
         }
     }
 
-    private boolean loginValidation(String username, String password) throws NonUniqueResultException {
+    private boolean formValidation() throws NonUniqueResultException {
         try {
-            if (!username.isEmpty() && !password.isEmpty()) {
+            if (!username.getText().isEmpty() && !password.getText().isEmpty()) {
 
-                List<Users> users = this.usersRelated.select(Restrictions.eq("username", username), Restrictions.eq("password", password));
+                List<Users> users = this.usersRelated.select(Restrictions.eq("username", username.getText()), Restrictions.eq("password", password.getText()));
                 if (users.size() < 1) {
                     throw new SelectNullObjectException();
                 } else if (users.size() > 1) {

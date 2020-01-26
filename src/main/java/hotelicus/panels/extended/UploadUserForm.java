@@ -54,58 +54,56 @@ public class UploadUserForm implements Initializable {
     private void uploadRouter() {
         try {
             Confirmation confirm = new Confirmation("Confirmation", "Are you sure you want to save?");
-            if (confirm.getConfirmationResult() == true) {
-                if (this.formValidation()) {
-                    DbController<Users> updateUser = new DbController<Users>(Users.class);
+            if (confirm.getConfirmationResult() == true && this.formValidation()) {
+                DbController<Users> updateUser = new DbController<Users>(Users.class);
 
-                    this.user.setUsername(this.username.getText());
-                    this.user.setPassword(this.password.getText());
-                    this.user.setFirstName(this.firstName.getText());
-                    this.user.setLastName(this.lastName.getText());
-                    this.user.setUserState(UserState.ACTIVE);
-                    this.user.setPrivileges(this.privileges);
+                this.user.setUsername(this.username.getText());
+                this.user.setPassword(this.password.getText());
+                this.user.setFirstName(this.firstName.getText());
+                this.user.setLastName(this.lastName.getText());
+                this.user.setUserState(UserState.ACTIVE);
+                this.user.setPrivileges(this.privileges);
 
-                    if (this.user.getStartedOn() == null) {
-                        LocalDate startedOn = LocalDate.now();
-                        this.user.setStartedOn(startedOn);
-                    }
-                    boolean successfulRecord = true;
+                if (this.user.getStartedOn() == null) {
+                    LocalDate startedOn = LocalDate.now();
+                    this.user.setStartedOn(startedOn);
+                }
+                boolean successfulRecord = true;
 
-                    if (this.uploadAction == EDIT) {
-                        updateUser.update(this.user);
-                    }
+                if (this.uploadAction == EDIT) {
+                    updateUser.update(this.user);
+                }
 
-                    if (this.uploadAction == INSERT) {
-                        try {
-                            updateUser.insert(this.user);
-                            if (this.parentTableView != null) {
-                                this.parentTableView.getItems().add(this.user);
-                            }
-                        } catch (ConstraintViolationException excep) {
-                            successfulRecord = false;
-                            new Error("Upload failed", "Username is busy");
-                            excep.printStackTrace();
-                        }
-                    }
-                    if (this.uploadAction == INSERT_OR_EDIT) {
-                        try {
-                            updateUser.insertOrUpdate(this.user);
-                        } catch (ConstraintViolationException excep) {
-                            successfulRecord = false;
-                            new Error("Upload failed", "Username is busy");
-                            excep.printStackTrace();
-                        }
-                    }
-                    if (successfulRecord) {
-                        if (this.hotel != null&&this.user!=null) {
-                            this.hotel.setManager(this.user);
-                        }
+                if (this.uploadAction == INSERT) {
+                    try {
+                        updateUser.insert(this.user);
                         if (this.parentTableView != null) {
-                            this.parentTableView.refresh();
+                            this.parentTableView.getItems().add(this.user);
                         }
-                        Stage stage = (Stage) saveButton.getScene().getWindow();
-                        stage.close();
+                    } catch (ConstraintViolationException excep) {
+                        successfulRecord = false;
+                        new Error("Upload failed", "Username is busy");
+                        excep.printStackTrace();
                     }
+                }
+                if (this.uploadAction == INSERT_OR_EDIT) {
+                    try {
+                        updateUser.insertOrUpdate(this.user);
+                    } catch (ConstraintViolationException excep) {
+                        successfulRecord = false;
+                        new Error("Upload failed", "Username is busy");
+                        excep.printStackTrace();
+                    }
+                }
+                if (successfulRecord) {
+                    if (this.hotel != null && this.user != null) {
+                        this.hotel.setManager(this.user);
+                    }
+                    if (this.parentTableView != null) {
+                        this.parentTableView.refresh();
+                    }
+                    Stage stage = (Stage) saveButton.getScene().getWindow();
+                    stage.close();
                 }
             }
         } catch (DbControllerNullConstructorException excep) {
@@ -119,7 +117,7 @@ public class UploadUserForm implements Initializable {
         }
     }
 
-    public void uploadUserInfo() {
+    public void uploadInfo() {
         if (this.user.getUsername() != null && this.user.getPassword() != null && this.user.getFirstName() != null && this.user.getLastName() != null) {
             this.username.setText(user.getUsername());
             this.password.setText(user.getPassword());
@@ -133,7 +131,7 @@ public class UploadUserForm implements Initializable {
             if (!this.username.getText().isEmpty() && !this.password.getText().isEmpty() && !this.firstName.getText().isEmpty() && !this.lastName.getText().isEmpty()) {
 
                 DbController<Users> uniqueUser = new DbController<Users>(Users.class);
-                Users testUser = uniqueUser.selectUnique(Restrictions.eq("username", username.getText()));
+                Users testUser = uniqueUser.selectUnique(Restrictions.eq("username", this.username.getText()));
                 if (testUser == null) {
                     return true;
                 }

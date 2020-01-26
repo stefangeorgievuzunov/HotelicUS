@@ -113,7 +113,7 @@ public class AdminPanel implements Initializable {
                         uploadUserForm.setPrivileges(OWNER);
                         uploadUserForm.setUploadAction(EDIT);
                         uploadUserForm.setUser(user);
-                        uploadUserForm.uploadUserInfo();
+                        uploadUserForm.uploadInfo();
                     });
 
                 } catch (IOException excep) {

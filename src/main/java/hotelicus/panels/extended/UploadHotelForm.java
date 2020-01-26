@@ -71,8 +71,12 @@ public class UploadHotelForm implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-
-            this.uploadInfo();
+            if (this.hotel == null) {
+                this.hotel = new Hotels();
+                this.hotel.setHotelState(HotelState.ACTIVE);
+                this.hotel.setCreatedOn(LocalDate.now());
+                this.hotel.setOwner(App.getLoggedUser());
+            }
 
             DbController<Rooms> rooms = new DbController<Rooms>(Rooms.class);
             PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
@@ -120,8 +124,6 @@ public class UploadHotelForm implements Initializable {
                         uploadRoomForm.setRoom(room);
                         uploadRoomForm.uploadInfo();
                     });
-
-
                 } catch (IOException excep) {
                     System.out.println(excep.getMessage());
                 } catch (NullPointerException excep) {
@@ -129,7 +131,6 @@ public class UploadHotelForm implements Initializable {
                 }
                 return room;
             }));
-
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
         } catch (SelectNullObjectException excep) {
@@ -145,24 +146,16 @@ public class UploadHotelForm implements Initializable {
                 if (!this.hotelNameField.getText().isEmpty()) {
                     DbController<Hotels> updateHotel = new DbController<Hotels>(Hotels.class);
 
-                    if (this.hotel == null) {
-                        this.hotel = new Hotels();
-                        this.hotel.setHotelState(HotelState.ACTIVE);
-                        this.hotel.setCreatedOn(LocalDate.now());
-                        this.hotel.setOwner(App.getLoggedUser());
-                    }
-
                     this.hotel.setName(this.hotelNameField.getText());
                     boolean successfulRecord = true;
 
-                    //PROBABLY HAS TO BE INSERT_OR_UPDATE
                     if (this.uploadAction == EDIT) {
                         updateHotel.update(this.hotel);
                     }
 
                     if (this.uploadAction == INSERT) {
                         updateHotel.insert(this.hotel);
-                        this.parentTableView.getItems().add(this.hotel); //probably has to getAccessTo parents table and add/refresh it.
+                        this.parentTableView.getItems().add(this.hotel);
                     }
 
                     if (successfulRecord) {
@@ -192,6 +185,7 @@ public class UploadHotelForm implements Initializable {
             SceneController.openNewScene(UploadRoomForm.class, "Room", () -> {
                 UploadRoomForm uploadRoomForm = SceneController.getStageAccessTo(UploadRoomForm.class);
                 uploadRoomForm.setHotel(this.hotel);
+                uploadRoomForm.setParentTable(this.tableView);
                 uploadRoomForm.setUploadAction(INSERT);
             });
 
@@ -222,16 +216,14 @@ public class UploadHotelForm implements Initializable {
 
     public void uploadInfo() {
         try {
+            this.tableView.getItems().clear();
             if (this.uploadAction == INSERT) {
                 this.addNewRoomButton.setVisible(false);
                 this.manageManagerButton.setVisible(false);
                 this.searchRoomByNumber.setVisible(false);
             }
 
-            this.tableView.getItems().clear();
-
-            if (this.hotel != null) {
-                System.out.println("Heeeeyy maafaka 1");
+            if (this.hotel != null && this.uploadAction == EDIT) {
                 this.hotelNameField.setText(this.hotel.getName());
 
                 DbController<Rooms> loadRooms = new DbController<Rooms>(Rooms.class);
@@ -239,8 +231,6 @@ public class UploadHotelForm implements Initializable {
 
                 if (!result.isEmpty()) {
                     result.forEach(room -> this.tableView.getItems().add(room));
-                }else{
-                    System.out.println("Heeeeyy maafaka 2");
                 }
             }
         } catch (DbControllerNullConstructorException excep) {

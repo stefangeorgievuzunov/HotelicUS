@@ -1,5 +1,6 @@
 package hotelicus.panels.extended;
 
+import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.panels.controllers.DbController;
 import hotelicus.entities.Hotels;
 import hotelicus.entities.Rooms;
@@ -18,8 +19,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.hibernate.NonUniqueResultException;
+import org.hibernate.criterion.Restrictions;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -54,36 +56,27 @@ public class UploadRoomForm implements Initializable {
     public void uploadRouter() {
         try {
             Confirmation confirm = new Confirmation("Confirmation", "Are you sure you want to save?");
-            if (confirm.getConfirmationResult() == true) {
-                if (!this.capacity.getText().isEmpty() && !this.price.getText().isEmpty() && !this.roomNumber.getText().isEmpty() && !this.categoryMenu.getSelectionModel().isEmpty()) {
+            if (confirm.getConfirmationResult() == true && this.formValidation()) {
+                DbController<Rooms> updateRoom = new DbController<Rooms>(Rooms.class);
 
-                    DbController<Rooms> updateRoom = new DbController<Rooms>(Rooms.class);
+                this.room.setCapacity(Integer.parseInt(this.capacity.getText()));
+                this.room.setPrice(Double.parseDouble(this.price.getText()));
+                this.room.setHotel(this.hotel);
+                this.room.setRoomNumber(this.roomNumber.getText());
+                this.room.setCategory(this.categoryMenu.getSelectionModel().getSelectedItem());
 
-                    this.room.setCapacity(Integer.parseInt(this.capacity.getText()));
-                    this.room.setHotel(this.hotel);
-                    this.room.setPrice(Double.parseDouble(this.price.getText()));
-                    this.room.setRoomNumber(this.roomNumber.getText());
-                    this.room.setCategory(this.categoryMenu.getSelectionModel().getSelectedItem());
-                    boolean successfulRecord = true;
-
-                    if (this.uploadAction == EDIT) {
-                        this.parentTable.refresh();
-                        updateRoom.update(this.room);
-                    }
-
-                    if (this.uploadAction == INSERT) {
-                        this.room.setStatus(RoomStatus.FREE);
-                        updateRoom.insert(this.room);
-                        this.parentTable.getItems().add(this.room);
-                    }
-
-                    if (successfulRecord) {
-                        Stage stage = (Stage) saveButton.getScene().getWindow();
-                        stage.close();
-                    }
-                } else {
-                    new Error("Upload failed", "There are empty fields!");
+                if (this.uploadAction == EDIT) {
+                    this.parentTable.refresh();
+                    updateRoom.update(this.room);
                 }
+
+                if (this.uploadAction == INSERT) {
+                    this.room.setStatus(RoomStatus.FREE);
+                    updateRoom.insert(this.room);
+                    this.parentTable.getItems().add(this.room);
+                }
+                Stage stage = (Stage) saveButton.getScene().getWindow();
+                stage.close();
             }
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
@@ -91,6 +84,9 @@ public class UploadRoomForm implements Initializable {
             excep.printStackTrace();
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+        } catch (NumberFormatException excep) {
+            excep.printStackTrace();
+            new Error("Upload failed", "Price and Capacity must be numeric!");
         }
     }
 
@@ -101,6 +97,38 @@ public class UploadRoomForm implements Initializable {
             this.roomNumber.setText(this.room.getRoomNumber());
             this.categoryMenu.setValue(this.room.getCategory());
         }
+    }
+
+    private boolean formValidation() {
+        try {
+            if (!this.capacity.getText().isEmpty() && !this.price.getText().isEmpty() && !this.roomNumber.getText().isEmpty() && !this.categoryMenu.getSelectionModel().isEmpty()) {
+                DbController<Rooms> uniqueRoom = new DbController<>(Rooms.class);
+                Rooms testRoom = uniqueRoom.selectUnique(Restrictions.eq("roomNumber", this.roomNumber.getText()), Restrictions.eq("hotel", this.hotel));
+
+                if (testRoom == null) {
+                    return true;
+                }
+                if (this.room.getRoomNumber() != null) {
+                    if (this.room.getRoomNumber().equals(testRoom.getRoomNumber())) {
+                        return true;
+                    } else {
+                        throw new NonUniqueResultException(0);
+                    }
+                }
+                if (this.roomNumber.getText().equals(testRoom.getRoomNumber())) {
+                    throw new NonUniqueResultException(0);
+                }
+            } else {
+                new Error("Upload failed", "There are empty fields!");
+            }
+        } catch (SelectNullObjectException excep) {
+            excep.printStackTrace();
+        } catch (DbControllerNullConstructorException excep) {
+            excep.printStackTrace();
+        } catch (NonUniqueResultException excep) {
+            new Error("Upload failed", "Room  number already exist !");
+        }
+        return false;
     }
 
     public Hotels getHotel() {
