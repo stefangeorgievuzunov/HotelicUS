@@ -60,17 +60,15 @@ public class OwnerPanel implements Initializable {
     @FXML
     private TextField searchHotelByName;
 
-    private DbController<Hotels> hotels;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            this.hotels = new DbController<Hotels>(Hotels.class);
+            DbController<Hotels> hotels = new DbController<Hotels>(Hotels.class);
 
             PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
             this.searchHotelByName.textProperty().addListener(e -> {
                 pause.setOnFinished(event -> {
-                    List<Hotels> result = this.hotels.select(Restrictions.like("name", searchHotelByName.getText(), MatchMode.START), Restrictions.eq("owner", App.getLoggedUser()));
+                    List<Hotels> result = hotels.select(Restrictions.like("name", searchHotelByName.getText(), MatchMode.START), Restrictions.eq("owner", App.getLoggedUser()));
                     if (!result.isEmpty()) {
                         this.tableView.getItems().clear();
                         result.forEach(hotel -> {
@@ -186,7 +184,8 @@ public class OwnerPanel implements Initializable {
                     hotel.setRemovedOn(null);
                 }
                 hotel.setHotelState(state);
-                this.hotels.update(hotel);
+                DbController<Hotels> hotels = new DbController<Hotels>(Hotels.class);
+                hotels.update(hotel);
                 this.tableView.refresh();
             }
         } catch (UpdateNullObjectException excep) {
@@ -197,15 +196,15 @@ public class OwnerPanel implements Initializable {
     private void loadHotels(HotelState hotelState) {
         try {
             tableView.getItems().clear();
-
+            DbController<Hotels> retrieveHotel = new DbController<Hotels>(Hotels.class);
             List<Hotels> hotels;
             if (hotelState == ACTIVE) {
-                hotels = this.hotels.select(Restrictions.eq("owner", App.getLoggedUser()), Restrictions.eq("hotelState", ACTIVE));
+                hotels = retrieveHotel.select(Restrictions.eq("owner", App.getLoggedUser()), Restrictions.eq("hotelState", ACTIVE));
 
             } else if (hotelState == DISABLED) {
-                hotels = this.hotels.select(Restrictions.eq("owner", App.getLoggedUser()), Restrictions.eq("hotelState", DISABLED));
+                hotels = retrieveHotel.select(Restrictions.eq("owner", App.getLoggedUser()), Restrictions.eq("hotelState", DISABLED));
             } else {
-                hotels = this.hotels.select(Restrictions.eq("owner", App.getLoggedUser()));
+                hotels = retrieveHotel.select(Restrictions.eq("owner", App.getLoggedUser()));
             }
             for (Hotels hotel : hotels) {
                 this.tableView.getItems().add(hotel);

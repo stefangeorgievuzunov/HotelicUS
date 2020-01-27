@@ -27,9 +27,8 @@ public class Clients {
         this.id = id;
     }
 
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @OneToOne
+    @JoinColumn(name="receptionist_id",referencedColumnName = "user_id")
     public Users getCreatedBy() {
         return createdBy;
     }

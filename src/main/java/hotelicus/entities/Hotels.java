@@ -5,6 +5,8 @@ import org.hibernate.mapping.Join;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "hotels")
@@ -17,9 +19,12 @@ public class Hotels {
     private LocalDate createdOn;
     private LocalDate removedOn;
 
-    public Hotels(){
+    private Set<Users> receptionists = new HashSet<>();
+
+    public Hotels() {
         this.setCreatedOn(LocalDate.now());
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hotel_id")
@@ -31,8 +36,22 @@ public class Hotels {
         this.hotelId = hotelId;
     }
 
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "hotel_receptionists",
+            joinColumns = @JoinColumn(name = "hotel", referencedColumnName = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "receptionist", referencedColumnName = "user_id")
+    )
+    public Set<Users> getReceptionists() {
+        return receptionists;
+    }
+
+    public void setReceptionists(Set<Users> receptionists) {
+        this.receptionists = receptionists;
+    }
+
     @OneToOne
-    @JoinColumn(name="user_owner_id",referencedColumnName = "user_id")
+    @JoinColumn(name = "user_owner_id", referencedColumnName = "user_id")
     public Users getOwner() {
         return owner;
     }

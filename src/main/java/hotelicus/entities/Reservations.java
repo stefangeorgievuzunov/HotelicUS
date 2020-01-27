@@ -4,6 +4,8 @@ import hotelicus.enums.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "reservations")
@@ -22,7 +24,6 @@ public class Reservations {
     private LocalDate reservedFrom;
     private LocalDate reservedTo;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
@@ -34,8 +35,8 @@ public class Reservations {
         this.reservationId = reservationId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", referencedColumnName = "hotel_id")
+    @OneToOne
+    @JoinColumn(name = "hotel_fk_id", referencedColumnName = "hotel_id")
     public Hotels getHotel() {
         return hotel;
     }
@@ -44,8 +45,8 @@ public class Reservations {
         this.hotel = hotel;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
+    @OneToOne
+    @JoinColumn(name = "client_fk_id", referencedColumnName = "client_id")
     public Clients getClient() {
         return client;
     }
@@ -54,8 +55,8 @@ public class Reservations {
         this.client = client;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @OneToOne
+    @JoinColumn(name = "receptionist_id", referencedColumnName = "user_id")
     public Users getUser() {
         return user;
     }
@@ -72,7 +73,7 @@ public class Reservations {
     public void setReservationPackage(Packages reservationPackage) {
         this.reservationPackage = reservationPackage;
     }
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "reservation_type")
     public ReservationTypes getReservationType() {
         return reservationType;
@@ -81,7 +82,7 @@ public class Reservations {
     public void setReservationType(ReservationTypes reservationType) {
         this.reservationType = reservationType;
     }
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_type")
     public PaymentTypes getPaymentType() {
         return paymentType;
@@ -90,7 +91,7 @@ public class Reservations {
     public void setPaymentType(PaymentTypes paymentType) {
         this.paymentType = paymentType;
     }
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "canceling_type")
     public ReservationCanceling getCancelingType() {
         return cancelingType;
@@ -99,7 +100,7 @@ public class Reservations {
     public void setCancelingType(ReservationCanceling cancelingType) {
         this.cancelingType = cancelingType;
     }
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "reservation_status")
     public ReservationStatus getReservationStatus() {
         return reservationStatus;
