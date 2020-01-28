@@ -1,5 +1,6 @@
 package hotelicus;
 import hotelicus.core.HibernateUtil;
+import hotelicus.core.LoggerUtil;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
 import hotelicus.panels.controllers.DbController;
@@ -82,6 +83,7 @@ public final class App extends Application {
     }
 
     public static void main(String[] args) {
+        LoggerUtil.init();
         launch(args);
     }
 
