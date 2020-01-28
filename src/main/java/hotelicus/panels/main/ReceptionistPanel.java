@@ -75,21 +75,6 @@ public class ReceptionistPanel implements Initializable {
 
             DbController<Reservations> retrieveReservations = new DbController<>(Reservations.class);
 
-
-            this.expiringReservationsSchedule.scheduleAtFixedRate(() -> {
-                System.out.println("TEST IM HERE NOW");
-                List<Reservations> expiringReservations = retrieveReservations.select(
-                        Restrictions.eq("reservationStatus", ACTIVE),
-                        Restrictions.le("reservedFrom", LocalDate.now()),
-                        Restrictions.ge("reservedTo", LocalDate.now()));
-
-                if (!expiringReservations.isEmpty()) {
-                    System.out.println("TEST IM HERE NOW 2");
-                    this.loadExpiringReservations();
-                }
-            }, 0, 60, TimeUnit.SECONDS);
-
-
             reservedFrom.valueProperty().addListener((ov, oldValue, newValue) -> {
                 this.tableView.getItems().clear();
                 if (!newValue.isAfter(this.reservedTo.getValue())) {
@@ -136,6 +121,18 @@ public class ReceptionistPanel implements Initializable {
             }));
 
             this.uploadAllReservations();
+
+            this.expiringReservationsSchedule.scheduleAtFixedRate(() -> {
+                System.out.println("TEST IM HERE NOW");
+                List<Reservations> expiringReservations = retrieveReservations.select(
+                        Restrictions.eq("reservationStatus", ACTIVE),
+                        Restrictions.le("reservedFrom", LocalDate.now()),
+                        Restrictions.ge("reservedTo", LocalDate.now()));
+
+                if (!expiringReservations.isEmpty()) {
+                    System.out.println("TEST IM HERE NOW 2");
+                }
+            }, 0, 60, TimeUnit.SECONDS);
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
         } catch (SelectNullObjectException excep) {
