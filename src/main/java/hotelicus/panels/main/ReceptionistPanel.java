@@ -15,6 +15,7 @@ import hotelicus.window.Confirmation;
 import hotelicus.window.Error;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,8 +43,7 @@ import java.util.concurrent.TimeUnit;
 import static hotelicus.enums.ReservationCanceling.EMERGENCY;
 import static hotelicus.enums.ReservationCanceling.ON_TIME;
 import static hotelicus.enums.ReservationStatus.*;
-import static hotelicus.styles.Styles.CHANGE_STATUS_BUTTON_STYLE;
-import static hotelicus.styles.Styles.EDIT_BUTTON_STYLE;
+import static hotelicus.styles.Styles.*;
 
 public class ReceptionistPanel implements Initializable {
     @FXML
@@ -74,8 +74,8 @@ public class ReceptionistPanel implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            this.timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> this.notifications.setVisible(false)),
-                    new KeyFrame(Duration.seconds(1.5), e -> this.notifications.setVisible(true)));
+            this.timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> this.notifications.setStyle(NOTIFICATION_BUTTON_STYLE_1)),
+                    new KeyFrame(Duration.seconds(1.5), e -> this.notifications.setStyle(NOTIFICATION_BUTTON_STYLE_2)));
             this.timeline.setCycleCount(Animation.INDEFINITE);
 
             DbController<HotelReceptionists> retrieveHotel = new DbController<>(HotelReceptionists.class);
