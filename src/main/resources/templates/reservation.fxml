@@ -14,88 +14,128 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.panels.extended.UploadReservationForm">
-   <children>
-      <HBox prefHeight="402.0" prefWidth="1200.0">
-         <children>
-            <VBox prefHeight="402.0" prefWidth="348.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reservation Type">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Text>
-                  <ChoiceBox fx:id="reservationType" prefHeight="26.0" prefWidth="349.0">
-                     <VBox.margin>
-                        <Insets right="5.0" />
-                     </VBox.margin></ChoiceBox>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Payment Type">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Text>
-                  <ChoiceBox fx:id="paymentType" prefHeight="26.0" prefWidth="356.0">
-                     <VBox.margin>
-                        <Insets right="5.0" />
-                     </VBox.margin></ChoiceBox>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Canceling Type">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Text>
-                  <ChoiceBox fx:id="cancelingType" prefHeight="26.0" prefWidth="351.0">
-                     <VBox.margin>
-                        <Insets right="5.0" />
-                     </VBox.margin></ChoiceBox>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Services">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Text>
-                  <ListView fx:id="services" prefHeight="323.0" prefWidth="348.0">
-                     <VBox.margin>
-                        <Insets right="5.0" />
-                     </VBox.margin></ListView>
-               </children>
-            </VBox>
-            <TableView  fx:id="clientsTableView" prefHeight="402.0" prefWidth="852.0">
-              <columns>
-                <TableColumn fx:id="clientIdColumn" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="firstNameColumn" prefWidth="177.0" text="First Name" />
-                  <TableColumn fx:id="lastNameColumn" prefWidth="198.0" text="Last Name" />
-                  <TableColumn fx:id="phoneNumberColumn" prefWidth="133.0" text="Phone Number" />
-                  <TableColumn fx:id="clientRateColumn" prefWidth="59.0" text="Rate" />
-                  <TableColumn fx:id="addClientColumn" prefWidth="201.0" text="Action" />
-              </columns>
-            </TableView>
-         </children>
-      </HBox>
-      <Pane layoutY="402.0" prefHeight="402.0" prefWidth="1200.0">
-         <children>
-            <Button fx:id="addNewClient" layoutX="896.0" layoutY="16.0" mnemonicParsing="false" text="New" />
-            <TextField fx:id="paidMoney" layoutX="14.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0" text="123" />
-            <TextField fx:id="totalSum" disable="true" editable="false" layoutX="115.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0" text="123" />
-            <DatePicker fx:id="reserveFrom" layoutX="14.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" />
-            <DatePicker fx:id="reserveTo" layoutX="368.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" />
-            <ChoiceBox fx:id="roomCategory" layoutX="722.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" />
-            <Text layoutX="18.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" />
-            <Text layoutX="368.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To" />
-            <Text layoutX="722.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" />
-            <TableView fx:id="roomsTableView" layoutX="1.0" layoutY="108.0" prefHeight="293.0" prefWidth="1200.0">
-              <columns>
-                <TableColumn fx:id="roomCategoryColumn" prefWidth="231.0" text="Category" />
-                <TableColumn fx:id="roomCapacityColumn" prefWidth="315.0" text="Capacity" />
-                  <TableColumn fx:id="roomNumberColumn" prefWidth="245.0" text="Room Number" />
-                  <TableColumn fx:id="roomPriceColumn" prefWidth="221.0" text="Price Per Night" />
-                  <TableColumn fx:id="takeRoomColumn" prefWidth="174.0" text="Action" />
-              </columns>
-            </TableView>
-            <Text layoutX="14.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paid Money" />
-            <Text layoutX="115.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total" />
-            <Button layoutX="1124.0" layoutY="16.0" mnemonicParsing="false" text="Save" />
-            <TextField fx:id="searchClientByID" layoutX="362.0" layoutY="21.0" prefHeight="26.0" prefWidth="509.0" />
-            <Text layoutX="362.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search by Client ID" />
-         </children>
-      </Pane>
-   </children>
+<?import hotelicus.enums.RoomCategories?>
+<?import javafx.collections.FXCollections?>
+<?import hotelicus.enums.ReservationTypes?>
+<?import hotelicus.enums.PaymentTypes?>
+<?import hotelicus.enums.ReservationCanceling?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
+            prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hotelicus.panels.extended.UploadReservationForm">
+    <children>
+        <HBox prefHeight="402.0" prefWidth="1200.0">
+            <children>
+                <VBox prefHeight="402.0" prefWidth="348.0">
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reservation Type">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="5.0" top="5.0"/>
+                            </VBox.margin>
+                        </Text>
+                        <ChoiceBox fx:id="reservationType" prefHeight="26.0" prefWidth="349.0">
+                            <VBox.margin>
+                                <Insets right="5.0"/>
+                            </VBox.margin>
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <ReservationTypes fx:value="ONLINE"/>
+                                    <ReservationTypes fx:value="ON_PLACE"/>
+                                </FXCollections>
+                            </items>
+                        </ChoiceBox>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Payment Type">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="5.0" top="5.0"/>
+                            </VBox.margin>
+                        </Text>
+                        <ChoiceBox fx:id="paymentType" prefHeight="26.0" prefWidth="356.0">
+                            <VBox.margin>
+                                <Insets right="5.0"/>
+                            </VBox.margin>
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <PaymentTypes fx:value="CASH"/>
+                                    <PaymentTypes fx:value="CREDIT_CARD"/>
+                                </FXCollections>
+                            </items>
+                        </ChoiceBox>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Canceling Type">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="5.0" top="5.0"/>
+                            </VBox.margin>
+                        </Text>
+                        <ChoiceBox fx:id="cancelingType" prefHeight="26.0" prefWidth="351.0">
+                            <VBox.margin>
+                                <Insets right="5.0"/>
+                            </VBox.margin>
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <ReservationCanceling fx:value="ON_TIME"/>
+                                    <ReservationCanceling fx:value="EMERGENCY"/>
+                                </FXCollections>
+                            </items>
+                        </ChoiceBox>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Services">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="5.0" top="5.0"/>
+                            </VBox.margin>
+                        </Text>
+                        <ListView fx:id="services" prefHeight="323.0" prefWidth="348.0">
+                            <VBox.margin>
+                                <Insets right="5.0"/>
+                            </VBox.margin>
+                        </ListView>
+                    </children>
+                </VBox>
+                <TableView fx:id="clientsTableView" prefHeight="402.0" prefWidth="852.0">
+                    <columns>
+                        <TableColumn fx:id="clientIdColumn" prefWidth="75.0" text="ID"/>
+                        <TableColumn fx:id="firstNameColumn" prefWidth="177.0" text="First Name"/>
+                        <TableColumn fx:id="lastNameColumn" prefWidth="198.0" text="Last Name"/>
+                        <TableColumn fx:id="phoneNumberColumn" prefWidth="133.0" text="Phone Number"/>
+                        <TableColumn fx:id="clientRateColumn" prefWidth="59.0" text="Rate"/>
+                        <TableColumn fx:id="addClientColumn" prefWidth="201.0" text="Action"/>
+                    </columns>
+                </TableView>
+            </children>
+        </HBox>
+        <Pane layoutY="402.0" prefHeight="402.0" prefWidth="1200.0">
+            <children>
+                <Button fx:id="addNewClient" layoutX="896.0" layoutY="16.0" mnemonicParsing="false" text="New"/>
+                <TextField fx:id="paidMoney" layoutX="14.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0"
+                           text="123"/>
+                <TextField fx:id="totalSum" disable="true" editable="false" layoutX="115.0" layoutY="20.0"
+                           prefHeight="26.0" prefWidth="87.0" text="123"/>
+                <DatePicker fx:id="reserveFrom" layoutX="14.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0"/>
+                <DatePicker fx:id="reserveTo" layoutX="368.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0"/>
+                <ChoiceBox fx:id="roomCategory" layoutX="722.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <RoomCategories fx:value="SINGLE"/>
+                            <RoomCategories fx:value="COUPLE"/>
+                            <RoomCategories fx:value="FAMILY"/>
+                            <RoomCategories fx:value="VIP"/>
+                        </FXCollections>
+                    </items>
+                </ChoiceBox>
+                <Text layoutX="18.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From"/>
+                <Text layoutX="368.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To"/>
+                <Text layoutX="722.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category"/>
+                <TableView fx:id="roomsTableView" layoutX="1.0" layoutY="108.0" prefHeight="293.0" prefWidth="1200.0">
+                    <columns>
+                        <TableColumn fx:id="roomCategoryColumn" prefWidth="231.0" text="Category"/>
+                        <TableColumn fx:id="roomCapacityColumn" prefWidth="315.0" text="Capacity"/>
+                        <TableColumn fx:id="roomNumberColumn" prefWidth="245.0" text="Room Number"/>
+                        <TableColumn fx:id="roomPriceColumn" prefWidth="221.0" text="Price Per Night"/>
+                        <TableColumn fx:id="takeRoomColumn" prefWidth="174.0" text="Action"/>
+                    </columns>
+                </TableView>
+                <Text layoutX="14.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paid Money"/>
+                <Text layoutX="115.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total"/>
+                <Button layoutX="1124.0" layoutY="16.0" mnemonicParsing="false" text="Save"/>
+                <TextField fx:id="searchClientByID" layoutX="362.0" layoutY="21.0" prefHeight="26.0" prefWidth="509.0"/>
+                <Text layoutX="362.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search by Client ID"/>
+            </children>
+        </Pane>
+    </children>
 </AnchorPane>

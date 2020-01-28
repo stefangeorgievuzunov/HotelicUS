@@ -3,9 +3,12 @@ package hotelicus.panels.extended;
 import hotelicus.entities.*;
 import hotelicus.enums.ReservationTypes;
 import hotelicus.enums.RoomCategories;
+import hotelicus.exceptions.SelectNullObjectException;
+import hotelicus.exceptions.UpdateNullObjectException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -61,11 +64,35 @@ public class UploadReservationForm implements Initializable {
     private Button addNewClient;
 
     private TableView<Reservations> parentTableView;
+    private Hotels hotel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.addNewClient.setVisible(false);
+        try {
+            this.addNewClient.setVisible(false);
 
+            clientIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+            firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+            lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+            phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+            clientRateColumn.setCellValueFactory(new PropertyValueFactory<>("rate"));
+            addClientColumn.setCellValueFactory(new PropertyValueFactory<>("id")); //button
+
+            roomCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("roomId"));
+            roomCapacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
+            roomNumberColumn.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
+            roomPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+            takeRoomColumn.setCellValueFactory(new PropertyValueFactory<>("rate")); //button
+
+
+
+        } catch (UpdateNullObjectException excep) {
+            excep.printStackTrace();
+        } catch (SelectNullObjectException excep) {
+            excep.printStackTrace();
+        } catch (NullPointerException excep) {
+            excep.printStackTrace();
+        }
 
 
     }
