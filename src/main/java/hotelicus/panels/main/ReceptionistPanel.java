@@ -21,8 +21,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Duration;
 
+import javafx.util.Duration;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.criterion.Restrictions;
 
@@ -63,11 +63,15 @@ public class ReceptionistPanel implements Initializable {
     @FXML
     private DatePicker reservedTo;
     private Hotels hotel;
+    private Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> this.notifications.setVisible(false)),
+            new KeyFrame(Duration.seconds(1.5), e -> this.notifications.setVisible(true)));
+
     private ScheduledExecutorService expiringReservationsSchedule = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            this.timeline.setCycleCount(Animation.INDEFINITE);
 
             DbController<HotelReceptionists> retrieveHotel = new DbController<>(HotelReceptionists.class);
             HotelReceptionists record = retrieveHotel.selectUnique(Restrictions.eq("receptionist", App.getLoggedUser()));
@@ -123,16 +127,23 @@ public class ReceptionistPanel implements Initializable {
             this.uploadAllReservations();
 
             this.expiringReservationsSchedule.scheduleAtFixedRate(() -> {
-                System.out.println("TEST IM HERE NOW");
                 List<Reservations> expiringReservations = retrieveReservations.select(
                         Restrictions.eq("reservationStatus", ACTIVE),
                         Restrictions.le("reservedFrom", LocalDate.now()),
-                        Restrictions.ge("reservedTo", LocalDate.now()));
+                        Restrictions.ge("reservedTo", LocalDate.now()),
+                        Restrictions.eq("paidMoney", 0.0));
 
                 if (!expiringReservations.isEmpty()) {
-                    System.out.println("TEST IM HERE NOW 2");
+                    DbController<Clients> updateClientsRate = new DbController<>(Clients.class);
+                    for (Reservations r : expiringReservations) {
+                        Clients badClient = r.getClient();
+                        badClient.setRate(badClient.getRate() - 0.5);
+                        updateClientsRate.update(badClient);
+                    }
+
+                    this.timeline.play();
                 }
-            }, 0, 60, TimeUnit.SECONDS);
+            }, 0, 60, TimeUnit.SECONDS); //have to be changed to 12hours or 24 hours.
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
         } catch (SelectNullObjectException excep) {
@@ -159,24 +170,17 @@ public class ReceptionistPanel implements Initializable {
     @FXML
     private void loadExpiringReservations() {
         try {
+            this.timeline.stop();
+            this.tableView.getItems().clear();
             DbController<Reservations> retrieveExpiringReservations = new DbController<>(Reservations.class);
             List<Reservations> expiringReservations = retrieveExpiringReservations.select(
                     Restrictions.eq("reservationStatus", ACTIVE),
                     Restrictions.le("reservedFrom", LocalDate.now()),
-                    Restrictions.ge("reservedTo", LocalDate.now()));
+                    Restrictions.ge("reservedTo", LocalDate.now()),
+                    Restrictions.eq("paidMoney", 0.0));
 
             if (!expiringReservations.isEmpty()) {
-                this.tableView.getItems().clear();
-
-                for (Reservations r : expiringReservations) {
-                    Clients badClient = r.getClient();
-                    if (r.getPaidMoney() < r.getTotalSum()) {
-                        DbController<Clients> updateClientsRate = new DbController<>(Clients.class);
-                        badClient.setRate(badClient.getRate() - 0.5);
-                        updateClientsRate.update(badClient);
-                    }
-                    this.tableView.getItems().add(r);
-                }
+                expiringReservations.forEach(r -> this.tableView.getItems().add(r));
             }
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
@@ -189,10 +193,11 @@ public class ReceptionistPanel implements Initializable {
             if (confirm.getConfirmationResult() == true && reservation != null) {
                 DbController<Reservations> updateReservation = new DbController<>(Reservations.class);
                 DbController<Register> updateRegister = new DbController<>(Register.class);
+                DbController<Clients> updateClientsRate = new DbController<>(Clients.class);
 
                 LocalDate today = LocalDate.now();
 
-                if (reservation.getPaidMoney() > 0 && today.isBefore(reservation.getReservedFrom())) {
+                if (reservation.getPaidMoney() > 0) {
                     Register register = new Register();
                     register.setCreatedOn(today);
                     register.setReservation(reservation);
@@ -200,12 +205,10 @@ public class ReceptionistPanel implements Initializable {
                     updateRegister.insert(register);
                 }
 
-                if (reservation.getPaidMoney() < reservation.getTotalSum()) {
-                    DbController<Clients> updateClientsRate = new DbController<>(Clients.class);
-                    Clients badClient = reservation.getClient();
-                    badClient.setRate(badClient.getRate() - 1);
-                    updateClientsRate.update(badClient);
-                }
+                Clients badClient = reservation.getClient();
+                badClient.setRate(badClient.getRate() - 1);
+                updateClientsRate.update(badClient);
+
                 reservation.setReservationStatus(ABORTED);
                 reservation.setCancelingType(EMERGENCY);
                 updateReservation.update(reservation);
@@ -246,9 +249,14 @@ public class ReceptionistPanel implements Initializable {
                             badClientRate.update(badClient);
                         }
                     } else {
-                        register.setStatus(EXPIRED);
-                        reservation.setReservationStatus(EXPIRED);
-                        reservation.setCancelingType(ON_TIME);
+                        if (reservation.getPaidMoney() == reservation.getTotalSum()) {
+                            register.setStatus(EXPIRED);
+                            reservation.setReservationStatus(EXPIRED);
+                            reservation.setCancelingType(ON_TIME);
+                        } else {
+                            new Error("Upload failed", "Paid money must be full price !");
+                            throw new UpdateNullObjectException();
+                        }
                     }
 
                     updateReservation.update(reservation);
