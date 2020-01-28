@@ -2,6 +2,7 @@ package hotelicus.panels.controllers;
 
 import hotelicus.App;
 import hotelicus.panels.extended.UploadHotelForm;
+import hotelicus.panels.extended.UploadReservationForm;
 import hotelicus.panels.extended.UploadRoomForm;
 import hotelicus.panels.extended.UploadUserForm;
 import hotelicus.panels.main.AdminPanel;
@@ -23,6 +24,7 @@ public class SceneController {
     private static final String UPLOAD_ROOM_FORM_XML = "room.fxml";
     private static final String UPLOAD_USER_FORM_XML = "edit.fxml";
     private static final String UPLOAD_HOTEL_FORM_XML = "hotel.fxml";
+    private static final String UPLOAD_RESERVATION_FORM_XML="reservation.fxml";
     private static final String OWNER_PANEL_XML = "ownerpanel.fxml";
     private static final String LOGIN_PANEL_XML = "login.fxml";
     private static final String ADMIN_PANEL_XML = "adminpanel.fxml";
@@ -37,6 +39,7 @@ public class SceneController {
             put(UploadHotelForm.class, UPLOAD_HOTEL_FORM_XML);
             put(UploadRoomForm.class, UPLOAD_ROOM_FORM_XML);
             put(UploadUserForm.class, UPLOAD_USER_FORM_XML);
+            put(UploadReservationForm.class,UPLOAD_RESERVATION_FORM_XML);
         }
     };
 

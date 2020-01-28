@@ -7,8 +7,10 @@ import hotelicus.exceptions.InsertNullObjectException;
 import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.exceptions.UpdateNullObjectException;
 import hotelicus.panels.controllers.DbController;
+import hotelicus.panels.controllers.SceneController;
 import hotelicus.panels.controllers.UserController;
 import hotelicus.panels.extended.ActionButtonTrigger;
+import hotelicus.panels.extended.UploadReservationForm;
 import hotelicus.window.Confirmation;
 import hotelicus.window.Error;
 import javafx.animation.Animation;
@@ -16,6 +18,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -26,6 +29,7 @@ import javafx.util.Duration;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.criterion.Restrictions;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 
@@ -63,14 +67,15 @@ public class ReceptionistPanel implements Initializable {
     @FXML
     private DatePicker reservedTo;
     private Hotels hotel;
-    private Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> this.notifications.setVisible(false)),
-            new KeyFrame(Duration.seconds(1.5), e -> this.notifications.setVisible(true)));
+    private Timeline timeline;
 
     private ScheduledExecutorService expiringReservationsSchedule = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            this.timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> this.notifications.setVisible(false)),
+                    new KeyFrame(Duration.seconds(1.5), e -> this.notifications.setVisible(true)));
             this.timeline.setCycleCount(Animation.INDEFINITE);
 
             DbController<HotelReceptionists> retrieveHotel = new DbController<>(HotelReceptionists.class);
@@ -81,7 +86,7 @@ public class ReceptionistPanel implements Initializable {
 
             reservedFrom.valueProperty().addListener((ov, oldValue, newValue) -> {
                 this.tableView.getItems().clear();
-                if (!newValue.isAfter(this.reservedTo.getValue())) {
+                if (!newValue.isAfter(this.reservedTo.getValue()) && this.reservedTo.getValue() != null) {
                     List<Reservations> allReservations = retrieveReservations.select(Restrictions.eq("hotel", this.hotel), Restrictions.eq("reservationStatus", ACTIVE),
                             Restrictions.or(
                                     Restrictions.between("reservedFrom", newValue, this.reservedTo.getValue()),
@@ -97,7 +102,7 @@ public class ReceptionistPanel implements Initializable {
 
             reservedTo.valueProperty().addListener((ov, oldValue, newValue) -> {
                 this.tableView.getItems().clear();
-                if (!newValue.isBefore(this.reservedFrom.getValue())) {
+                if (!newValue.isBefore(this.reservedFrom.getValue()) && this.reservedFrom.getValue() != null) {
                     List<Reservations> allReservations = retrieveReservations.select(Restrictions.eq("hotel", this.hotel), Restrictions.eq("reservationStatus", ACTIVE),
                             Restrictions.or(
                                     Restrictions.between("reservedFrom", this.reservedFrom.getValue(), newValue),
@@ -147,6 +152,21 @@ public class ReceptionistPanel implements Initializable {
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
         } catch (SelectNullObjectException excep) {
+            excep.printStackTrace();
+        } catch (NullPointerException excep) {
+            excep.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void addReservation() {
+        try {
+            SceneController.openNewScene(UploadReservationForm.class, "Add new reservation", () -> {
+
+            });
+        } catch (IOException excep) {
+            excep.printStackTrace();
+        } catch (NullPointerException excep) {
             excep.printStackTrace();
         }
     }
@@ -274,8 +294,13 @@ public class ReceptionistPanel implements Initializable {
         }
     }
 
+    public ScheduledExecutorService getExpiringReservationsSchedule() {
+        return expiringReservationsSchedule;
+    }
+
     @FXML
     private void logOut() {
+        this.expiringReservationsSchedule.shutdown();
         UserController.logOut();
     }
 }

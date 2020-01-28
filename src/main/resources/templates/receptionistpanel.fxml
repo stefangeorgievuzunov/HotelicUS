@@ -22,7 +22,7 @@
                         <Insets left="10.0"/>
                     </VBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="167.0" text="Add new" VBox.vgrow="ALWAYS">
+                <Button mnemonicParsing="false" onAction="#addReservation" prefHeight="32.0" prefWidth="167.0" text="Add new" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets left="10.0"/>
                     </VBox.margin>

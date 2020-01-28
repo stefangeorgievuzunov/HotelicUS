@@ -6,6 +6,7 @@ import hotelicus.panels.controllers.DbController;
 import hotelicus.panels.controllers.LoginController;
 import hotelicus.panels.controllers.SceneController;
 import hotelicus.panels.controllers.UserController;
+import hotelicus.panels.main.ReceptionistPanel;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -59,8 +60,11 @@ public final class App extends Application {
             },0,60, TimeUnit.SECONDS);
 
             App.stage.setOnCloseRequest(e -> {
-                Platform.exit();
+                if(SceneController.getStageAccessTo(ReceptionistPanel.class)!=null){
+                    SceneController.getStageAccessTo(ReceptionistPanel.class).getExpiringReservationsSchedule().shutdown();
+                }
                 this.loggedUserPinging.shutdown();
+                Platform.exit();
             });
 
             SceneController.changePrimaryScene(LoginController.class,"Login Panel");
