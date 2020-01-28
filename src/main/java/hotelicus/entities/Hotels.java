@@ -19,7 +19,6 @@ public class Hotels {
     private LocalDate createdOn;
     private LocalDate removedOn;
 
-    private Set<Users> receptionists = new HashSet<>();
 
     public Hotels() {
         this.setCreatedOn(LocalDate.now());
@@ -34,20 +33,6 @@ public class Hotels {
 
     public void setHotelId(Integer hotelId) {
         this.hotelId = hotelId;
-    }
-
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "hotel_receptionists",
-            joinColumns = @JoinColumn(name = "hotel", referencedColumnName = "hotel_id"),
-            inverseJoinColumns = @JoinColumn(name = "receptionist", referencedColumnName = "user_id")
-    )
-    public Set<Users> getReceptionists() {
-        return receptionists;
-    }
-
-    public void setReceptionists(Set<Users> receptionists) {
-        this.receptionists = receptionists;
     }
 
     @OneToOne

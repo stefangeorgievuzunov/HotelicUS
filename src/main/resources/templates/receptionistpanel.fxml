@@ -16,7 +16,7 @@
     <children>
         <VBox prefHeight="606.0" prefWidth="156.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="163.0" text="All"
+                <Button mnemonicParsing="false" onAction="#uploadAllReservations" prefHeight="32.0" prefWidth="163.0" text="All"
                         VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets left="10.0"/>
@@ -27,12 +27,12 @@
                         <Insets left="10.0"/>
                     </VBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="169.0" text="Expiring" VBox.vgrow="ALWAYS">
+                <Button fx:id="notifications" onAction="#loadExpiringReservations" mnemonicParsing="false" prefHeight="32.0" prefWidth="169.0" text="notifications" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets left="10.0"/>
                     </VBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="168.0" text="Waiting" VBox.vgrow="ALWAYS">
+                <Button mnemonicParsing="false" onAction="#logOut" prefHeight="32.0" prefWidth="168.0" text="Log out" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets left="10.0"/>
                     </VBox.margin>
@@ -75,7 +75,8 @@
                         <TableColumn fx:id="createdOnColumn" prefWidth="170.0" text="Created on"/>
                         <TableColumn fx:id="reservedFromColumn" prefWidth="134.0" text="Reserverd from"/>
                         <TableColumn fx:id="reservedToColumn" prefWidth="123.0" text="Reserved to"/>
-                        <TableColumn fx:id="abortColumn" prefWidth="127.0" text="Action"/>
+                        <TableColumn fx:id="abortColumn" prefWidth="127.0" text="Abort"/>
+                        <TableColumn fx:id="registerColumn" prefWidth="127.0" text="Register"/>
                     </columns>
                     <VBox.margin>
                         <Insets left="10.0" right="10.0"/>

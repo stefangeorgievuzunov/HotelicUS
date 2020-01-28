@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="reservations_rooms")
-public class ReservationRooms implements Serializable {
+@Table(name="reservation_services")
+public class ReservationServices implements Serializable {
     private Reservations reservation;
-    private Rooms room;
+    private Services service;
 
     @Id
     @OneToOne
@@ -22,12 +22,12 @@ public class ReservationRooms implements Serializable {
 
     @Id
     @OneToOne
-    @JoinColumn(name = "room", referencedColumnName = "room_id")
-    public Rooms getRoom() {
-        return room;
+    @JoinColumn(name = "service", referencedColumnName = "service_id")
+    public Services getService() {
+        return service;
     }
 
-    public void setRoom(Rooms room) {
-        this.room = room;
+    public void setService(Services service) {
+        this.service = service;
     }
 }

@@ -12,12 +12,14 @@
         <property name="show_sql">true</property>
         <mapping class="hotelicus.entities.Clients"/>
         <mapping class="hotelicus.entities.Hotels"/>
-        <mapping class="hotelicus.entities.Reports"/>
         <mapping class="hotelicus.entities.Reservations"/>
         <mapping class="hotelicus.entities.Rooms"/>
         <mapping class="hotelicus.entities.Services"/>
         <mapping class="hotelicus.entities.Users"/>
         <mapping class="hotelicus.entities.LoggedUsers"/>
         <mapping class="hotelicus.entities.HotelReceptionists"/>
+        <mapping class="hotelicus.entities.Register"/>
+        <mapping class="hotelicus.entities.ReservationRooms"/>
+        <mapping class="hotelicus.entities.ReservationServices"/>
     </session-factory>
 </hibernate-configuration>

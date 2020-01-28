@@ -14,16 +14,19 @@ public class Reservations {
     private Hotels hotel;
     private Clients client;
     private Users user;
-    private Packages reservationPackage;
     private ReservationTypes reservationType;
     private PaymentTypes paymentType;
     private ReservationCanceling cancelingType;
     private Double paidMoney;
+    private Double totalSum;
     private ReservationStatus reservationStatus;
     private LocalDate createdOn;
     private LocalDate reservedFrom;
     private LocalDate reservedTo;
 
+    public Reservations(){
+        this.paidMoney=0.0;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
@@ -65,14 +68,6 @@ public class Reservations {
         this.user = user;
     }
 
-    @Column(name = "package")
-    public Packages getReservationPackage() {
-        return reservationPackage;
-    }
-
-    public void setReservationPackage(Packages reservationPackage) {
-        this.reservationPackage = reservationPackage;
-    }
     @Enumerated(EnumType.STRING)
     @Column(name = "reservation_type")
     public ReservationTypes getReservationType() {
@@ -144,5 +139,14 @@ public class Reservations {
 
     public void setReservedTo(LocalDate reservedTo) {
         this.reservedTo = reservedTo;
+    }
+
+    @Column(name="total_sum")
+    public Double getTotalSum() {
+        return totalSum;
+    }
+
+    public void setTotalSum(Double totalSum) {
+        this.totalSum = totalSum;
     }
 }

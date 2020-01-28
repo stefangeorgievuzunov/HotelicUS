@@ -13,8 +13,12 @@ public class Clients {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private Float rate;
+    private Double rate;
     private LocalDate createdOn;
+
+    public Clients(){
+        this.rate=5.0;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,11 +69,11 @@ public class Clients {
     }
 
     @Column(name = "rate")
-    public Float getRate() {
+    public Double getRate() {
         return rate;
     }
 
-    public void setRate(Float rate) {
+    public void setRate(Double rate) {
         this.rate = rate;
     }
 
