@@ -5,81 +5,66 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-            prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.panels.main.ReceptionistPanel">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.panels.main.ReceptionistPanel">
     <children>
         <VBox prefHeight="606.0" prefWidth="156.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#uploadAllReservations" prefHeight="32.0" prefWidth="163.0" text="All"
-                        VBox.vgrow="ALWAYS">
+                <Button mnemonicParsing="false" onAction="#uploadAllReservations" prefHeight="150.0" prefWidth="159.0" text="All" VBox.vgrow="ALWAYS" textFill="WHITE" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;">
                     <VBox.margin>
-                        <Insets left="10.0"/>
+                        <Insets />
                     </VBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#addReservation" prefHeight="32.0" prefWidth="167.0" text="Add new" VBox.vgrow="ALWAYS">
+                <Button mnemonicParsing="false" onAction="#addReservation" prefHeight="150.0" prefWidth="167.0" text="Add new" VBox.vgrow="ALWAYS" textFill="WHITE" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;">
                     <VBox.margin>
-                        <Insets left="10.0"/>
+                        <Insets />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="notifications" onAction="#loadExpiringReservations" mnemonicParsing="false" prefHeight="32.0" prefWidth="169.0" text="notifications" VBox.vgrow="ALWAYS">
+                <Button fx:id="notifications" mnemonicParsing="false" onAction="#loadExpiringReservations" prefHeight="150.0" prefWidth="169.0" text="notifications" textFill="WHITE" VBox.vgrow="ALWAYS" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;">
                     <VBox.margin>
-                        <Insets left="10.0"/>
+                        <Insets />
                     </VBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#logOut" prefHeight="32.0" prefWidth="168.0" text="Log out" VBox.vgrow="ALWAYS">
+                <Button mnemonicParsing="false" onAction="#logOut" prefHeight="150.0" prefWidth="168.0" text="Log out" VBox.vgrow="ALWAYS" textFill="WHITE" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;">
                     <VBox.margin>
-                        <Insets left="10.0"/>
+                        <Insets />
                     </VBox.margin>
                 </Button>
             </children>
         </VBox>
         <VBox layoutX="156.0" prefHeight="600.0" prefWidth="941.0">
             <children>
-                <HBox prefHeight="38.0" prefWidth="946.0">
-                    <children>
-                        <TextField prefHeight="33.0" prefWidth="831.0">
-                            <HBox.margin>
-                                <Insets left="10.0" right="10.0"/>
-                            </HBox.margin>
-                        </TextField>
-                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="122.0" text="Notifications">
-                            <HBox.margin>
-                                <Insets right="10.0"/>
-                            </HBox.margin>
-                        </Button>
-                    </children>
-                </HBox>
                 <HBox prefHeight="31.0" prefWidth="941.0">
                     <children>
                         <DatePicker fx:id="reservedFrom" prefHeight="26.0" prefWidth="441.0">
                             <HBox.margin>
-                                <Insets left="10.0" right="5.0"/>
+                                <Insets left="10.0" right="5.0" />
                             </HBox.margin>
                         </DatePicker>
                         <DatePicker fx:id="reservedTo" prefHeight="26.0" prefWidth="469.0">
                             <HBox.margin>
-                                <Insets left="5.0" right="10.0"/>
+                                <Insets left="5.0" right="10.0" />
                             </HBox.margin>
                         </DatePicker>
                     </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
                 </HBox>
                 <TableView fx:id="tableView" prefHeight="513.0" prefWidth="941.0" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="reservationIdColumn" prefWidth="36.0" text="ID"/>
-                        <TableColumn fx:id="createdOnColumn" prefWidth="170.0" text="Created on"/>
-                        <TableColumn fx:id="reservedFromColumn" prefWidth="134.0" text="Reserverd from"/>
-                        <TableColumn fx:id="reservedToColumn" prefWidth="123.0" text="Reserved to"/>
-                        <TableColumn fx:id="abortColumn" prefWidth="127.0" text="Abort"/>
-                        <TableColumn fx:id="registerColumn" prefWidth="127.0" text="Register"/>
+                        <TableColumn fx:id="reservationIdColumn" prefWidth="36.0" text="ID" />
+                        <TableColumn fx:id="createdOnColumn" prefWidth="170.0" text="Created on" />
+                        <TableColumn fx:id="reservedFromColumn" prefWidth="134.0" text="Reserverd from" />
+                        <TableColumn fx:id="reservedToColumn" prefWidth="123.0" text="Reserved to" />
+                        <TableColumn fx:id="abortColumn" prefWidth="127.0" text="Abort" />
+                        <TableColumn fx:id="registerColumn" prefWidth="127.0" text="Register" />
                     </columns>
                     <VBox.margin>
-                        <Insets left="10.0" right="10.0"/>
+                        <Insets left="10.0" right="10.0" />
                     </VBox.margin>
                 </TableView>
             </children>
