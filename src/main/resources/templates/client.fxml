@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="340.0" style="-fx-background-color: #8d99ae;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.panels.extended.UploadClientForm">
+    <children>
+        <Label text="Client ID" textFill="WHITE">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+        <TextField fx:id="clientId" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+        <Label text="First Name" textFill="WHITE">
+            <VBox.margin>
+                <Insets top="20.0" />
+            </VBox.margin>
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+        <TextField fx:id="firstName" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+        <Label text="Last Name" textFill="WHITE">
+            <VBox.margin>
+                <Insets top="20.0" />
+            </VBox.margin>
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+        <TextField fx:id="lastName" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+        <Label text="Phone number" textFill="WHITE">
+            <VBox.margin>
+                <Insets top="20.0" />
+            </VBox.margin>
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+        <TextField fx:id="phoneNumber" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+        <Button fx:id="saveButton" onAction="#uploadRouter" mnemonicParsing="false" prefHeight="32.0" prefWidth="76.0" style="-fx-background-color: #d80032;-fx-font-weight: bold;" text="Save" textFill="WHITE" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets top="20.0" />
+            </VBox.margin>
+        </Button>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

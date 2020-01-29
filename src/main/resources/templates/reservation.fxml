@@ -101,7 +101,7 @@
         </HBox>
         <Pane layoutY="402.0" prefHeight="402.0" prefWidth="1200.0">
             <children>
-                <Button fx:id="addNewClient" layoutX="896.0" layoutY="16.0" mnemonicParsing="false" text="New"/>
+                <Button fx:id="addNewClient" onAction="#uploadClientForm" layoutX="896.0" layoutY="16.0" mnemonicParsing="false" text="New"/>
                 <TextField fx:id="paidMoney" layoutX="14.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0"
                            text="123"/>
                 <TextField fx:id="totalSum" disable="true" editable="false" layoutX="115.0" layoutY="20.0"
@@ -132,7 +132,7 @@
                 </TableView>
                 <Text layoutX="14.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paid Money"/>
                 <Text layoutX="115.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total"/>
-                <Button layoutX="1124.0" layoutY="16.0" mnemonicParsing="false" text="Save"/>
+                <Button fx:id="saveButton" onAction="#uploadRouter" layoutX="1124.0" layoutY="16.0" mnemonicParsing="false" text="Save"/>
                 <TextField fx:id="searchClientById" layoutX="362.0" layoutY="21.0" prefHeight="26.0" prefWidth="509.0"/>
                 <Text layoutX="362.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search by Client ID"/>
             </children>

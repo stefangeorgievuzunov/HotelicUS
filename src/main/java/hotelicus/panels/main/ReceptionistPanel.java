@@ -283,6 +283,9 @@ public class ReceptionistPanel implements Initializable {
                         }
                     } else {
                         if (reservation.getPaidMoney() == reservation.getTotalSum()) {
+                            DbController<Clients> updateClient=new DbController<>(Clients.class);
+                            Clients current =reservation.getClient();
+                            current.setRate(current.getRate()+1);
                             register.setStatus(EXPIRED);
                             reservation.setReservationStatus(EXPIRED);
                             reservation.setCancelingType(ON_TIME);
