@@ -1,5 +1,6 @@
 package hotelicus.panels.extended;
 
+import hotelicus.core.LoggerUtil;
 import hotelicus.exceptions.SelectNullObjectException;
 import hotelicus.panels.controllers.DbController;
 import hotelicus.entities.Hotels;
@@ -80,12 +81,16 @@ public class UploadRoomForm implements Initializable {
             }
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (InsertNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NumberFormatException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
             new Error("Upload failed", "Price and Capacity must be numeric!");
         }
     }
@@ -123,10 +128,13 @@ public class UploadRoomForm implements Initializable {
             }
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NonUniqueResultException excep) {
             new Error("Upload failed", "Room  number already exist !");
+            LoggerUtil.error(excep.getMessage());
         }
         return false;
     }

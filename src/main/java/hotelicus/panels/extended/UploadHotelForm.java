@@ -1,6 +1,7 @@
 package hotelicus.panels.extended;
 
 import hotelicus.App;
+import hotelicus.core.LoggerUtil;
 import hotelicus.panels.controllers.DbController;
 import hotelicus.panels.controllers.SceneController;
 import hotelicus.entities.Hotels;
@@ -128,13 +129,16 @@ public class UploadHotelForm implements Initializable {
                     System.out.println(excep.getMessage());
                 } catch (NullPointerException excep) {
                     excep.printStackTrace();
+                    LoggerUtil.error(excep.getMessage());
                 }
                 return room;
             }));
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -170,12 +174,16 @@ public class UploadHotelForm implements Initializable {
             }
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (InsertNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (ConstraintViolationException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -191,8 +199,10 @@ public class UploadHotelForm implements Initializable {
 
         } catch (IOException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -212,8 +222,10 @@ public class UploadHotelForm implements Initializable {
 
         } catch (IOException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -238,8 +250,10 @@ public class UploadHotelForm implements Initializable {
             }
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -254,6 +268,7 @@ public class UploadHotelForm implements Initializable {
             }
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
