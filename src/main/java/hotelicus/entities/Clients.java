@@ -21,7 +21,6 @@ public class Clients {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "client_id")
     public Integer getId() {
         return id;

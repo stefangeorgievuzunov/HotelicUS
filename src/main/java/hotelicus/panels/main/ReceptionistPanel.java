@@ -16,11 +16,9 @@ import hotelicus.window.Confirmation;
 import hotelicus.window.Error;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -78,12 +76,11 @@ public class ReceptionistPanel implements Initializable {
             this.timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> this.notifications.setStyle(NOTIFICATION_BUTTON_STYLE_1)),
                     new KeyFrame(Duration.seconds(1.5), e -> this.notifications.setStyle(NOTIFICATION_BUTTON_STYLE_2)));
             this.timeline.setCycleCount(Animation.INDEFINITE);
-
             DbController<HotelReceptionists> retrieveHotel = new DbController<>(HotelReceptionists.class);
+            DbController<Reservations> retrieveReservations = new DbController<>(Reservations.class);
+
             HotelReceptionists record = retrieveHotel.selectUnique(Restrictions.eq("receptionist", App.getLoggedUser()));
             this.hotel = record.getHotel();
-
-            DbController<Reservations> retrieveReservations = new DbController<>(Reservations.class);
 
             reservedFrom.valueProperty().addListener((ov, oldValue, newValue) -> {
                 this.tableView.getItems().clear();
@@ -150,6 +147,7 @@ public class ReceptionistPanel implements Initializable {
                     this.timeline.play();
                 }
             }, 0, 60, TimeUnit.SECONDS); //have to be changed to 12hours or 24 hours.
+
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
             LoggerUtil.error(excep.getMessage());
@@ -166,9 +164,9 @@ public class ReceptionistPanel implements Initializable {
     private void addReservation() {
         try {
             SceneController.openNewScene(UploadReservationForm.class, "Add new reservation", () -> {
-            UploadReservationForm sendTo=SceneController.getStageAccessTo(UploadReservationForm.class);
-            sendTo.setHotel(this.hotel);
-            sendTo.setParentTableView(this.tableView);
+                UploadReservationForm sendTo = SceneController.getStageAccessTo(UploadReservationForm.class);
+                sendTo.setHotel(this.hotel);
+                sendTo.setParentTableView(this.tableView);
             });
         } catch (IOException excep) {
             excep.printStackTrace();
@@ -184,10 +182,11 @@ public class ReceptionistPanel implements Initializable {
         try {
             this.tableView.getItems().clear();
 
-            DbController<Reservations> retrieveReservations = new DbController<>(Reservations.class);
-            List<Reservations> allReservations = retrieveReservations.select(Restrictions.eq("hotel", this.hotel), Restrictions.eq("reservationStatus", ACTIVE));
+            DbController<Reservations> retrieveAllReservations = new DbController<>(Reservations.class);
+            List<Reservations> allReservations = retrieveAllReservations.select(Restrictions.eq("hotel", this.hotel), Restrictions.eq("reservationStatus", ACTIVE));
 
             allReservations.forEach(r -> this.tableView.getItems().add(r));
+
         } catch (NonUniqueResultException excep) {
             excep.printStackTrace();
             LoggerUtil.error(excep.getMessage());
@@ -201,6 +200,8 @@ public class ReceptionistPanel implements Initializable {
     private void loadExpiringReservations() {
         try {
             this.timeline.stop();
+            this.notifications.setStyle(NOTIFICATION_BUTTON_STYLE_2);
+
             this.tableView.getItems().clear();
             DbController<Reservations> retrieveExpiringReservations = new DbController<>(Reservations.class);
             List<Reservations> expiringReservations = retrieveExpiringReservations.select(
@@ -283,9 +284,9 @@ public class ReceptionistPanel implements Initializable {
                         }
                     } else {
                         if (reservation.getPaidMoney() == reservation.getTotalSum()) {
-                            DbController<Clients> updateClient=new DbController<>(Clients.class);
-                            Clients current =reservation.getClient();
-                            current.setRate(current.getRate()+1);
+                            DbController<Clients> updateClient = new DbController<>(Clients.class);
+                            Clients current = reservation.getClient();
+                            current.setRate(current.getRate() + 1);
                             register.setStatus(EXPIRED);
                             reservation.setReservationStatus(EXPIRED);
                             reservation.setCancelingType(ON_TIME);
@@ -299,7 +300,7 @@ public class ReceptionistPanel implements Initializable {
                     updateRegister.insert(register);
                     this.tableView.getItems().remove(reservation);
                 } else {
-                    new Error("Upload failed", "Paid money too low.");
+                    new Error("Register failed", "Paid money too low.");
                 }
                 this.tableView.refresh();
             }

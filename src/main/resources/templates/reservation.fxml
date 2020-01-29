@@ -88,10 +88,10 @@
         <Pane layoutY="402.0" prefHeight="402.0" prefWidth="1200.0">
             <children>
                 <Button fx:id="addNewClient" layoutX="865.0" layoutY="20.0" mnemonicParsing="false" onAction="#uploadClientForm" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 14;" text="New" textFill="WHITE" />
-                <TextField fx:id="paidMoney" layoutX="7.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" text="123" />
-                <TextField fx:id="totalSum" disable="true" editable="false" layoutX="109.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" text="123" />
-                <DatePicker fx:id="reserveFrom" layoutX="14.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
-                <DatePicker fx:id="reserveTo" layoutX="368.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+                <TextField fx:id="paidMoney" layoutX="7.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+                <TextField fx:id="totalSum" disable="true" editable="false" layoutX="109.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+                <DatePicker fx:id="reserveFrom" layoutX="14.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" style="-fx-background-color: transparent; -fx-border-color: #d80032;" />
+                <DatePicker fx:id="reserveTo" layoutX="368.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" style="-fx-background-color: transparent; -fx-border-color: #d80032;" />
                 <ChoiceBox fx:id="roomCategory" layoutX="722.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;">
                     <items>
                         <FXCollections fx:factory="observableArrayList">

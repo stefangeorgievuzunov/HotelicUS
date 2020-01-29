@@ -21,8 +21,6 @@ import javafx.util.Duration;
 
 import org.hibernate.criterion.Restrictions;
 
-
-import javax.xml.transform.Result;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -86,23 +84,21 @@ public class UploadReservationForm implements Initializable {
     private TableView<Reservations> parentTableView;
     private Hotels hotel;
     private List<Rooms> pickedRooms = new ArrayList<>();
-    private Clients pickedClient;
-    private Reservations newReservation;
+    private Clients pickedClient = new Clients();
+    private Reservations newReservation = new Reservations();
     private List<Services> pickedServices = new ArrayList<>();
     private Map<String, Services> loadedServices = new HashMap<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            this.services.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             DbController<Clients> retrieveAllClients = new DbController<>(Clients.class);
             DbController<Reservations> retriveAllReservations = new DbController<>(Reservations.class);
             DbController<ReservationRooms> retrieveAllBusyRooms = new DbController<>(ReservationRooms.class);
             DbController<Rooms> retrieveAllRooms = new DbController<>(Rooms.class);
+            DbController<Services> retrieveAllServices = new DbController<>(Services.class);
 
-            this.newReservation = new Reservations();
-            this.pickedClient = new Clients();
-
+            this.services.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             this.services.getSelectionModel().selectedItemProperty().addListener(e -> {
                 if (this.pickedServices.contains(this.loadedServices.get(e))) {
                     this.pickedServices.remove(this.loadedServices.get(e));
@@ -110,6 +106,12 @@ public class UploadReservationForm implements Initializable {
                     this.pickedServices.add(this.loadedServices.get(e));
                 }
             });
+
+            List<Services> allServices = retrieveAllServices.findAll();
+            for (Services service : allServices) {
+                this.loadedServices.put("Name: " + service.getName() + " Price: " + service.getPrice(), service);
+                this.services.getItems().add("Name: " + service.getName() + " Price: " + service.getPrice());
+            }
 
             PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
             this.searchClientById.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -134,7 +136,6 @@ public class UploadReservationForm implements Initializable {
                 pause.playFromStart();
             });
 
-
             clientIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
             firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
             lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -144,13 +145,15 @@ public class UploadReservationForm implements Initializable {
                 if (this.pickedClient == client) {
                     this.pickedClient = null;
                 } else {
+                    if (client.getRate() < 5) {
+                        new Error("WARNING", "THIS CLIENT MAY BE INDECOROUS");
+                    }
                     this.pickedClient = client;
                 }
                 return client;
             }));
 
-
-            roomCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("roomId"));
+            roomCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
             roomCapacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
             roomNumberColumn.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
             roomPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -158,21 +161,24 @@ public class UploadReservationForm implements Initializable {
                 if (this.pickedRooms.contains(room)) {
                     this.pickedRooms.remove(room);
                 } else {
-                    this.pickedRooms.add(room);
-                    this.newReservation.setReservedFrom(this.reserveFrom.getValue());
-                    this.newReservation.setReservedTo(this.reserveTo.getValue());
+                    if (this.reserveFrom.getValue().isBefore(this.reserveTo.getValue()) && this.reserveTo.getValue().isAfter(this.reserveFrom.getValue())) {
+                        this.pickedRooms.add(room);
+                        this.newReservation.setReservedFrom(this.reserveFrom.getValue());
+                        this.newReservation.setReservedTo(this.reserveTo.getValue());
+                    } else {
+                        new Error("Selection failed !", "Please select valid date period !");
+                    }
                 }
                 return room;
             }));
 
 
-            this.roomCategory.setOnAction(e -> {
-                this.roomsTableView.getItems().clear();
-
+            this.roomCategory.getSelectionModel().selectedItemProperty().addListener(e -> {
                 try {
-                    if (this.reserveFrom.getValue().isBefore(this.reserveTo.getValue()) && this.reserveTo.getValue().isAfter(this.reserveFrom.getValue())) {
+                    this.roomsTableView.getItems().clear();
+                    if (this.reserveFrom.getValue() != null && this.reserveTo != null && this.reserveFrom.getValue().isBefore(this.reserveTo.getValue()) && this.reserveTo.getValue().isAfter(this.reserveFrom.getValue())) {
 
-                        List<Reservations> allReservations = retriveAllReservations.select(Restrictions.eq("hotel", this.hotel), Restrictions.eq("reservationStatus", ACTIVE),
+                        List<Reservations> allActiveReservations = retriveAllReservations.select(Restrictions.eq("hotel", this.hotel), Restrictions.eq("reservationStatus", ACTIVE),
                                 Restrictions.or(
                                         Restrictions.between("reservedFrom", this.reserveFrom.getValue(), this.reserveTo.getValue()),
                                         Restrictions.between("reservedTo", this.reserveFrom.getValue(), this.reserveTo.getValue()),
@@ -180,23 +186,27 @@ public class UploadReservationForm implements Initializable {
                                         Restrictions.and(Restrictions.le("reservedFrom", this.reserveFrom.getValue()), Restrictions.between("reservedTo", this.reserveFrom.getValue(), this.reserveTo.getValue())),
                                         Restrictions.and(Restrictions.le("reservedFrom", this.reserveFrom.getValue()), Restrictions.ge("reservedTo", this.reserveTo.getValue()))
                                 ));
+
                         List<Rooms> freeRooms = retrieveAllRooms.select(Restrictions.eq("category", this.roomCategory.getSelectionModel().getSelectedItem()),
                                 Restrictions.eq("status", FREE), Restrictions.eq("hotel", this.hotel));
 
                         List<Rooms> busyRooms = new ArrayList<>();
 
-                        for (Reservations reservation : allReservations) {
+                        for (Reservations reservation : allActiveReservations) {
                             List<ReservationRooms> busyRoomz = retrieveAllBusyRooms.select(Restrictions.eq("reservation", reservation));
                             for (ReservationRooms record : busyRoomz) {
-                                if (record.getRoom().getCategory() == this.roomCategory.getSelectionModel().getSelectedItem() && record.getRoom().getStatus() == FREE) {
-                                    busyRooms.add(record.getRoom());
-                                }
+                                busyRooms.add(record.getRoom());
                             }
                         }
 
-                        freeRooms.removeAll(busyRooms);
-                        freeRooms.forEach(r -> this.roomsTableView.getItems().add(r));
-                        this.roomCategory.getSelectionModel().clearSelection();
+                        if (!busyRooms.isEmpty()) {
+                            freeRooms.removeAll(busyRooms);
+                        }
+                        for (Rooms room : freeRooms) {
+                            if (room.getCategory() == this.roomCategory.getSelectionModel().getSelectedItem()) {
+                                this.roomsTableView.getItems().add(room);
+                            }
+                        }
                     }
                 } catch (SelectNullObjectException excep) {
                     excep.printStackTrace();
@@ -207,33 +217,12 @@ public class UploadReservationForm implements Initializable {
                     LoggerUtil.error(excep.getMessage());
                 }
             });
-
-            this.uploadInfo();
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
             LoggerUtil.error(excep.getMessage());
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
             LoggerUtil.error(excep.getMessage());
-        } catch (NullPointerException excep) {
-            excep.printStackTrace();
-            LoggerUtil.error(excep.getMessage());
-        }
-    }
-
-    private void uploadInfo() {
-        try {
-            DbController<Services> retrieveAllServices = new DbController<>(Services.class);
-            List<Services> allServices = retrieveAllServices.findAll();
-
-            for (Services service : allServices) {
-                this.loadedServices.put("Name: " + service.getName() + " Price: " + service.getPrice(), service);
-                this.services.getItems().add("Name: " + service.getName() + " Price: " + service.getPrice());
-            }
-
-            DbController<Clients> retrieveAllClients = new DbController<>(Clients.class);
-            List<Clients> allClients = retrieveAllClients.findAll();
-            allClients.forEach(c -> this.clientsTableView.getItems().add(c));
         } catch (NullPointerException excep) {
             excep.printStackTrace();
             LoggerUtil.error(excep.getMessage());
@@ -259,22 +248,24 @@ public class UploadReservationForm implements Initializable {
     @FXML
     private void uploadRouter() {
         try {
-            Confirmation confirm = new Confirmation("Confirmation", "Do you want to disable this hotel?");
-            if (confirm.getConfirmationResult() == true && this.newReservation != null && this.formValidation()) {
+            Confirmation confirm = new Confirmation("Confirmation", "Do you want to save this reservation?");
+            if (confirm.getConfirmationResult() == true && this.formValidation()) {
                 DbController<Reservations> uploadNewReservation = new DbController<>(Reservations.class);
                 DbController<ReservationRooms> uploadReservationRooms = new DbController<>(ReservationRooms.class);
 
                 Double totalSum = 0.0;
                 long days = ChronoUnit.DAYS.between(this.reserveFrom.getValue(), this.reserveTo.getValue());
-                for (Rooms room : pickedRooms) {
-                    totalSum +=room.getPrice()*days*1.0;
-                }
-                if(pickedServices!=null && !pickedServices.isEmpty()){ ;
-                    for (Services service : pickedServices) {
-                        totalSum += service.getPrice()*1.0;
+                System.out.println("TEST DAYS" + days);
 
-                    }
-            }
+                for (Rooms room : this.pickedRooms) {
+                    totalSum += room.getPrice() * days;
+                    System.out.println("TEST total sum: " + totalSum);
+                }
+
+                for (Services service : this.pickedServices) {
+                    totalSum += service.getPrice();
+                }
+
                 this.totalSum.setText(totalSum.toString());
                 this.newReservation.setTotalSum(totalSum);
                 this.newReservation.setReservationStatus(ACTIVE);
@@ -284,14 +275,12 @@ public class UploadReservationForm implements Initializable {
                 this.newReservation.setHotel(this.hotel);
                 this.newReservation.setPaidMoney(Double.parseDouble(this.paidMoney.getText()));
                 this.newReservation.setPaymentType(this.paymentType.getSelectionModel().getSelectedItem());
-                if (this.reserveFrom.getValue() != null && this.reserveTo.getValue() != null) {
-                    this.newReservation.setReservationType(this.reservationType.getSelectionModel().getSelectedItem());
-                }
+                this.newReservation.setReservationType(this.reservationType.getSelectionModel().getSelectedItem());
                 this.newReservation.setUser(App.getLoggedUser());
 
                 uploadNewReservation.insert(this.newReservation);
 
-                for (Rooms room : pickedRooms) {
+                for (Rooms room : this.pickedRooms) {
                     ReservationRooms newReservationRooms = new ReservationRooms();
 
                     newReservationRooms.setReservation(this.newReservation);
@@ -314,15 +303,11 @@ public class UploadReservationForm implements Initializable {
 
     private boolean formValidation() {
         try {
-            if (!this.reservationType.getSelectionModel().isEmpty() && !this.paymentType.getSelectionModel().isEmpty() && !this.cancelingType.getSelectionModel().isEmpty() && pickedClient != null && !pickedRooms.isEmpty()) {
+            if (!this.reservationType.getSelectionModel().isEmpty() && !this.paymentType.getSelectionModel().isEmpty() && !this.cancelingType.getSelectionModel().isEmpty() && this.pickedClient.getId() != null && !this.pickedRooms.isEmpty()) {
                 return true;
             } else {
                 new Error("Upload failed", "There are empty fields!");
             }
-        } catch (NumberFormatException excep) {
-            excep.printStackTrace();
-            LoggerUtil.error(excep.getMessage());
-            new Error("Upload failed", "Paid money must be numeric!");
         } catch (NullPointerException excep) {
             excep.printStackTrace();
             LoggerUtil.error(excep.getMessage());
@@ -338,8 +323,6 @@ public class UploadReservationForm implements Initializable {
         try {
             if (parentTableView != null) {
                 this.parentTableView = parentTableView;
-            } else {
-                throw new NullPointerException();
             }
         } catch (NullPointerException excep) {
             excep.printStackTrace();

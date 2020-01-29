@@ -75,7 +75,7 @@ public class AdminPanel implements Initializable {
             PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
             this.searchUserByName.textProperty().addListener(e -> {
                 pause.setOnFinished(event -> {
-                    List<Users> result = retrieveUsers.select(Restrictions.like("firstName", searchUserByName.getText(), MatchMode.START));
+                    List<Users> result = retrieveUsers.select(Restrictions.like("firstName", searchUserByName.getText(), MatchMode.START),Restrictions.eq("privileges",OWNER));
                     if (!result.isEmpty()) {
                         this.tableView.getItems().clear();
                         result.forEach(user -> this.tableView.getItems().add(user));

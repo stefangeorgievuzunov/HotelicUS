@@ -24,7 +24,7 @@
                         <Insets />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="notifications" mnemonicParsing="false" onAction="#loadExpiringReservations" prefHeight="150.0" prefWidth="169.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="notifications" textFill="WHITE" VBox.vgrow="ALWAYS">
+                <Button fx:id="notifications" mnemonicParsing="false" onAction="#loadExpiringReservations" prefHeight="150.0" prefWidth="169.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="Expiring" textFill="WHITE" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
