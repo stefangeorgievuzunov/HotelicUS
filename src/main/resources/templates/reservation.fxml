@@ -1,140 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import hotelicus.enums.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import hotelicus.enums.RoomCategories?>
-<?import javafx.collections.FXCollections?>
-<?import hotelicus.enums.ReservationTypes?>
-<?import hotelicus.enums.PaymentTypes?>
-<?import hotelicus.enums.ReservationCanceling?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
-            prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="hotelicus.panels.extended.UploadReservationForm">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #8d99ae;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotelicus.panels.extended.UploadReservationForm">
     <children>
         <HBox prefHeight="402.0" prefWidth="1200.0">
             <children>
                 <VBox prefHeight="402.0" prefWidth="348.0">
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reservation Type">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Reservation Type">
                             <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" top="5.0"/>
+                                <Insets bottom="5.0" left="5.0" top="5.0" />
                             </VBox.margin>
                         </Text>
-                        <ChoiceBox fx:id="reservationType" prefHeight="26.0" prefWidth="349.0">
+                        <ChoiceBox fx:id="reservationType" prefHeight="26.0" prefWidth="349.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;">
                             <VBox.margin>
-                                <Insets right="5.0"/>
+                                <Insets left="5.0" right="5.0" />
                             </VBox.margin>
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
-                                    <ReservationTypes fx:value="ONLINE"/>
-                                    <ReservationTypes fx:value="ON_PLACE"/>
+                                    <ReservationTypes fx:value="ONLINE" />
+                                    <ReservationTypes fx:value="ON_PLACE" />
                                 </FXCollections>
                             </items>
                         </ChoiceBox>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Payment Type">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Payment Type">
                             <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" top="5.0"/>
+                                <Insets bottom="5.0" left="5.0" top="5.0" />
                             </VBox.margin>
                         </Text>
-                        <ChoiceBox fx:id="paymentType" prefHeight="26.0" prefWidth="356.0">
+                        <ChoiceBox fx:id="paymentType" prefHeight="26.0" prefWidth="356.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;">
                             <VBox.margin>
-                                <Insets right="5.0"/>
+                                <Insets left="5.0" right="5.0" />
                             </VBox.margin>
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
-                                    <PaymentTypes fx:value="CASH"/>
-                                    <PaymentTypes fx:value="CREDIT_CARD"/>
+                                    <PaymentTypes fx:value="CASH" />
+                                    <PaymentTypes fx:value="CREDIT_CARD" />
                                 </FXCollections>
                             </items>
                         </ChoiceBox>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Canceling Type">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Canceling Type">
                             <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" top="5.0"/>
+                                <Insets bottom="5.0" left="5.0" top="5.0" />
                             </VBox.margin>
                         </Text>
-                        <ChoiceBox fx:id="cancelingType" prefHeight="26.0" prefWidth="351.0">
+                        <ChoiceBox fx:id="cancelingType" prefHeight="26.0" prefWidth="351.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;">
                             <VBox.margin>
-                                <Insets right="5.0"/>
+                                <Insets left="5.0" right="5.0" />
                             </VBox.margin>
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
-                                    <ReservationCanceling fx:value="ON_TIME"/>
-                                    <ReservationCanceling fx:value="EMERGENCY"/>
+                                    <ReservationCanceling fx:value="ON_TIME" />
+                                    <ReservationCanceling fx:value="EMERGENCY" />
                                 </FXCollections>
                             </items>
                         </ChoiceBox>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Services">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Services">
                             <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" top="5.0"/>
+                                <Insets bottom="5.0" left="5.0" top="5.0" />
                             </VBox.margin>
                         </Text>
-                        <ListView fx:id="services" prefHeight="323.0" prefWidth="348.0">
+                        <ListView fx:id="services" prefHeight="323.0" prefWidth="348.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;">
                             <VBox.margin>
-                                <Insets right="5.0"/>
+                                <Insets left="5.0" right="5.0" />
                             </VBox.margin>
                         </ListView>
                     </children>
                 </VBox>
-                <TableView fx:id="clientsTableView" prefHeight="402.0" prefWidth="852.0">
+                <TableView fx:id="clientsTableView" prefHeight="402.0" prefWidth="852.0" style="-fx-background-color: #8d99ae; -fx-border-color: #d80032;">
                     <columns>
-                        <TableColumn fx:id="clientIdColumn" prefWidth="75.0" text="ID"/>
-                        <TableColumn fx:id="firstNameColumn" prefWidth="177.0" text="First Name"/>
-                        <TableColumn fx:id="lastNameColumn" prefWidth="198.0" text="Last Name"/>
-                        <TableColumn fx:id="phoneNumberColumn" prefWidth="133.0" text="Phone Number"/>
-                        <TableColumn fx:id="clientRateColumn" prefWidth="59.0" text="Rate"/>
-                        <TableColumn fx:id="addClientColumn" prefWidth="201.0" text="Action"/>
+                        <TableColumn fx:id="clientIdColumn" prefWidth="75.0" text="ID" />
+                        <TableColumn fx:id="firstNameColumn" prefWidth="177.0" text="First Name" />
+                        <TableColumn fx:id="lastNameColumn" prefWidth="198.0" text="Last Name" />
+                        <TableColumn fx:id="phoneNumberColumn" prefWidth="133.0" text="Phone Number" />
+                        <TableColumn fx:id="clientRateColumn" prefWidth="59.0" text="Rate" />
+                        <TableColumn fx:id="addClientColumn" prefWidth="201.0" text="Action" />
                     </columns>
                 </TableView>
             </children>
         </HBox>
         <Pane layoutY="402.0" prefHeight="402.0" prefWidth="1200.0">
             <children>
-                <Button fx:id="addNewClient" onAction="#uploadClientForm" layoutX="896.0" layoutY="16.0" mnemonicParsing="false" text="New"/>
-                <TextField fx:id="paidMoney" layoutX="14.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0"
-                           text="123"/>
-                <TextField fx:id="totalSum" disable="true" editable="false" layoutX="115.0" layoutY="20.0"
-                           prefHeight="26.0" prefWidth="87.0" text="123"/>
-                <DatePicker fx:id="reserveFrom" layoutX="14.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0"/>
-                <DatePicker fx:id="reserveTo" layoutX="368.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0"/>
-                <ChoiceBox fx:id="roomCategory" layoutX="722.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0">
+                <Button fx:id="addNewClient" layoutX="865.0" layoutY="20.0" mnemonicParsing="false" onAction="#uploadClientForm" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 14;" text="New" textFill="WHITE" />
+                <TextField fx:id="paidMoney" layoutX="7.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" text="123" />
+                <TextField fx:id="totalSum" disable="true" editable="false" layoutX="109.0" layoutY="20.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" text="123" />
+                <DatePicker fx:id="reserveFrom" layoutX="14.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+                <DatePicker fx:id="reserveTo" layoutX="368.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+                <ChoiceBox fx:id="roomCategory" layoutX="722.0" layoutY="73.0" prefHeight="26.0" prefWidth="348.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <RoomCategories fx:value="SINGLE"/>
-                            <RoomCategories fx:value="COUPLE"/>
-                            <RoomCategories fx:value="FAMILY"/>
-                            <RoomCategories fx:value="VIP"/>
+                            <RoomCategories fx:value="SINGLE" />
+                            <RoomCategories fx:value="COUPLE" />
+                            <RoomCategories fx:value="FAMILY" />
+                            <RoomCategories fx:value="VIP" />
                         </FXCollections>
                     </items>
                 </ChoiceBox>
-                <Text layoutX="18.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From"/>
-                <Text layoutX="368.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To"/>
-                <Text layoutX="722.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category"/>
-                <TableView fx:id="roomsTableView" layoutX="1.0" layoutY="108.0" prefHeight="293.0" prefWidth="1200.0">
+                <Text fill="WHITE" layoutX="18.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" />
+                <Text fill="WHITE" layoutX="368.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To" />
+                <Text fill="WHITE" layoutX="722.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" />
+                <TableView fx:id="roomsTableView" layoutX="1.0" layoutY="108.0" prefHeight="293.0" prefWidth="1200.0" style="-fx-background-color: #8d99ae; -fx-border-color: #d80032;">
                     <columns>
-                        <TableColumn fx:id="roomCategoryColumn" prefWidth="231.0" text="Category"/>
-                        <TableColumn fx:id="roomCapacityColumn" prefWidth="315.0" text="Capacity"/>
-                        <TableColumn fx:id="roomNumberColumn" prefWidth="245.0" text="Room Number"/>
-                        <TableColumn fx:id="roomPriceColumn" prefWidth="221.0" text="Price Per Night"/>
-                        <TableColumn fx:id="takeRoomColumn" prefWidth="174.0" text="Action"/>
+                        <TableColumn fx:id="roomCategoryColumn" prefWidth="231.0" text="Category" />
+                        <TableColumn fx:id="roomCapacityColumn" prefWidth="315.0" text="Capacity" />
+                        <TableColumn fx:id="roomNumberColumn" prefWidth="245.0" text="Room Number" />
+                        <TableColumn fx:id="roomPriceColumn" prefWidth="221.0" text="Price Per Night" />
+                        <TableColumn fx:id="takeRoomColumn" prefWidth="174.0" text="Action" />
                     </columns>
                 </TableView>
-                <Text layoutX="14.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paid Money"/>
-                <Text layoutX="115.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total"/>
-                <Button fx:id="saveButton" onAction="#uploadRouter" layoutX="1124.0" layoutY="16.0" mnemonicParsing="false" text="Save"/>
-                <TextField fx:id="searchClientById" layoutX="362.0" layoutY="21.0" prefHeight="26.0" prefWidth="509.0"/>
-                <Text layoutX="362.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search by Client ID"/>
+                <Text fill="WHITE" layoutX="7.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paid Money" />
+                <Text fill="WHITE" layoutX="109.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total" />
+                <Button fx:id="saveButton" layoutX="1135.0" layoutY="20.0" mnemonicParsing="false" onAction="#uploadRouter" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 14;" text="Save" textFill="WHITE" />
+                <TextField fx:id="searchClientById" layoutX="349.0" layoutY="21.0" prefHeight="26.0" prefWidth="509.0" style="-fx-background-color: transparent; -fx-border-color: #d80032; -fx-text-inner-color: white;" />
+                <Text fill="WHITE" layoutX="349.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search by Client ID" />
             </children>
         </Pane>
     </children>

@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,22 +14,22 @@
     <children>
         <VBox prefHeight="606.0" prefWidth="156.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#uploadAllReservations" prefHeight="150.0" prefWidth="159.0" text="All" VBox.vgrow="ALWAYS" textFill="WHITE" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;">
+                <Button mnemonicParsing="false" onAction="#uploadAllReservations" prefHeight="150.0" prefWidth="159.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="All" textFill="WHITE" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#addReservation" prefHeight="150.0" prefWidth="167.0" text="Add new" VBox.vgrow="ALWAYS" textFill="WHITE" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;">
+                <Button mnemonicParsing="false" onAction="#addReservation" prefHeight="150.0" prefWidth="167.0" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;" text="Add new" textFill="WHITE" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="notifications" mnemonicParsing="false" onAction="#loadExpiringReservations" prefHeight="150.0" prefWidth="169.0" text="notifications" textFill="WHITE" VBox.vgrow="ALWAYS" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;">
+                <Button fx:id="notifications" mnemonicParsing="false" onAction="#loadExpiringReservations" prefHeight="150.0" prefWidth="169.0" style="-fx-background-color: #d80032; -fx-font-weight: bold; -fx-font-size: 16;" text="notifications" textFill="WHITE" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#logOut" prefHeight="150.0" prefWidth="168.0" text="Log out" VBox.vgrow="ALWAYS" textFill="WHITE" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;">
+                <Button mnemonicParsing="false" onAction="#logOut" prefHeight="150.0" prefWidth="168.0" style="-fx-background-color: #ef233c; -fx-font-weight: bold; -fx-font-size: 16;" text="Log out" textFill="WHITE" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
@@ -39,22 +40,40 @@
             <children>
                 <HBox prefHeight="31.0" prefWidth="941.0">
                     <children>
-                        <DatePicker fx:id="reservedFrom" prefHeight="26.0" prefWidth="441.0">
-                            <HBox.margin>
-                                <Insets left="10.0" right="5.0" />
-                            </HBox.margin>
-                        </DatePicker>
-                        <DatePicker fx:id="reservedTo" prefHeight="26.0" prefWidth="469.0">
-                            <HBox.margin>
-                                <Insets left="5.0" right="10.0" />
-                            </HBox.margin>
-                        </DatePicker>
+                  <VBox prefHeight="31.0" prefWidth="446.0">
+                     <children>
+                        <Label text="From">
+                           <VBox.margin>
+                              <Insets left="15.0" />
+                           </VBox.margin>
+                        </Label>
+                              <DatePicker fx:id="reservedFrom" prefHeight="26.0" prefWidth="441.0">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="10.0" />
+                           </VBox.margin>
+                              </DatePicker>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="31.0" prefWidth="493.0">
+                     <children>
+                        <Label text="To">
+                           <VBox.margin>
+                              <Insets left="25.0" />
+                           </VBox.margin>
+                        </Label>
+                              <DatePicker fx:id="reservedTo" prefHeight="26.0" prefWidth="469.0">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="20.0" />
+                           </VBox.margin>
+                              </DatePicker>
+                     </children>
+                  </VBox>
                     </children>
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
                 </HBox>
-                <TableView fx:id="tableView" prefHeight="513.0" prefWidth="941.0" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tableView" prefHeight="540.0" prefWidth="921.0" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="reservationIdColumn" prefWidth="36.0" text="ID" />
                         <TableColumn fx:id="createdOnColumn" prefWidth="170.0" text="Created on" />
@@ -64,7 +83,7 @@
                         <TableColumn fx:id="registerColumn" prefWidth="127.0" text="Register" />
                     </columns>
                     <VBox.margin>
-                        <Insets left="10.0" right="10.0" />
+                        <Insets left="10.0" right="5.0" />
                     </VBox.margin>
                 </TableView>
             </children>
