@@ -1,5 +1,6 @@
 package hotelicus.panels.main;
 
+import hotelicus.core.LoggerUtil;
 import hotelicus.panels.controllers.DbController;
 import hotelicus.panels.controllers.SceneController;
 import hotelicus.panels.extended.ActionButtonTrigger;
@@ -115,7 +116,7 @@ public class AdminPanel implements Initializable {
                     });
 
                 } catch (IOException excep) {
-                    System.out.println(excep.getMessage());
+                    LoggerUtil.error(excep.getMessage());
                 }
                 return user;
             }));
@@ -123,8 +124,10 @@ public class AdminPanel implements Initializable {
             this.loadUsers(null);
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -154,8 +157,10 @@ public class AdminPanel implements Initializable {
             });
         } catch (IOException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -178,6 +183,7 @@ public class AdminPanel implements Initializable {
             }
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -205,6 +211,7 @@ public class AdminPanel implements Initializable {
             }
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 }

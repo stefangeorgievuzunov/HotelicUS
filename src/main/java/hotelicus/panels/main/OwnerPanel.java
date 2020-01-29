@@ -1,6 +1,7 @@
 package hotelicus.panels.main;
 
 import hotelicus.App;
+import hotelicus.core.LoggerUtil;
 import hotelicus.panels.controllers.DbController;
 import hotelicus.panels.controllers.SceneController;
 import hotelicus.panels.extended.ActionButtonTrigger;
@@ -107,8 +108,10 @@ public class OwnerPanel implements Initializable {
 
                 } catch (IOException excep) {
                     excep.printStackTrace();
+                    LoggerUtil.error(excep.getMessage());
                 } catch (NullPointerException excep) {
                     excep.printStackTrace();
+                    LoggerUtil.error(excep.getMessage());
                 }
                 return hotel;
             }));
@@ -125,8 +128,10 @@ public class OwnerPanel implements Initializable {
             this.loadHotels(null);
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -157,8 +162,10 @@ public class OwnerPanel implements Initializable {
             });
         } catch (IOException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -190,6 +197,7 @@ public class OwnerPanel implements Initializable {
             }
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -211,6 +219,7 @@ public class OwnerPanel implements Initializable {
             }
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 

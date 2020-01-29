@@ -71,6 +71,7 @@ public final class App extends Application {
             SceneController.changePrimaryScene(LoginController.class,"Login Panel");
         } catch (Exception excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 

@@ -1,6 +1,7 @@
 package hotelicus.panels.main;
 
 import hotelicus.App;
+import hotelicus.core.LoggerUtil;
 import hotelicus.entities.*;
 import hotelicus.exceptions.DbControllerNullConstructorException;
 import hotelicus.exceptions.InsertNullObjectException;
@@ -151,10 +152,13 @@ public class ReceptionistPanel implements Initializable {
             }, 0, 60, TimeUnit.SECONDS); //have to be changed to 12hours or 24 hours.
         } catch (DbControllerNullConstructorException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -166,8 +170,10 @@ public class ReceptionistPanel implements Initializable {
             });
         } catch (IOException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -182,8 +188,10 @@ public class ReceptionistPanel implements Initializable {
             allReservations.forEach(r -> this.tableView.getItems().add(r));
         } catch (NonUniqueResultException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -204,6 +212,7 @@ public class ReceptionistPanel implements Initializable {
             }
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -238,8 +247,10 @@ public class ReceptionistPanel implements Initializable {
             }
         } catch (InsertNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
 
     }
@@ -289,8 +300,10 @@ public class ReceptionistPanel implements Initializable {
             }
         } catch (InsertNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 

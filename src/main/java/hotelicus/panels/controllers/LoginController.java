@@ -1,6 +1,7 @@
 package hotelicus.panels.controllers;
 
 import hotelicus.App;
+import hotelicus.core.LoggerUtil;
 import hotelicus.entities.LoggedUsers;
 import hotelicus.entities.Users;
 import hotelicus.exceptions.DeleteNullObjectException;
@@ -72,6 +73,7 @@ public class LoginController implements Initializable {
                         }
                     } else {
                         new Error("Login Failed", "User is already logged in ! Try again later.");
+                        LoggerUtil.warn("User is already logged in ! Try again later.");
                     }
                 } else {
                     throw new SelectNullObjectException();
@@ -79,12 +81,16 @@ public class LoginController implements Initializable {
             }
         } catch (IOException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NonUniqueResultException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (DeleteNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -99,18 +105,22 @@ public class LoginController implements Initializable {
                 } else if (users.size() > 1) {
                     throw new NonUniqueResultException(0);
                 } else {
+                    LoggerUtil.info("Successfully logged in!");
                     return true;
                 }
             } else {
                 new Error("Failed to login", "There are empty fields!");
+                LoggerUtil.warn("There are empty fields!");
                 return false;
             }
         } catch (NonUniqueResultException excep) {
             excep.printStackTrace();
             new Error("Failed to login", "Invalid username or password!");
+            LoggerUtil.warn("Invalid username or password!");
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
             new Error("Failed to login", "Invalid username or password!");
+            LoggerUtil.warn("Invalid username or password!");
         }
         return false;
     }
