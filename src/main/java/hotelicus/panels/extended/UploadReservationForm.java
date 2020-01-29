@@ -88,6 +88,7 @@ public class UploadReservationForm implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            services.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             DbController<Clients> retrieveAllClients = new DbController<>(Clients.class);
             DbController<Reservations> retriveAllReservations = new DbController<>(Reservations.class);
             DbController<ReservationRooms> retrieveAllBusyRooms = new DbController<>(ReservationRooms.class);
