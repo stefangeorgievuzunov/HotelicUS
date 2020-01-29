@@ -166,7 +166,9 @@ public class ReceptionistPanel implements Initializable {
     private void addReservation() {
         try {
             SceneController.openNewScene(UploadReservationForm.class, "Add new reservation", () -> {
-
+            UploadReservationForm sendTo=SceneController.getStageAccessTo(UploadReservationForm.class);
+            sendTo.setHotel(this.hotel);
+            sendTo.setParentTableView(this.tableView);
             });
         } catch (IOException excep) {
             excep.printStackTrace();
