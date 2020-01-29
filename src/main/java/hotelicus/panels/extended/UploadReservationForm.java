@@ -1,6 +1,7 @@
 package hotelicus.panels.extended;
 
 import hotelicus.App;
+import hotelicus.core.LoggerUtil;
 import hotelicus.entities.*;
 import hotelicus.enums.*;
 import hotelicus.exceptions.InsertNullObjectException;
@@ -127,6 +128,7 @@ public class UploadReservationForm implements Initializable {
                         }
                     } catch (NumberFormatException excep) {
                         this.clientsTableView.getItems().clear();
+                        LoggerUtil.error(excep.getMessage());
                     }
                 });
                 pause.playFromStart();
@@ -198,19 +200,24 @@ public class UploadReservationForm implements Initializable {
                     }
                 } catch (SelectNullObjectException excep) {
                     excep.printStackTrace();
+                    LoggerUtil.error(excep.getMessage());
                 } catch (NullPointerException excep) {
                     new Error("Search failed", "Please choose period and category !");
                     excep.printStackTrace();
+                    LoggerUtil.error(excep.getMessage());
                 }
             });
 
             this.uploadInfo();
         } catch (UpdateNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (SelectNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -229,6 +236,7 @@ public class UploadReservationForm implements Initializable {
             allClients.forEach(c -> this.clientsTableView.getItems().add(c));
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -241,8 +249,10 @@ public class UploadReservationForm implements Initializable {
             });
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (IOException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -294,8 +304,10 @@ public class UploadReservationForm implements Initializable {
             }
         } catch (InsertNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NumberFormatException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
             new Error("Upload failed", "Price must be numeric!");
         }
     }
@@ -309,9 +321,11 @@ public class UploadReservationForm implements Initializable {
             }
         } catch (NumberFormatException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
             new Error("Upload failed", "Paid money must be numeric!");
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
         return false;
     }
@@ -329,6 +343,7 @@ public class UploadReservationForm implements Initializable {
             }
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -345,6 +360,7 @@ public class UploadReservationForm implements Initializable {
             }
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 

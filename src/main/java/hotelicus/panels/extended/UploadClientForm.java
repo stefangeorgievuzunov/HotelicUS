@@ -1,6 +1,7 @@
 package hotelicus.panels.extended;
 
 import hotelicus.App;
+import hotelicus.core.LoggerUtil;
 import hotelicus.entities.Clients;
 import hotelicus.exceptions.InsertNullObjectException;
 import hotelicus.panels.controllers.DbController;
@@ -58,11 +59,14 @@ public class UploadClientForm {
         } catch (ConstraintViolationException excep) {
             new Error("Upload failed", "Client already exist");
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         } catch (NumberFormatException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
             new Error("Upload failed", "ID must be numeric!");
         } catch (InsertNullObjectException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 
@@ -77,6 +81,7 @@ public class UploadClientForm {
             }
         } catch (NullPointerException excep) {
             excep.printStackTrace();
+            LoggerUtil.error(excep.getMessage());
         }
     }
 }
